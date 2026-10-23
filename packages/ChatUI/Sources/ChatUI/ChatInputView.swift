@@ -212,12 +212,13 @@ public final class ChatInputContainerView: FlippableView {
         let presentation = chatInteraction.presentation
         return presentation.state == .normal
             && presentation.peer?.isSecretChat != true
+            && chatInteraction.mode.customChatLink == nil
             && presentation.effectiveInput.inputText.trimmingCharacters(in: .whitespacesAndNewlines).count >= 10
     }
 
     fileprivate func inputRowHeight(for width: CGFloat) -> CGFloat {
         let contentHeight = contentHeight(for: width)
-        guard shouldShowAIEditor, chatInteraction.mode.customChatLink == nil else {
+        guard shouldShowAIEditor else {
             return contentHeight
         }
         return max(contentHeight, ChatInputAttachButton.expandedHeight)
