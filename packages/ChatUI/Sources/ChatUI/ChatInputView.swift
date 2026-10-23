@@ -210,7 +210,8 @@ public final class ChatInputContainerView: FlippableView {
 
     private var shouldShowAIEditor: Bool {
         let presentation = chatInteraction.presentation
-        return presentation.state == .normal
+        return (presentation.state == .normal || presentation.state == .editing)
+            && (presentation.interfaceState.editState?.loadingState ?? EditStateLoading.none) == EditStateLoading.none
             && presentation.peer?.isSecretChat != true
             && chatInteraction.mode.customChatLink == nil
             && presentation.effectiveInput.inputText.trimmingCharacters(in: .whitespacesAndNewlines).count >= 10
