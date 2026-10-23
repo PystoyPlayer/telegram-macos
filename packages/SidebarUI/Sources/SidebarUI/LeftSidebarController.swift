@@ -106,6 +106,7 @@ public final class LeftSidebarView: View {
 
         edit.autohighlight = false
         edit.scaleOnClick = true
+        edit.setAccessibilityLabel(strings().chatListFilterEditFilters)
 
         updateLocalizationAndTheme(theme: theme)
     }
