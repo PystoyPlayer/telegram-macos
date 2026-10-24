@@ -140,7 +140,8 @@ func renderHeaderComparisons() {
                 root.addSubview(label(scenario, frame: NSMakeRect(12, y, 400, 18), color: palette.grayText, size: 11))
                 let geometry = ChatHeaderBubblesView()
                 let inline = geometry.inlineHeaderFrame(for: 1000)!.offsetBy(dx: 0, dy: y + 10)
-                let titleWidth = after ? inline.minX - 22 : 878
+                let inlineAccessory = after || index == 0
+                let titleWidth = inlineAccessory ? inline.minX - 22 : 878
                 let title = SnapshotPill(frame: NSMakeRect(12, y + 22, titleWidth, 40))
                 title.fill = palette.grayBackground
                 let avatar = SnapshotPill(frame: NSMakeRect(4, 4, 32, 32))
@@ -161,7 +162,7 @@ func renderHeaderComparisons() {
                 }
                 root.addSubview(actions)
                 if index == 2 && !after { continue }
-                let accessoryFrame = after ? inline : NSMakeRect(12, y + 72, 976, 40)
+                let accessoryFrame = inlineAccessory ? inline : NSMakeRect(12, y + 72, 976, 40)
                 let accessory = SnapshotPill(frame: accessoryFrame)
                 accessory.fill = palette.grayBackground
                 root.addSubview(accessory)
