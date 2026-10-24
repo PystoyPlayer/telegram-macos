@@ -11,4 +11,6 @@ The runner compiles the complete production `ChatLayerScene.swift` unchanged aga
 
 The selection owner's `resignFirstResponder` implementation is extracted from SelectManager. Its collection storage and the text-node pointer/menu handler are controlled fixtures. The full ChatLayerTextNode, chat/account state and actual reply composer are not compiled. Quote only records a local string and never sends a message.
 
-Optional captures show the same native text component while its menu is open. The floating menu is a separate window and is outside the component image. They are not screenshots of a running Telegram client. Both palettes and both context-click methods are included.
+Optional captures briefly open a floating fixture window and require macOS screen recording access. Each image shows two steps: a selected-text reference, then the same message after the context click. macOS captures the text and the real floating Quote/Copy menu together inside the fixture's bounds. The footer reports whether the highlight survived and which substring the local Quote callback received. Both palettes and both context-click methods are included.
+
+The first step is an independent native text-layout reference. The second step uses the actual scene dispatcher. Captions, message text, menu contents and the callback footer belong to the fixture; these are not screenshots of a running Telegram client. The Copy item only makes the menu context visible and has no clipboard side effect. No account data is captured.

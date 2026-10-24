@@ -18,29 +18,59 @@ func check(_ value: @autoclosure () -> Bool, _ message: String) {
     checks += 1
 }
 let initial = PresentationTheme.current
+func caption(_ text: String, y: CGFloat, color: NSColor) -> NSTextField {
+    let field = NSTextField(labelWithString: text)
+    field.frame = NSMakeRect(20, y, 600, 24)
+    field.font = .systemFont(ofSize: 14, weight: .medium)
+    field.textColor = color
+    return field
+}
 for (paletteName, palette) in [("dark", nightAccentPalette), ("light", whitePalette)] {
     updateTheme(PresentationTheme(colors: palette, search: initial.search, inputTheme: initial.inputTheme))
-    let window = Window(contentRect: NSMakeRect(150, 150, 600, 150), styleMask: [.titled, .closable], backing: .buffered, defer: false)
+    let window = Window(contentRect: NSMakeRect(150, 150, 640, 350), styleMask: [.borderless], backing: .buffered, defer: false)
     window.isReleasedWhenClosed = false
+    window.level = .floating
+    window.isOpaque = true
+    window.backgroundColor = palette.background
+    window.hasShadow = false
     window.title = "Message selection — component check"
-    let root = View(frame: NSMakeRect(0, 0, 600, 150))
+    let root = View(frame: NSMakeRect(0, 0, 640, 350))
     root.backgroundColor = palette.background
     window.contentView = root
-    let bubble = View(frame: NSMakeRect(12, 20, 450, 100))
+    root.addSubview(caption("1. Select “Apply style”", y: 10, color: palette.grayText))
+    let contextStep = caption("2. Right-click the message", y: 136, color: palette.grayText)
+    root.addSubview(contextStep)
+    let result = caption("", y: 300, color: palette.text)
+    root.addSubview(result)
+    let bubble = View(frame: NSMakeRect(12, 168, 616, 100))
     bubble.backgroundColor = palette.grayBackground
     bubble.layer?.cornerRadius = 18
     root.addSubview(bubble)
-    let scene = ChatLayerSceneView(frame: NSMakeRect(16, 30, 420, 40))
+    let scene = ChatLayerSceneView(frame: NSMakeRect(16, 24, 560, 40))
     bubble.addSubview(scene)
     let selectionColor = palette.accent.withAlphaComponent(0.4)
-    let layout = TextViewLayout(.initialize(string: "Кнопки «применить стиль»", color: palette.text, font: .normal(18)), selectText: selectionColor)
-    layout.measure(width: 420)
+    let message = NSAttributedString.initialize(string: "Choose “Apply style” to update the message.", color: palette.text, font: .normal(18))
+    let layout = TextViewLayout(message, selectText: selectionColor)
+    layout.measure(width: 560)
+    let selected = (layout.attributedString.string as NSString).range(of: "Apply style")
+    let reference = View(frame: NSMakeRect(12, 42, 616, 80))
+    reference.backgroundColor = palette.grayBackground
+    reference.layer?.cornerRadius = 18
+    root.addSubview(reference)
+    let referenceScene = ChatLayerSceneView(frame: NSMakeRect(16, 24, 560, 40))
+    reference.addSubview(referenceScene)
+    let referenceLayout = TextViewLayout(message, selectText: selectionColor)
+    referenceLayout.measure(width: 560)
+    referenceLayout.selectedRange = TextSelectedRange(range: selected, color: selectionColor, def: true)
+    let referenceNode = ChatLayerTextNode(id: "selected-reference", layout: referenceLayout)
+    referenceNode.frame = NSRect(origin: .zero, size: referenceLayout.layoutSize)
+    try! referenceScene.root.setChildren([referenceNode])
+    referenceScene.layoutSubtreeIfNeeded()
     let node = ChatLayerTextNode(id: "message", layout: layout)
     node.frame = NSRect(origin: .zero, size: layout.layoutSize)
     try! scene.root.setChildren([node])
     scene.layoutSubtreeIfNeeded()
     let owner = SelectionFixture(node)
-    let selected = (layout.attributedString.string as NSString).range(of: "применить стиль")
     var shown: ContextMenu?
     var quoteItem: ContextMenuItem?
     var quoted = ""
@@ -50,8 +80,9 @@ for (paletteName, palette) in [("dark", nightAccentPalette), ("light", whitePale
             let range = layout.selectedRange.range
             let text = range.location == NSNotFound ? "" : layout.attributedString.attributedSubstring(from: range).string
             let menu = ContextMenu()
-            let item = ContextMenuItem("Quote", handler: { quoted = text })
+            let item = ContextMenuItem("Quote", handler: { quoted = text }, overrideWidth: 180)
             menu.addItem(item)
+            menu.addItem(ContextMenuItem("Copy", handler: {}))
             quoteItem = item
             shown = menu
             AppMenu.show(menu: menu, event: event.nativeEvent!, for: scene)
@@ -85,15 +116,25 @@ for (paletteName, palette) in [("dark", nightAccentPalette), ("light", whitePale
         if opensMenu {
             check(shown?.isShown == true, "context menu did not open")
             quoteItem?.handler?()
-            check(quoted == "применить стиль", "quote did not use the selected text")
+            check(quoted == "Apply style", "quote did not use the selected text")
             print("\(paletteName) \(name): menu open, owner retained \(window.firstResponder === owner), visible selection \(layout.selectedRange.range == selected), quote correct")
             if let snapshots, name == "right-click" || name == "control-click" {
+                contextStep.stringValue = name == "control-click" ? "2. Control-click the message" : "2. Right-click the message"
+                result.stringValue = layout.selectedRange.range == selected
+                    ? "Highlight stays visible. Quote receives “\(quoted)”."
+                    : "Highlight disappears. Quote still receives “\(quoted)”."
                 window.display()
                 CATransaction.flush()
-                RunLoop.main.run(until: Date().addingTimeInterval(0.2))
-                let rep = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
-                root.cacheDisplay(in: root.bounds, to: rep)
-                try! rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: snapshots + "/" + paletteName + "-" + name + ".png"))
+                RunLoop.main.run(until: Date().addingTimeInterval(0.3))
+                let rect = window.convertToScreen(root.convert(root.bounds, to: nil))
+                let top = NSScreen.screens.first!.frame.maxY
+                let region = "\(Int(rect.minX)),\(Int(top - rect.maxY)),\(Int(rect.width)),\(Int(rect.height))"
+                let capture = Process()
+                capture.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
+                capture.arguments = ["-x", "-R", region, snapshots + "/" + paletteName + "-" + name + ".png"]
+                try! capture.run()
+                capture.waitUntilExit()
+                precondition(capture.terminationStatus == 0, "Component and menu capture failed")
             }
         }
     }
