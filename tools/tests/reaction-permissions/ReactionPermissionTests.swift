@@ -78,8 +78,12 @@ struct ChatHistoryUIHooks {
     static let shared = ChatHistoryUIHooks()
     func messageNewReactions(_ message: Message, _ update: Int, _ tags: Bool) -> [Int] { [update] }
 }
-func tap(message: Message, context: Context, mode: Mode, engine: Engine, value: Reaction = .builtin, isFilterTag: Bool = false, tagAction: (Reaction) -> Void = { _ in }) {
+func tap(message: Message, context: Context, mode: Mode, engine: Engine, value: Reaction = .builtin, isFilterTag: Bool = false, canReact: (() -> Bool)? = nil, tagAction: (Reaction) -> Void = { _ in }) {
     let source = Source()
+    let canReact = canReact ?? {
+        guard let peer = message.peers[message.id.peerId] else { return false }
+        return canSendReactionsToPeer(EnginePeer(peer))
+    }
     __CHIP_ACTION__
 }
 var checks = 0
@@ -133,10 +137,21 @@ for value in [Reaction.builtin, .stars] {
     engine.calls = 0
     tap(message: message, context: Context(peerId: PeerId(value: 1)), mode: .full, engine: engine, value: value)
     expect(engine.calls == 1, "allowed reaction chip submits \(value)")
+    engine.calls = 0
+    row.firstMessage = message
+    row.chatInteraction.peer = restricted
+    tap(message: message, context: Context(peerId: PeerId(value: 1)), mode: .full, engine: engine, value: value, canReact: { row.canReact })
+    expect(engine.calls == 0, "existing chip observes a live restriction despite stale allowed message peer \(value)")
+    engine.calls = 0
+    row.firstMessage = restrictedMessage
+    row.chatInteraction.peer = allowed
+    tap(message: restrictedMessage, context: Context(peerId: PeerId(value: 1)), mode: .full, engine: engine, value: value, canReact: { row.canReact })
+    expect(engine.calls == 1, "existing chip observes permission restoration despite stale restricted message peer \(value)")
+
 }
 let engine = Engine()
 var filtered = false
-tap(message: message, context: Context(peerId: chatId), mode: .tag, engine: engine, tagAction: { _ in filtered = true })
+tap(message: message, context: Context(peerId: chatId), mode: .tag, engine: engine, canReact: { false }, tagAction: { _ in filtered = true })
 expect(filtered && engine.calls == 0, "saved-message tags still filter without submitting")
 print("\(checks - failures)/\(checks) reaction permission checks passed")
 exit(failures == 0 ? 0 : 1)
