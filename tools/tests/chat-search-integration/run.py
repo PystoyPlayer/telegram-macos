@@ -13,7 +13,9 @@ parser.add_argument('--revision')
 parser.add_argument('--expect-regression', action='store_true')
 parser.add_argument('--prepare-app', action='store_true')
 parser.add_argument('--scratch-path', type=Path, required=True)
+parser.add_argument("--dependency-root", type=Path, default=root)
 args = parser.parse_args()
+dependency_root = args.dependency_root.resolve()
 
 
 def source(name):
@@ -37,19 +39,21 @@ with tempfile.TemporaryDirectory(prefix='telegram-search-integration-') as direc
     directory = Path(directory)
     sources = directory / 'Sources'
     sources.mkdir()
-    packages = ['.package(path: ' + json.dumps(str(root / 'packages' / name)) + ')' for name in ['TGUIKit', 'ColorPalette']]
-    packages.append('.package(path: ' + json.dumps(str(root / 'submodules/telegram-ios/submodules/SSignalKit')) + ')')
+    packages = ['.package(path: ' + json.dumps(str(dependency_root / 'packages' / name)) + ')' for name in ['TGUIKit', 'ColorPalette']]
+    packages.append('.package(path: ' + json.dumps(str(dependency_root / 'submodules/telegram-ios/submodules/SSignalKit')) + ')')
     (directory / 'Package.swift').write_text('''// swift-tools-version:5.9
 import PackageDescription
 let package = Package(name: "SearchIntegration", platforms: [.macOS(.v12)], dependencies: [DEPENDENCIES], targets: [.executableTarget(name: "SearchIntegration", dependencies: ["TGUIKit", "ColorPalette", .product(name: "SwiftSignalKit", package: "SSignalKit")], path: "Sources", swiftSettings: SETTINGS)])
 '''.replace('DEPENDENCIES', ', '.join(packages)).replace('SETTINGS', '[.define("UPDATED_SEARCH_POPUP_LAYOUT")]' if has_updated_helper else '[]'))
     header = source('ChatSearchHeader')
-    header = imports + header[header.index('private final class CSearchContextState'):header.index('private final class ChatSearchTagsView')] + header[header.index('class ChatSearchHeader :'):]
+    header = imports + header[header.index('private final class CSearchContextState'):header.index('private final class ChatSearchTagsView')] + header[header.index('private final class ChatSearchCountContainer:'):]
     header += '''
 extension ChatSearchHeader {
  var testSearchView: ChatSearchView { searchView }
  var testContext: InputContextHelper { inputContextHelper }
  var testTagsView: NSView? { tagsView }
+ var testCount: (current: Int, total: Int) { countState }
+ var testCountIsHidden: Bool { countContainer.isHidden }
  var testPeerId: PeerId? { inputInteraction.state.peerId }
  var testButtons: [ImageButton] { [prev, next, from, calendar, cancel] }
 }
@@ -106,18 +110,18 @@ struct ControllerGeometry {
     (sources / 'Geometry.swift').write_text(geometry.replace('__INLINE_FRAME__', block(source('ChatController'), 'private func inlineHeaderFrame(for width:').replace('private ', '')))
     images = {}
     for name in ['Icon_SearchField', 'Icon_SearchClear', 'Icon_Quote', 'Icon_Quote_Collapse', 'Icon_Quote_Expand', 'Icon_SearchArrow', 'Icon_Calendar', 'Icon_Pip_Close', 'Icon_ChatSearchFrom']:
-        image_set = root / 'Telegram-Mac/Assets.xcassets' / (name + '.imageset')
+        image_set = dependency_root / 'Telegram-Mac/Assets.xcassets' / (name + '.imageset')
         variants = json.loads((image_set / 'Contents.json').read_text())['images']
         filename = next(image['filename'] for image in variants if image.get('filename') and image.get('scale') == '1x')
         images[name] = str(image_set / filename)
     (sources / 'Assets.swift').write_text('let imagePaths: [String: String] = [' + ', '.join(json.dumps(name) + ': ' + json.dumps(path) for name, path in images.items()) + ']')
     for name in ['Models.swift', 'EmptySearchState.swift', 'main.swift']:
         (sources / name).write_text((fixtures / name).read_text())
-    command = ['swift', 'run', '--package-path', str(directory), '--scratch-path', str(args.scratch_path.resolve()), '--disable-sandbox', '--jobs', '4', 'SearchIntegration']
+    command = ['swift', 'run', '--package-path', str(directory), '--scratch-path', str(args.scratch_path.resolve()), '--disable-sandbox', '--jobs', '2', 'SearchIntegration']
     if args.expect_regression:
         command.append('--expect-regression')
     if args.prepare_app:
-        build = ['swift', 'build', '--package-path', str(directory), '--scratch-path', str(args.scratch_path.resolve()), '--disable-sandbox', '--jobs', '4', '--product', 'SearchIntegration']
+        build = ['swift', 'build', '--package-path', str(directory), '--scratch-path', str(args.scratch_path.resolve()), '--disable-sandbox', '--jobs', '2', '--product', 'SearchIntegration']
         subprocess.run(build, check=True)
         binary_dir = subprocess.check_output(['swift', 'build', '--package-path', str(directory), '--scratch-path', str(args.scratch_path.resolve()), '--show-bin-path'], text=True).strip()
         bundle = args.scratch_path.resolve() / 'SearchIntegration.app'
