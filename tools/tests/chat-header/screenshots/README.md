@@ -24,3 +24,12 @@ Historical captures from the earlier validation pass:
 All images are crops of the running client. The private sidebar, account identity, Saved Messages contents and their blurred backdrop are excluded. No controls or messages are reconstructed. The original illustrative component comparisons were deleted.
 
 These still images establish final geometry and visible control states, not animation frame timing. The exact production glass-removal block is exercised with real GlassContainerView/LiquidGlassView objects by the search integration tests.
+
+## Reopen Topic captures
+
+- `review-before-topic.png`: complete client with exact `5c36bbd3` header source; closed Release Notes topic, 3 Messages, action below the title.
+- `review-after-topic.png`: utility header source `5794d4e8` in native integration `d159d0b2`; same topic, state, count, width and crop, action beside the title.
+- `review-after-topic-narrow.png`: real system Left-half window; action falls back to its own row.
+- `review-topic-reopened.png`: actual history service messages after one UI click on Reopen Topic.
+
+Both comparison builds use the real authenticated account and dependencies. An excluded local setup helper created/closed the private test topic with real engine calls and opened its actual controller. The actual Reopen Topic button was clicked through accessibility; the helper did not invoke that action or replace UI state. The captures are direct crops with no compositing or reconstructed controls. See `../utility-validation.json` and the search validation record for the source hashes, dimensions and observed state transition.
