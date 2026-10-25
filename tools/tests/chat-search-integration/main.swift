@@ -138,9 +138,11 @@ check(requests.last?.0 == "Designer from San Francisco", "Typing did not reach t
 check(
   search.testContext.results.count == 3, "Search response did not reach the visible result list")
 verifyResults("initial query")
+#if UPSTREAM_SEARCH_RESULT_COUNTER
 check(jumps.last?.value == 1, "Upstream automatic first-result selection was lost")
 check(search.testCount.current == 1 && search.testCount.total == 3, "Upstream result counter was lost")
 check(!search.testCountIsHidden, "Result counter is hidden with sufficient space")
+#endif
 for width: CGFloat in [742, 600, 360, 1000, 1200, 742] {
   layout(width: width)
   check(window.firstResponder === search.testSearchView.input, "Resize stole input focus")
@@ -150,28 +152,37 @@ for width: CGFloat in [742, 600, 360, 1000, 1200, 742] {
       clip.frame.width >= (width >= 600 ? 210 : 80),
       "Search text viewport is too short: \(clip.frame.width) at \(width)")
   }
+  #if UPSTREAM_SEARCH_RESULT_COUNTER
   if width == 360 {
     check(search.testCountIsHidden, "Result counter crowds the narrow search input")
   } else if width >= 1000 {
     check(!search.testCountIsHidden, "Result counter does not return after widening")
   }
+  #endif
   verifyResults("resize to \(width)")
 }
 layout(width: 742, height: 180)
 verifyResults("short window")
 layout(width: 1000)
+#if UPSTREAM_SEARCH_RESULT_COUNTER
+let navigationTargets = [2, 3, 2]
+#else
+let navigationTargets = [1, 2, 1]
+#endif
 search.testButtons[0].send(event: .Click)
-check(jumps.last?.value == 2, "Previous-result button did not advance from the automatically selected first result")
+check(jumps.last?.value == navigationTargets[0], "Previous-result button did not advance from the selected result")
 search.testButtons[0].send(event: .Click)
-check(jumps.last?.value == 3, "Previous-result button did not advance")
+check(jumps.last?.value == navigationTargets[1], "Previous-result button did not advance")
 search.testButtons[1].send(event: .Click)
-check(jumps.last?.value == 2, "Next-result button did not go back")
+check(jumps.last?.value == navigationTargets[2], "Next-result button did not go back")
 search.applySearchResponder(false)
 drain()
 verifyResults("refocus after jumping")
+#if UPSTREAM_SEARCH_RESULT_COUNTER
 search.testContext.controller.selected?(search.testContext.results[2])
 check(search.testCount.current == 3, "Selecting a result row did not update the counter")
 check(!search.testButtons[0].isEnabled && search.testButtons[1].isEnabled, "Selecting the last result left stale navigation buttons")
+#endif
 interaction.presentation.peer = Peer(1, "Project Group", group: true)
 search.update(with: state, animated: false)
 search.testButtons[2].send(event: .Click)

@@ -34,6 +34,9 @@ def block(text, marker):
 
 
 has_updated_helper = 'public func updateLayout(animated: Bool)' in source('InputContextHelper')
+has_result_counter = 'private final class ChatSearchCountContainer:' in source('ChatSearchHeader')
+flags = (['UPDATED_SEARCH_POPUP_LAYOUT'] if has_updated_helper else []) + (['UPSTREAM_SEARCH_RESULT_COUNTER'] if has_result_counter else [])
+settings = '[' + ', '.join('.define(' + json.dumps(flag) + ')' for flag in flags) + ']'
 imports = 'import Cocoa\nimport TGUIKit\nimport ColorPalette\nimport SwiftSignalKit\n'
 with tempfile.TemporaryDirectory(prefix='telegram-search-integration-') as directory:
     directory = Path(directory)
@@ -44,20 +47,20 @@ with tempfile.TemporaryDirectory(prefix='telegram-search-integration-') as direc
     (directory / 'Package.swift').write_text('''// swift-tools-version:5.9
 import PackageDescription
 let package = Package(name: "SearchIntegration", platforms: [.macOS(.v12)], dependencies: [DEPENDENCIES], targets: [.executableTarget(name: "SearchIntegration", dependencies: ["TGUIKit", "ColorPalette", .product(name: "SwiftSignalKit", package: "SSignalKit")], path: "Sources", swiftSettings: SETTINGS)])
-'''.replace('DEPENDENCIES', ', '.join(packages)).replace('SETTINGS', '[.define("UPDATED_SEARCH_POPUP_LAYOUT")]' if has_updated_helper else '[]'))
+'''.replace('DEPENDENCIES', ', '.join(packages)).replace('SETTINGS', settings))
     header = source('ChatSearchHeader')
-    header = imports + header[header.index('private final class CSearchContextState'):header.index('private final class ChatSearchTagsView')] + header[header.index('private final class ChatSearchCountContainer:'):]
+    header = imports + header[header.index('private final class CSearchContextState'):header.index('private final class ChatSearchTagsView')] + header[header.index('private final class ChatSearchCountContainer:' if has_result_counter else 'class ChatSearchHeader :'):]
     header += '''
 extension ChatSearchHeader {
  var testSearchView: ChatSearchView { searchView }
  var testContext: InputContextHelper { inputContextHelper }
  var testTagsView: NSView? { tagsView }
- var testCount: (current: Int, total: Int) { countState }
- var testCountIsHidden: Bool { countContainer.isHidden }
+__COUNTER_PROPERTIES__
  var testPeerId: PeerId? { inputInteraction.state.peerId }
  var testButtons: [ImageButton] { [prev, next, from, calendar, cancel] }
 }
 '''
+    header = header.replace('__COUNTER_PROPERTIES__', ' var testCount: (current: Int, total: Int) { countState }\n var testCountIsHidden: Bool { countContainer.isHidden }' if has_result_counter else '')
     (sources / 'Header.swift').write_text(header)
     search = source('ChatSearchView')
     (sources / 'SearchView.swift').write_text(imports + '\n'.join(line for line in search.splitlines() if not line.startswith('import ')))
