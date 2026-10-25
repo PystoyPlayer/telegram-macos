@@ -1520,7 +1520,7 @@ public final class AnimatedEmojiesView : Control {
         let searchInsideRect: CGRect = CGRect(origin: CGPoint(x: 0, y: searchContainer.frame.height - 46), size: NSMakeSize(size.width, 46))
         transition.updateFrame(view: searchInside, frame: searchInsideRect)
         transition.updateFrame(view: visualEffect, frame: searchInsideRect)
-        transition.updateFrame(view: searchStatusView, frame: NSMakeRect(0, searchContainer.frame.maxY, size.width, max(0, size.height - searchContainer.frame.maxY - 56)))
+        transition.updateFrame(view: searchStatusView, frame: NSMakeRect(0, searchContainer.frame.maxY, size.width, max(0, size.height - searchContainer.frame.maxY - tableView.contentInsets.bottom)))
 
         
         
