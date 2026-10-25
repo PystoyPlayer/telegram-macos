@@ -12,7 +12,7 @@ To reuse compiler outputs between runs:
 python3 tools/tests/chat-header/run.py --scratch-path /tmp/telegram-chat-header-build
 ```
 
-The runner copies the production `ChatHeaderInlineLayout.swift` and its six XCTest tests unchanged into a temporary package. It also compiles the actual translation-menu functions and extracts the production header eligibility, accessory geometry, placement, history-inset, search-layout and typing-activity methods into controlled fixtures. Extraction fails when the expected source sections are missing.
+The runner copies the production `ChatHeaderInlineLayout.swift` and its six XCTest tests unchanged into a temporary package. It also compiles the actual translation-menu functions and extracts the production header eligibility, accessory geometry, placement, history-inset, search-layout and typing-activity methods into controlled fixtures; the Reopen Topic control is compiled unchanged with controlled account and localization collaborators. Extraction fails when the expected source sections are missing.
 
 The integration executable builds and links the real TGUIKit and Translate packages, including SwiftSignalKit, ObjcUtils, ColorPalette and KeyboardKey. It uses real `ContextMenu`, `ContextMenuItem`, `SearchView`, `ImageButton`, `View` and layout transitions, and loads the five images needed by TGUIKit's default theme from the app's assets. Search checks cover both optional buttons, six widths, keyboard focus, query retention, bounds and hit testing.
 
@@ -23,3 +23,5 @@ Chat presentation, account actions, localization and animated menu images use te
 The previous illustrative component comparisons were removed. Before/After evidence is captured from the actual Telegram client and documented with the search-flow validation record. Channel descriptions are not part of this change.
 
 The plain-SearchView checks above do not validate the complete chat-search flow. Use `tools/tests/chat-search-integration/run.py` for the actual ChatSearchHeader/ChatSearchView state machine, result-popup geometry, sender filtering and cancellation. Neither suite substitutes for testing the built Telegram client with an account. Search now falls back to its full row sooner than a pinned header when the remaining inline slot would leave too little space for the query.
+
+Single-action utility headers share the same inline eligibility and narrow fallback checks. The real Reopen Topic control is exercised with localized and long labels, 36/40-point heights, bounds, accessibility and its original callback. The harness does not reopen a server topic.

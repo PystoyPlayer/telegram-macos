@@ -36,6 +36,8 @@ def block(text, marker):
 has_updated_helper = 'public func updateLayout(animated: Bool)' in source('InputContextHelper')
 has_result_counter = 'private final class ChatSearchCountContainer:' in source('ChatSearchHeader')
 flags = (['UPDATED_SEARCH_POPUP_LAYOUT'] if has_updated_helper else []) + (['UPSTREAM_SEARCH_RESULT_COUNTER'] if has_result_counter else [])
+if 'case .pinned, .restartTopic,' in source('ChatHeaderController'):
+    flags.append('INLINE_UTILITY_HEADERS')
 settings = '[' + ', '.join('.define(' + json.dumps(flag) + ')' for flag in flags) + ']'
 imports = 'import Cocoa\nimport TGUIKit\nimport ColorPalette\nimport SwiftSignalKit\n'
 with tempfile.TemporaryDirectory(prefix='telegram-search-integration-') as directory:
