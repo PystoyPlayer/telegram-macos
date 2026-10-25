@@ -1,0 +1,23 @@
+{
+  "featureSource": "5794d4e8fbaf15c1b1f2d73ec9aa33443dd0c465",
+  "nativeIntegration": "d159d0b2e6025a42f50e94a25534aa8a1f968216",
+  "productionHeaderSha256": "1470779b632f48d7f1eed68057e1ac89f6113ca5ddeb38b71276779c5da923ee",
+  "completeNativeBuild": "succeeded; arm64 Debug; actual dependencies",
+  "checks": {
+    "XCTest": 6,
+    "extractedHeaderPlacementAndMenus": 139,
+    "nativeSearchControls": 288,
+    "typingReflow": 7,
+    "productionReopenControl": 41,
+    "searchFlowControlledBackend": 157
+  },
+  "authenticatedSmoke": {
+    "channel": "Telegram Tips",
+    "query": "stories",
+    "counter": "1 of 32",
+    "emptyNavigation": "disabled",
+    "results": "full chat width",
+    "cancel": "restores pin"
+  },
+  "limitation": "No server-backed closed-topic reopening; actual control callback is covered by native fixture."
+}
