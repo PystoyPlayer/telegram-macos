@@ -21,7 +21,12 @@ rows = (args.source_root / 'packages/ChatUI/Sources/ChatUI/ChatRowItem.swift').r
 chips = (args.source_root / 'packages/ChatUI/Sources/ChatUI/ChatReactionsView.swift').read_text()
 fixture = Path(__file__).with_name('ReactionPermissionTests.swift').read_text()
 fixture = fixture.replace('__CAN_REACT__', body(rows, 'public var canReact: Bool {'))
-fixture = fixture.replace('__REACTION_PEER__', body(rows, 'private var reactionPermissionPeer: Peer? {'))
+if 'private var reactionPermissionPeer: Peer? {' in rows:
+    permission_peer = body(rows, 'private var reactionPermissionPeer: Peer? {')
+else:
+    selector = next(line.strip() for line in rows.splitlines() if 'let peer = chatInteraction.peer.flatMap' in line)
+    permission_peer = 'guard let message = firstMessage else { return nil }\n' + selector.replace('let peer =', 'return', 1)
+fixture = fixture.replace('__REACTION_PEER__', permission_peer)
 fixture = fixture.replace('__CHIP_ACTION__', body(chips, 'action: { value, isFilterTag in'))
 stars = body(rows, '}, starReact: {').replace(' [weak self] in', '', 1)
 fixture = fixture.replace('__STAR_ACTION__', stars)
