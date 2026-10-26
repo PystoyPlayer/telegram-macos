@@ -30,6 +30,7 @@ fixture = fixture.replace('__REACTION_PEER__', permission_peer)
 fixture = fixture.replace('__CHIP_ACTION__', body(chips, 'action: { value, isFilterTag in'))
 stars = body(rows, '}, starReact: {').replace(' [weak self] in', '', 1)
 fixture = fixture.replace('__STAR_ACTION__', stars)
+fixture = fixture.replace('__QUICK_ACTION__', body(rows, 'public func reactAction() -> Bool {'))
 apply_guard = next((line.strip() for line in rows.splitlines() if 'let canApplyReaction: () -> Bool =' in line), 'let canApplyReaction: () -> Bool = { true }')
 fixture = fixture.replace('__CAN_APPLY_REACTION__', apply_guard)
 for token, marker in [

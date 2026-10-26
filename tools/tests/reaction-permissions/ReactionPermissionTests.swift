@@ -33,8 +33,12 @@ struct Message {
     var extendedMedia: Media?
     var flags: MessageFlags = []
 }
-struct Interaction { var peer: Peer?; var isPeerSavedMessages = false }
-struct Entry { var isFakeMessage = false }
+enum PeerAllowedReactions { case all, limited([Reaction]), empty }
+struct Presentation { var allowedReactions: PeerAllowedReactions? = .all }
+struct Interaction { var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation() }
+struct Available { var enabledValues: [Reaction] = [.builtin] }
+struct AdditionalData { var reactions: Available? = Available() }
+struct Entry { var isFakeMessage = false; var additionalData = AdditionalData() }
 final class Row {
     var firstMessage: Message?
     var chatInteraction: Interaction
@@ -42,6 +46,9 @@ final class Row {
     var isUnsent = false
     var isFailed = false
     var unsupported = false
+    let context = Context(peerId: PeerId(value: 1))
+    var message: Message? { firstMessage }
+    func reactAction() -> Bool { __QUICK_ACTION__ }
     init(firstMessage: Message?, chatInteraction: Interaction) {
         self.firstMessage = firstMessage
         self.chatInteraction = chatInteraction
@@ -68,11 +75,13 @@ final class Row {
     }
 }
 enum Reaction: Equatable {
-    case builtin, stars
+    case builtin, custom, stars
     func toUpdate(_ file: Int? = nil) -> Int { 1 }
 }
+typealias FixtureReaction = Reaction
+enum MessageReaction { typealias Reaction = FixtureReaction }
 struct Source { var file: Int? }
-struct Context { let peerId: PeerId; let window = 0; let reactions = Engine(); var isPremium = true }
+struct Context { let peerId: PeerId; let window = 0; let reactions = Engine(); var isPremium = true; var isFrozen = false }
 struct EngineMessage {
     let message: Message
     init(_ message: Message) { self.message = message }
@@ -89,8 +98,11 @@ final class Engine {
     func sendStarsReaction(_ messageId: MessageId, count: Int, fromRect: CGRect? = nil) { calls += 1 }
     func react(_ messageId: MessageId, values: [Int], fromRect: CGRect? = nil, storeAsRecentlyUsed: Bool = false, isLarge: Bool = false) { calls += 1 }
 }
+struct ReactionSettings { var quickReaction: Reaction = .builtin }
+struct ChatInterfaceHooks { static let shared = ChatInterfaceHooks(); func freezeAlert(_ context: Context) {} }
 struct ChatHistoryUIHooks {
     static let shared = ChatHistoryUIHooks()
+    func reactionSettings(_ context: Context) -> ReactionSettings { ReactionSettings() }
     func messageNewReactions(_ message: Message, _ update: Int, _ tags: Bool) -> [Int] { [update] }
     func messageNewReactions(_ message: Message, _ update: UpdateMessageReaction, _ tags: Bool) -> [Int] { [1] }
 }
@@ -204,6 +216,15 @@ for index in 0..<3 {
     current(.builtin)
     expect(context.reactions.calls == 1, "open picker action \(index) accepts restored rights")
 }
+row.chatInteraction.peer = restricted
+_ = row.reactAction()
+expect(row.context.reactions.calls == 0, "quick-reaction gesture does not send when restricted")
+row.chatInteraction.peer = allowed
+_ = row.reactAction()
+expect(row.context.reactions.calls == 1, "quick-reaction gesture still sends when allowed")
+row.chatInteraction.peer = restricted
+_ = row.reactAction()
+expect(row.context.reactions.calls == 1, "quick-reaction gesture observes revoked rights")
 let tagContext = Context(peerId: chatId)
 row.chatInteraction.peer = restricted
 for action in row.pickerActions(message: message, context: tagContext, isTags: true) { action(.builtin) }
