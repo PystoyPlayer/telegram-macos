@@ -62,3 +62,10 @@ System Left tiling produced an accepted 1514x1772-pixel window; Reopen Topic ret
 Source hashes, capture bounds and the before/after state observations are in `tools/tests/chat-header/utility-validation.json`. Live coverage is the forum creator path on macOS 27.0.1, Telegram 13.1.0 (283357); other utility actions retain controlled native-fixture coverage.
 
 Manual reproduction: create a private forum and topic, close the topic from its menu, open it in a wide chat pane, click Reopen Topic, and verify that the button disappears and the topic is reopened. Close it again, narrow the window and restore its width to check the row fallback.
+
+
+## Search glass corners, 26 October 2026
+
+A reported rectangular search background after switching chats led to a native regression reproduction: `LiquidGlassView.setAnimatorFrame` caches the target size without updating the clamped corner radius. After a zero-height layout has set radius zero, an animated reveal retains the zero radius; its subsequent layout sees the cached size and skips the update. This affects both shared ghost surfaces and standalone glass.
+
+The added native checks use real `GlassContainerView`, `LiquidGlassView` and `NSGlassEffectView` objects. They cover zero-height reveal, collapse/reopen and height changes in shared and standalone hosting. Five checks fail before the fix. Updating the radius before caching the target frame makes all **163/163 search-integration checks pass** (previously 157 checks). The exact user chat-switch sequence is additionally checked in the client; the deterministic reproduction establishes the stale-radius mechanism without relying on a timing-sensitive screenshot.
