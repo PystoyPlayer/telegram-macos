@@ -48,6 +48,20 @@ final class Row {
     }
     var reactionPermissionPeer: Peer? { __REACTION_PEER__ }
     var canReact: Bool { __CAN_REACT__ }
+    func pickerActions(message: Message, context: Context, isTags: Bool) -> [(Reaction) -> Void] {
+        __CAN_APPLY_REACTION__
+        let openSavedTagsPremium = { }
+        let reactions: [RecentReactionItem] = []
+        let fromRect: CGRect? = nil
+        let isLarge = false
+        let normal: (Reaction) -> Void = { value in __PICKER_ACTION__ }
+        let large: (Reaction) -> Void = { value in __LARGE_ACTION__ }
+        let expanded: (Reaction) -> Void = { _ in
+            let sticker = StickerPackItem()
+            __EXPANDED_ACTION__
+        }
+        return [normal, large, expanded]
+    }
     func openStars(message: Message, context: Context) {
         let action = { [weak self] in __STAR_ACTION__ }
         action()
@@ -55,10 +69,10 @@ final class Row {
 }
 enum Reaction: Equatable {
     case builtin, stars
-    func toUpdate(_ file: Int?) -> Int { 1 }
+    func toUpdate(_ file: Int? = nil) -> Int { 1 }
 }
 struct Source { var file: Int? }
-struct Context { let peerId: PeerId; let window = 0 }
+struct Context { let peerId: PeerId; let window = 0; let reactions = Engine(); var isPremium = true }
 struct EngineMessage {
     let message: Message
     init(_ message: Message) { self.message = message }
@@ -72,18 +86,36 @@ func showModal(with controller: Star_ReactionsController, for window: Int) { sta
 enum Mode { case tag, full }
 final class Engine {
     var calls = 0
-    func sendStarsReaction(_ messageId: MessageId, count: Int) { calls += 1 }
-    func react(_ messageId: MessageId, values: [Int]) { calls += 1 }
+    func sendStarsReaction(_ messageId: MessageId, count: Int, fromRect: CGRect? = nil) { calls += 1 }
+    func react(_ messageId: MessageId, values: [Int], fromRect: CGRect? = nil, storeAsRecentlyUsed: Bool = false, isLarge: Bool = false) { calls += 1 }
 }
 struct ChatHistoryUIHooks {
     static let shared = ChatHistoryUIHooks()
     func messageNewReactions(_ message: Message, _ update: Int, _ tags: Bool) -> [Int] { [update] }
+    func messageNewReactions(_ message: Message, _ update: UpdateMessageReaction, _ tags: Bool) -> [Int] { [1] }
 }
 func tap(message: Message, context: Context, mode: Mode, engine: Engine, value: Reaction = .builtin, isFilterTag: Bool = false, reactionPeer: (() -> Peer?)? = nil, tagAction: (Reaction) -> Void = { _ in }) {
     let source = Source()
     let reactionPeer = reactionPeer ?? { message.peers[message.id.peerId] }
     __CHIP_ACTION__
 }
+struct ParsedFile {
+    let stickerText: String? = "👍"
+    let fileId = FileId()
+    let isPremiumEmoji = false
+    func _parse() -> ParsedFile { self }
+}
+struct FileId: Equatable { let id = 1 }
+struct StickerPackItem { let file = ParsedFile() }
+enum UpdateMessageReaction { case builtin(String), custom(fileId: Int, file: ParsedFile) }
+enum RecentContent { case custom(ParsedFile), builtin }
+struct RecentReactionItem { let content: RecentContent }
+enum PremiumSource { case premium_stickers }
+struct PremiumBoardingController { init(context: Context, source: PremiumSource) { } }
+func prem(with controller: PremiumBoardingController, for window: Int) { }
+func strings() -> (customReactionPremiumAlert: String, unused: Int) { ("Premium", 0) }
+func showModalText(for window: Int, text: String, callback: (Int) -> Void) { }
+
 var checks = 0
 var failures = 0
 func expect(_ condition: @autoclosure () -> Bool, _ name: String) {
@@ -157,5 +189,24 @@ row.chatInteraction.isPeerSavedMessages = true
 let savedEngine = Engine()
 tap(message: message, context: Context(peerId: chatId), mode: .tag, engine: savedEngine, isFilterTag: true, reactionPeer: { row.reactionPermissionPeer })
 expect(savedEngine.calls == 1, "saved-peer media tags retain their existing update action when picker eligibility is false")
+row.chatInteraction.isPeerSavedMessages = false
+row.chatInteraction.peer = allowed
+row.firstMessage = message
+for index in 0..<3 {
+    let context = Context(peerId: PeerId(value: 1))
+    let current = row.pickerActions(message: message, context: context, isTags: false)[index]
+    row.chatInteraction.peer = restricted
+    current(.builtin)
+    current(.stars)
+    expect(context.reactions.calls == 0, "open picker action \(index) rejects a live restriction")
+    context.reactions.calls = 0
+    row.chatInteraction.peer = allowed
+    current(.builtin)
+    expect(context.reactions.calls == 1, "open picker action \(index) accepts restored rights")
+}
+let tagContext = Context(peerId: chatId)
+row.chatInteraction.peer = restricted
+for action in row.pickerActions(message: message, context: tagContext, isTags: true) { action(.builtin) }
+expect(tagContext.reactions.calls == 3, "open saved-tag actions preserve their update route")
 print("\(checks - failures)/\(checks) reaction permission checks passed")
 exit(failures == 0 ? 0 : 1)

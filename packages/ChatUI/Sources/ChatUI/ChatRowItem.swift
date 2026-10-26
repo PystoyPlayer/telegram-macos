@@ -3978,6 +3978,8 @@ public class ChatRowItem: TableRowItem {
             let signal = combineLatest(queue: .mainQueue(), builtin, peerAllowed, reactions, maximumReactionsLimit, starsAllowed)
             |> take(1)
 
+            let canApplyReaction: () -> Bool = { [weak self] in self?.canReact == true }
+
             return (signal) |> map { builtin, peerAllowed, reactions, maximumReactionsLimit, starsAllowed in
                 let enabled = builtin?.enabled ?? []
 
@@ -4169,6 +4171,7 @@ public class ChatRowItem: TableRowItem {
                 if accessToAll {
                     reveal = { view in
                         let react: (StickerPackItem, NSRect?, Bool) -> Void = { sticker, fromRect, isLarge in
+                            guard isTags || canApplyReaction() else { return }
                             let parsedFile = sticker.file._parse()
                             let value: UpdateMessageReaction
                             if let bundle = parsedFile.stickerText {
@@ -4218,6 +4221,7 @@ public class ChatRowItem: TableRowItem {
                 
                 
                 let view = ContextAddReactionsListView(frame: rect, context: context, list: available, add: { value, checkPrem, fromRect in
+                    guard isTags || canApplyReaction() else { return }
                     if isTags, !context.isPremium {
                         openSavedTagsPremium()
                     } else {
@@ -4228,6 +4232,7 @@ public class ChatRowItem: TableRowItem {
                         }
                     }
                 }, addLarge: isTags ? nil : { value, fromRect in
+                    guard isTags || canApplyReaction() else { return }
                     context.reactions.react(message.id, values: ChatHistoryUIHooks.shared.messageNewReactions(message, value.toUpdate(), isTags), fromRect: fromRect, storeAsRecentlyUsed: true, isLarge: true)
                 }, radiusLayer: nil, revealReactions: reveal, aboveText: aboveLayout, message: message)
                 
