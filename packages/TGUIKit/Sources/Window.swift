@@ -347,10 +347,7 @@ open class Window: NSWindow {
             self.styleMask.insert(.fullSizeContentView)
             self.titlebarAppearsTransparent = true
             self.titleVisibility = .hidden
-            if #available(macOS 27, *) {
-                self.toolbar = nil
-                self.setTrafficLightsInset(nil)
-            } else if #available(macOS 26, *) {
+            if #available(macOS 26, *) {
                 let toolbar = NSToolbar(identifier: "window")
                 toolbar.allowsUserCustomization = false
                 toolbar.allowsDisplayModeCustomization = false
