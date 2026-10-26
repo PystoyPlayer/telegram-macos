@@ -1,9 +1,16 @@
 [
   {
     "contentFrame": "{{0, 0}, {1100, 800}}",
-    "contentRect": "{{0, 117}, {1100, 832}}",
+    "contentRect": "{{0, 149}, {1100, 800}}",
+    "hasToolbar": true,
     "styleMask": 32783,
-    "time": 1793036881.934325,
+    "time": 1793039188.364541,
+    "toolbarVisible": true,
+    "trafficLights": [
+      "{{19, 767}, {14, 14}}",
+      "{{42, 767}, {14, 14}}",
+      "{{65, 767}, {14, 14}}"
+    ],
     "views": [
       {
         "class": "MainController_View",
@@ -12,58 +19,35 @@
         "frame": "{{8, 8}, {292, 784}}"
       }
     ],
-    "windowFrame": "{{0, 117}, {1100, 832}}"
+    "windowFrame": "{{0, 149}, {1100, 800}}"
   },
   {
-    "contentFrame": "{{0, 0}, {1100, 800}}",
-    "contentRect": "{{0, 117}, {1100, 832}}",
-    "styleMask": 32783,
-    "time": 1793036982.743818,
-    "views": [
-      {
-        "class": "MainController_View",
-        "effectiveTopLeft": 8,
-        "effectiveTopRight": 8,
-        "frame": "{{8, 8}, {292, 784}}"
-      }
-    ],
-    "windowFrame": "{{0, 117}, {1100, 832}}"
-  },
-  {
-    "contentFrame": "{{0, 0}, {560, 700}}",
+    "contentFrame": "{{0, 0}, {560, 668}}",
     "contentRect": "{{0, 249}, {560, 668}}",
+    "hasToolbar": false,
     "styleMask": 15,
-    "time": 1793036984.3954248,
+    "time": 1793039191.164505,
+    "toolbarVisible": false,
+    "trafficLights": [
+      "{{9, 677}, {14, 14}}",
+      "{{32, 677}, {14, 14}}",
+      "{{55, 677}, {14, 14}}"
+    ],
     "views": [],
     "windowFrame": "{{0, 249}, {560, 700}}"
   },
   {
-    "contentFrame": "{{0, 0}, {1190, 832}}",
-    "contentRect": "{{0, 117}, {1190, 832}}",
-    "styleMask": 32783,
-    "time": 1793036987.00848,
-    "views": [
-      {
-        "class": "MainController_View",
-        "effectiveTopLeft": 8,
-        "effectiveTopRight": 8,
-        "frame": "{{98, 8}, {292, 816}}"
-      },
-      {
-        "appliedRadius": 8,
-        "class": "LeftSidebarView",
-        "effectiveTopLeft": 8,
-        "effectiveTopRight": 8,
-        "frame": "{{8, 8}, {82, 816}}"
-      }
-    ],
-    "windowFrame": "{{0, 117}, {1190, 832}}"
-  },
-  {
     "contentFrame": "{{0, 0}, {560, 700}}",
-    "contentRect": "{{0, 249}, {560, 700}}",
+    "contentRect": "{{0, 217}, {560, 700}}",
+    "hasToolbar": true,
     "styleMask": 32783,
-    "time": 1793036988.6781402,
+    "time": 1793039194.4163918,
+    "toolbarVisible": true,
+    "trafficLights": [
+      "{{19, 667}, {14, 14}}",
+      "{{42, 667}, {14, 14}}",
+      "{{65, 667}, {14, 14}}"
+    ],
     "views": [
       {
         "appliedRadius": 8,
@@ -73,14 +57,72 @@
         "frame": "{{8, 8}, {82, 684}}"
       }
     ],
-    "windowFrame": "{{0, 249}, {560, 700}}"
+    "windowFrame": "{{0, 217}, {560, 700}}"
   },
   {
-    "contentFrame": "{{0, 0}, {560, 700}}",
-    "contentRect": "{{90, 217}, {560, 700}}",
+    "contentFrame": "{{0, 0}, {1100, 800}}",
+    "contentRect": "{{0, 117}, {1100, 800}}",
+    "hasToolbar": true,
+    "styleMask": 32783,
+    "time": 1793039197.011763,
+    "toolbarVisible": true,
+    "trafficLights": [
+      "{{19, 767}, {14, 14}}",
+      "{{42, 767}, {14, 14}}",
+      "{{65, 767}, {14, 14}}"
+    ],
+    "views": [
+      {
+        "class": "MainController_View",
+        "effectiveTopLeft": 8,
+        "effectiveTopRight": 8,
+        "frame": "{{98, 8}, {292, 784}}"
+      },
+      {
+        "appliedRadius": 8,
+        "class": "LeftSidebarView",
+        "effectiveTopLeft": 8,
+        "effectiveTopRight": 8,
+        "frame": "{{8, 8}, {82, 784}}"
+      }
+    ],
+    "windowFrame": "{{0, 117}, {1100, 800}}"
+  },
+  {
+    "contentFrame": "{{0, 0}, {1100, 800}}",
+    "contentRect": "{{90, 117}, {1100, 800}}",
+    "hasToolbar": true,
+    "styleMask": 32783,
+    "time": 1793039200.615241,
+    "toolbarVisible": true,
+    "trafficLights": [
+      "{{19, 767}, {14, 14}}",
+      "{{42, 767}, {14, 14}}",
+      "{{65, 767}, {14, 14}}"
+    ],
+    "views": [
+      {
+        "class": "MainController_View",
+        "effectiveTopLeft": 8,
+        "effectiveTopRight": 8,
+        "frame": "{{8, 8}, {292, 784}}"
+      }
+    ],
+    "windowFrame": "{{90, 117}, {1100, 800}}"
+  },
+  {
+    "contentFrame": "{{0, 0}, {560, 668}}",
+    "contentRect": "{{90, 249}, {560, 668}}",
+    "hasToolbar": false,
     "styleMask": 15,
-    "time": 1793036990.7241302,
+    "time": 1793039203.329608,
+    "toolbarVisible": false,
+    "trafficLights": [
+      "{{9, 677}, {14, 14}}",
+      "{{32, 677}, {14, 14}}",
+      "{{55, 677}, {14, 14}}"
+    ],
     "views": [],
-    "windowFrame": "{{90, 217}, {560, 732}}"
+    "windowFrame": "{{90, 249}, {560, 700}}"
   }
 ]
