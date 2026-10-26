@@ -16,9 +16,13 @@ A temporary setup helper operates only on the isolated test account. It creates 
 
 `validation.json` records exact crop coordinates, accepted frames, production source hashes, method and limitations. `corner-observations.json` records the final six native observations. The baseline window-corner code is the original private override; the candidate source is recorded in the validation JSON.
 
-## Remaining review gate
+## Compatibility and testing limits
 
-The original review explicitly requests multiple macOS versions. Only macOS 27.0.1 is available and the user has no second Mac. No macOS 26/older runtime test is claimed. Those paths are preserved by availability/compiler guards, but source inspection does not replace that requested runtime evidence. The continuation remains a draft until another macOS version is checked. Fullscreen, secondary displays and appearance outside a window-capture session are also not established by this pass.
+The macOS 27.0.1 build and six folder/window scenarios are complete. The continuation is submitted for review with the limitations below.
+
+The original review asks for results on multiple macOS versions. Only macOS 27.0.1 is available; no macOS 26/older runtime result is claimed. Source inspection confirms that the removed `applyCornerRadius(for:)` body was already guarded by `#available(macOS 27.0, *)`, so its removal does not change older-system execution. The new pane APIs are guarded by macOS 27 availability and Swift 6.4 compiler checks; the existing macOS 26 and earlier static radii and native toolbar are preserved. This compatibility inspection does not replace the requested additional runtime evidence.
+
+Fullscreen, secondary displays, older compilers and appearance outside a window-capture session are also not established by this pass.
 
 ## Sharing-indicator regression
 
