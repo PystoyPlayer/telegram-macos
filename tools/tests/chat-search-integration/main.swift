@@ -228,6 +228,7 @@ check(
 composerAnchor.removeFromSuperview()
 runHeaderLayoutChecks()
 runHeaderRemovalChecks()
+runFlippedGlassHostChecks()
 runAnimatedGlassCornerChecks()
 let savedState = ChatHeaderState(main: .search(operations, nil, nil, [], nil, interaction.chatLocation))
 let savedSearch = ChatSearchHeader(interaction, state: savedState, frame: NSMakeRect(0, 0, 742, 75))
