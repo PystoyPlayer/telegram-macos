@@ -11,7 +11,7 @@ python3 tools/tests/chat-search-integration/run.py --revision a190a124 --expect-
 
 The patched run checks the real query/input state machine, request delivery, response display, six successive width changes (including 742 pt from the maintainer's example), short windows, input focus/query preservation, result navigation, refocusing, sender filtering, the peer/query request parameters, cancellation and result removal. Search results use the full chat width with 12 pt side insets, independently of the inline field's width. Composer suggestions retain their own anchor width. The popup is also tested above/below its anchor with a requested height larger than available space.
 
-The baseline must reproduce the cramped text viewport and stale/detached result geometry. It reports 57 expected viewport, popup, initial-placement, empty-control, closing-glass and saved-tag-inset failures; any unrelated failure fails the baseline run as well. The current patched run passes 175 checks. The 57-failure baseline count above records the original pass; the newer closing regressions are documented below.
+The baseline must reproduce the cramped text viewport and stale/detached result geometry. It reports 57 expected viewport, popup, initial-placement, empty-control, closing-glass and saved-tag-inset failures; any unrelated failure fails the baseline run as well. The current patched run passes 177 checks. The 57-failure baseline count above records the original pass; the newer closing regressions are documented below.
 
 ## What runs
 
@@ -31,12 +31,12 @@ The runner builds `/private/tmp/telegram-search-build/SearchIntegration.app` for
 
 Validated on macOS 27.0.1 / Xcode 27.1. App version/build: N/A, native test executable. The separate complete Debug arm64 Telegram build succeeds after building the pinned native dependencies. See VALIDATION.md for the full-client verification status.
 
-## Saved Messages closing regression (2026-10-27)
+## Saved Messages search input background (2026-10-27)
 
-The current suite passes **175 checks**. The new cases retain a flipped native glass host while an outgoing row extends below its target bounds, release that height after closing, and cancel a pending shrink when search reopens. Standalone search content fades over 0.12 seconds so white text does not outlive the dimming native surface; the inline merge keeps its 0.2-second content fade.
+The current suite passes **177 checks**. The native glass host remains tall enough for the outgoing row and releases that height after closing; reopening cancels a pending shrink. Search content, including the input background, now uses the full 0.2-second exit rather than the earlier 0.12-second fade. The inline merge keeps its existing behavior.
 
-Four host checks fail with the previous TGUIKit source. A separate old-header run with the corrected host reproduces the late-text check. The two baseline scopes are recorded separately in `saved-search-fade/`; no single combined old-source run is claimed.
+A regression with the old header and corrected host fails the input-background timing check. The fixture includes a real ChatSearchView with a nontransparent background. `search-input-background/` records the passing/current and failing/old-header scopes, native before/after captures and authenticated-client endpoint checks.
 
-`before.gif` and `after.gif` capture actual native rendering of the production removal block and real glass views. The labels are controlled NSTextFields, not an authenticated Telegram screen or the Premium tag renderer. The text and glass host occupy separate hierarchies, as in the standalone row. The setup button delays closing so computer-use screenshots can sample the native transition. `verification.json` records fresh process IDs, frame times, hashes, crop coordinates and pixel samples. At comparable low background contrast, the old capture still has visible text; the corrected capture does not.
+The reproducible scene uses actual ChatSearchHeader / ChatSearchView controls, the production removal block and real glass views. Its Unlock label is controlled text, not the Premium renderer. Direct native crops record the input-background transition; verification.json records fresh process IDs, frame times, hashes and limits. The earlier `saved-search-fade/` text-only scene is historical and does not establish the input-background behavior.
 
-To open the reproducible native scene, run the usual harness command with `--prepare-app --fade-preview` and open the printed application path. Press **Close after 1.5 seconds** once and use **Quit Preview** before rebuilding. `--revision` selects ChatUI source only; reproducing the old host also requires dependencies checked out before this fix. No preview code is included in the Telegram target.
+Run the usual harness command with `--prepare-app --fade-preview` and open the printed application path. Press **Close after 1.5 seconds** once and use **Quit Preview** before rebuilding. `--revision` selects ChatUI source only; reproducing the old host also requires dependencies checked out before that fix. No preview code is included in the Telegram target.

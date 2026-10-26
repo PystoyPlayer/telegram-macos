@@ -175,7 +175,7 @@ func runFlippedGlassHostChecks() {
   check(wrapper.glassContent.frame.height == 137, "Header glass content clipped the outgoing row")
   drain(0.08)
   check(wrapper.glassContainer.frame.height == 137, "Header glass host shrank before the fade finished")
-  check((fadingContent.layer?.presentation()?.opacity ?? 0) > 0.35, "Search input background disappeared before the native glass exit completed")
+  check((fadingContent.layer?.presentation()?.opacity ?? 0) > 0.35, "Header search input background disappeared before the native glass exit completed")
   check(field.backgroundColor != .clear, "Standalone fade fixture does not exercise the input background")
   let reopened = LiquidGlassView(frame: NSMakeRect(12, 62, 976, 75), cornerRadius: 20)
   wrapper.addGhost(reopened)

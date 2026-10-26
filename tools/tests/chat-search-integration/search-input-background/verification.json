@@ -1,0 +1,393 @@
+{
+  "date": "2026-10-27",
+  "macOS": "27.0.1 (26A434)",
+  "Xcode": "27.1 (27A9275)",
+  "baseline": "c800a68bee5a0a79278f9cda8535bdf59c274e1e",
+  "candidate": "1aeb3e83909def1d17df242cfa8c0183e5ab4746",
+  "nativeIntegration": "fd4c24c9",
+  "method": "Native computer-use window captures of the source-extracted production removal block, actual ChatSearchHeader and ChatSearchView, and real GlassContainerView/LiquidGlassView. The Unlock text is a controlled label; this is not an authenticated Saved Messages/Premium rendering. No UI is reconstructed. GIFs are direct crops with palette conversion and recorded frame intervals.",
+  "crop": [
+    24,
+    216,
+    1976,
+    376
+  ],
+  "captures": {
+    "before": {
+      "pid": 98972,
+      "nativeImageSize": [
+        2000,
+        1156
+      ],
+      "frames": [
+        {
+          "frame": 20,
+          "ms": 1390,
+          "sha256": "e55c71cf500b5ecce5c719f632d595eaed5f23b0ee345d0dd821e3d4b84da318",
+          "fieldRGB": [
+            45,
+            55,
+            67
+          ],
+          "outerGlassRGB": [
+            53,
+            61,
+            72
+          ]
+        },
+        {
+          "frame": 21,
+          "ms": 1440,
+          "sha256": "246c2d36ba9127049d02384b2a5639b2903c62686c21373d9679a20e01e5c73d",
+          "fieldRGB": [
+            45,
+            55,
+            67
+          ],
+          "outerGlassRGB": [
+            53,
+            61,
+            72
+          ]
+        },
+        {
+          "frame": 22,
+          "ms": 1490,
+          "sha256": "c279717521192611547c10381bea1187009cbaa8a312d3a8d470ed6ebb92b9d5",
+          "fieldRGB": [
+            45,
+            55,
+            67
+          ],
+          "outerGlassRGB": [
+            53,
+            61,
+            72
+          ]
+        },
+        {
+          "frame": 23,
+          "ms": 1540,
+          "sha256": "a6ed0036fb3bf3b62a5cc898e2d27338f3d301603c338df8edf629f74d2cc4e4",
+          "fieldRGB": [
+            46,
+            56,
+            68
+          ],
+          "outerGlassRGB": [
+            52,
+            60,
+            71
+          ]
+        },
+        {
+          "frame": 24,
+          "ms": 1598,
+          "sha256": "d5763d4762b3944379392d26b0689b5dab96694f966bba1be38091c5bbcd534f",
+          "fieldRGB": [
+            42,
+            50,
+            61
+          ],
+          "outerGlassRGB": [
+            42,
+            51,
+            60
+          ]
+        },
+        {
+          "frame": 25,
+          "ms": 1648,
+          "sha256": "6bf797de5d697c133e6428edeb129dc106661c03919ffaf74078d810e7ee6a40",
+          "fieldRGB": [
+            32,
+            41,
+            50
+          ],
+          "outerGlassRGB": [
+            32,
+            41,
+            50
+          ]
+        },
+        {
+          "frame": 26,
+          "ms": 1700,
+          "sha256": "c5d9ddab81a3da29882131f44da39d409d0d508543ccacf698396fcf52dfae00",
+          "fieldRGB": [
+            28,
+            37,
+            46
+          ],
+          "outerGlassRGB": [
+            28,
+            37,
+            46
+          ]
+        },
+        {
+          "frame": 27,
+          "ms": 1751,
+          "sha256": "75d7898b64d21569501460635ebc466b019b99234e2101e464b234bb8a9eaf25",
+          "fieldRGB": [
+            26,
+            35,
+            44
+          ],
+          "outerGlassRGB": [
+            26,
+            35,
+            44
+          ]
+        },
+        {
+          "frame": 28,
+          "ms": 1806,
+          "sha256": "0e30d1ad6ef27fdda6739d53b9cb0cf1ce3f2222507bdbcb5c26ecd3e21a0177",
+          "fieldRGB": [
+            26,
+            35,
+            44
+          ],
+          "outerGlassRGB": [
+            26,
+            35,
+            44
+          ]
+        },
+        {
+          "frame": 29,
+          "ms": 1858,
+          "sha256": "bc1e3c8db9d9a13564360a5c9b9c18fe1a9daf6f01e12ac0b0c506b2967d2d44",
+          "fieldRGB": [
+            26,
+            35,
+            44
+          ],
+          "outerGlassRGB": [
+            26,
+            35,
+            44
+          ]
+        },
+        {
+          "frame": 30,
+          "ms": 1916,
+          "sha256": "fbc9caed9ea354cf9ce01073e03bd132ef3756ab7acfbadd185cdc2073cff6fa",
+          "fieldRGB": [
+            26,
+            35,
+            44
+          ],
+          "outerGlassRGB": [
+            26,
+            35,
+            44
+          ]
+        }
+      ],
+      "gifSha256": "2f6cdc1ff8a8feef452b907c340a1f777d0c71026de0a3721ff1a5bc9ff98e5c"
+    },
+    "after": {
+      "pid": 87766,
+      "nativeImageSize": [
+        2000,
+        1156
+      ],
+      "frames": [
+        {
+          "frame": 19,
+          "ms": 1353,
+          "sha256": "24dba992e2899554e77429482a5b6dcd2cddee61f483f843d599699a41429024",
+          "fieldRGB": [
+            45,
+            55,
+            67
+          ],
+          "outerGlassRGB": [
+            53,
+            61,
+            72
+          ]
+        },
+        {
+          "frame": 20,
+          "ms": 1403,
+          "sha256": "4fbf520ed48a8ddd47e09a71faa41e47e5268dac2e31ec6886cdb8902ef5f6ce",
+          "fieldRGB": [
+            45,
+            55,
+            67
+          ],
+          "outerGlassRGB": [
+            53,
+            61,
+            72
+          ]
+        },
+        {
+          "frame": 21,
+          "ms": 1453,
+          "sha256": "11fe6e6ddd43988511e06983fa31f92bcec1b0e59170cdcc9b9aba3d6e886bd8",
+          "fieldRGB": [
+            45,
+            55,
+            67
+          ],
+          "outerGlassRGB": [
+            53,
+            61,
+            72
+          ]
+        },
+        {
+          "frame": 22,
+          "ms": 1506,
+          "sha256": "798b8c31b22a8a338c290df699c3420c5ed25c838350c127cf6c56f613c5ee05",
+          "fieldRGB": [
+            45,
+            55,
+            67
+          ],
+          "outerGlassRGB": [
+            53,
+            61,
+            72
+          ]
+        },
+        {
+          "frame": 23,
+          "ms": 1556,
+          "sha256": "5c53b1d27dec1b10cb2d63159cfd18103976ad5dd352a9288c5d74fc29de6fe6",
+          "fieldRGB": [
+            45,
+            55,
+            67
+          ],
+          "outerGlassRGB": [
+            52,
+            60,
+            71
+          ]
+        },
+        {
+          "frame": 24,
+          "ms": 1603,
+          "sha256": "620c797b199c1ad806074f772d4df383c0a765150728f6b22ab96556da42fa0c",
+          "fieldRGB": [
+            42,
+            50,
+            61
+          ],
+          "outerGlassRGB": [
+            42,
+            51,
+            60
+          ]
+        },
+        {
+          "frame": 25,
+          "ms": 1654,
+          "sha256": "1dce3de2dc67388df705212cde119dc7519ebf597fb110ee64e4450c9962726b",
+          "fieldRGB": [
+            34,
+            42,
+            53
+          ],
+          "outerGlassRGB": [
+            33,
+            42,
+            51
+          ]
+        },
+        {
+          "frame": 26,
+          "ms": 1703,
+          "sha256": "e92d77ed9ba32782e11eee6fa69bfa8c133f8e3f12f28b7b3ba3a20f2c39c81a",
+          "fieldRGB": [
+            28,
+            36,
+            47
+          ],
+          "outerGlassRGB": [
+            28,
+            37,
+            46
+          ]
+        },
+        {
+          "frame": 27,
+          "ms": 1752,
+          "sha256": "60e5f6b6bc26f35c477519fb991d0717a1cfab2839b13b3c0daf87e5cf4ef1ee",
+          "fieldRGB": [
+            26,
+            35,
+            44
+          ],
+          "outerGlassRGB": [
+            26,
+            35,
+            44
+          ]
+        },
+        {
+          "frame": 28,
+          "ms": 1802,
+          "sha256": "eee6e3b8c697b2e242fb040c3b8a2958b61703f7a3c153e03a3e95d90bee26bd",
+          "fieldRGB": [
+            26,
+            35,
+            44
+          ],
+          "outerGlassRGB": [
+            26,
+            35,
+            44
+          ]
+        },
+        {
+          "frame": 29,
+          "ms": 1849,
+          "sha256": "e529cdf76b3d632bcc230df27c001821b7540ad1de37cfcca083fc8beef6b8a9",
+          "fieldRGB": [
+            26,
+            35,
+            44
+          ],
+          "outerGlassRGB": [
+            26,
+            35,
+            44
+          ]
+        },
+        {
+          "frame": 30,
+          "ms": 1895,
+          "sha256": "0612f0091ea361c9f1411b4bed8eff4c9cfc15b912302558301e4aceaf28d66a",
+          "fieldRGB": [
+            26,
+            35,
+            44
+          ],
+          "outerGlassRGB": [
+            26,
+            35,
+            44
+          ]
+        }
+      ],
+      "gifSha256": "bf701f37dba2632520222b84c0cdda14a1624ccac995481669e48a31222ccca1"
+    }
+  },
+  "validation": {
+    "currentChecks": 177,
+    "oldHeaderFailedChecks": 1,
+    "oldHeaderFailure": "Header search input background disappeared before the native glass exit completed",
+    "fullNativeBuild": "succeeded; final production header is identical to the tested candidate"
+  },
+  "limits": [
+    "The earlier text-only scene did not exercise the search input background. It is superseded by this real-field scene.",
+    "No authenticated-client frame-by-frame animation recording, Premium account or additional macOS version is claimed.",
+    "Glass uses the existing AppKit automatic exit; no additional native alpha animation or reparenting is shipped."
+  ]
+}
