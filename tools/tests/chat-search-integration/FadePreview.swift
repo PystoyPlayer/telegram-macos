@@ -8,7 +8,7 @@ final class FadePreviewButton: NSButton {
 func showFadePreview() {
   root.subviews.forEach { $0.removeFromSuperview() }
   window.title = "Native search closing · PID \(ProcessInfo.processInfo.processIdentifier)"
-  let note = NSTextField(labelWithString: "Production header removal · native glass · controlled text · no account")
+  let note = NSTextField(labelWithString: "Production search field and header removal · native glass · no account")
   note.textColor = theme.colors.grayText
   note.frame = NSMakeRect(20, 20, 940, 25)
   root.addSubview(note)
@@ -20,11 +20,10 @@ func showFadePreview() {
   content.frame = rect
   root.addSubview(content)
   wrapper.setGhostFrame(lifecycle.glassEffect!, frame: rect, transition: .immediate)
-  let search = NSTextField(labelWithString: "Search")
-  search.font = .systemFont(ofSize: 16)
-  search.textColor = .white
-  search.frame = NSMakeRect(28, 10, 200, 25)
+  search.frame = NSMakeRect(0, 0, rect.width, 40)
   content.addSubview(search)
+  search.updateLayout(size: search.frame.size, transition: .immediate)
+  search.applySearchResponder(false)
   let unlock = NSTextField(labelWithString: "Unlock")
   unlock.font = .systemFont(ofSize: 14)
   unlock.textColor = .systemBlue

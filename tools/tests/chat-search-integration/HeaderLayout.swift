@@ -118,6 +118,7 @@ func runHeaderRemovalChecks() {
   fallback.remove(animated: true, mergeGlassOnRemoval: false)
   check(fallbackGhost.effectView.superview == nil, "Header below the title kept an unwanted glass surface")
   drain(0.3)
+  check(fallbackGhost.effectView.superview == nil, "Standalone search retained its native glass after fading")
   check(wrapper.ghosts.isEmpty, "Header fallback removal leaked its glass")
   wrapper.removeFromSuperview()
 }
@@ -163,6 +164,8 @@ func runFlippedGlassHostChecks() {
   header.currentView!.frame = NSMakeRect(12, 62, 976, 75)
   root.addSubview(header.currentView!)
   let fadingContent = header.currentView!
+  let field = ChatSearchView(frame: NSMakeRect(8, 5, 600, 30))
+  fadingContent.addSubview(field)
   let outgoing = header.glassEffect!
   wrapper.setGhostFrame(outgoing, frame: header.currentView!.frame, transition: .immediate)
   header.remove(animated: true, mergeGlassOnRemoval: false)
@@ -172,7 +175,8 @@ func runFlippedGlassHostChecks() {
   check(wrapper.glassContent.frame.height == 137, "Header glass content clipped the outgoing row")
   drain(0.08)
   check(wrapper.glassContainer.frame.height == 137, "Header glass host shrank before the fade finished")
-  check((fadingContent.layer?.presentation()?.opacity ?? 1) < 0.35, "Header search text remains visible after its glass starts disappearing")
+  check((fadingContent.layer?.presentation()?.opacity ?? 0) > 0.35, "Search input background disappeared before the native glass exit completed")
+  check(field.backgroundColor != .clear, "Standalone fade fixture does not exercise the input background")
   let reopened = LiquidGlassView(frame: NSMakeRect(12, 62, 976, 75), cornerRadius: 20)
   wrapper.addGhost(reopened)
   wrapper.updateLayout(size: NSMakeSize(1000, 160), transition: .immediate)

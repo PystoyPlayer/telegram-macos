@@ -658,8 +658,7 @@ class ChatHeaderController {
                     let removingGlass = self.glassEffect
                     self.glassEffect = nil
                     self.separatorViews.removeAll()
-                    let removalDuration = previousPrimary is ChatSearchHeader && !mergeGlassOnRemoval ? 0.12 : 0.2
-                    performSubviewRemoval(currentView, animated: animated, duration: removalDuration)
+                    performSubviewRemoval(currentView, animated: animated)
                     if let removingGlass, removingGlass.superview !== currentView {
                         let wrapper = sharedGlassWrapper
                         if animated && mergeGlassOnRemoval {
