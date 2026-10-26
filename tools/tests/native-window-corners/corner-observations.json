@@ -1,0 +1,86 @@
+[
+  {
+    "contentFrame": "{{0, 0}, {1100, 800}}",
+    "contentRect": "{{0, 117}, {1100, 832}}",
+    "styleMask": 32783,
+    "time": 1793036881.934325,
+    "views": [
+      {
+        "class": "MainController_View",
+        "effectiveTopLeft": 8,
+        "effectiveTopRight": 8,
+        "frame": "{{8, 8}, {292, 784}}"
+      }
+    ],
+    "windowFrame": "{{0, 117}, {1100, 832}}"
+  },
+  {
+    "contentFrame": "{{0, 0}, {1100, 800}}",
+    "contentRect": "{{0, 117}, {1100, 832}}",
+    "styleMask": 32783,
+    "time": 1793036982.743818,
+    "views": [
+      {
+        "class": "MainController_View",
+        "effectiveTopLeft": 8,
+        "effectiveTopRight": 8,
+        "frame": "{{8, 8}, {292, 784}}"
+      }
+    ],
+    "windowFrame": "{{0, 117}, {1100, 832}}"
+  },
+  {
+    "contentFrame": "{{0, 0}, {560, 700}}",
+    "contentRect": "{{0, 249}, {560, 668}}",
+    "styleMask": 15,
+    "time": 1793036984.3954248,
+    "views": [],
+    "windowFrame": "{{0, 249}, {560, 700}}"
+  },
+  {
+    "contentFrame": "{{0, 0}, {1190, 832}}",
+    "contentRect": "{{0, 117}, {1190, 832}}",
+    "styleMask": 32783,
+    "time": 1793036987.00848,
+    "views": [
+      {
+        "class": "MainController_View",
+        "effectiveTopLeft": 8,
+        "effectiveTopRight": 8,
+        "frame": "{{98, 8}, {292, 816}}"
+      },
+      {
+        "appliedRadius": 8,
+        "class": "LeftSidebarView",
+        "effectiveTopLeft": 8,
+        "effectiveTopRight": 8,
+        "frame": "{{8, 8}, {82, 816}}"
+      }
+    ],
+    "windowFrame": "{{0, 117}, {1190, 832}}"
+  },
+  {
+    "contentFrame": "{{0, 0}, {560, 700}}",
+    "contentRect": "{{0, 249}, {560, 700}}",
+    "styleMask": 32783,
+    "time": 1793036988.6781402,
+    "views": [
+      {
+        "appliedRadius": 8,
+        "class": "LeftSidebarView",
+        "effectiveTopLeft": 8,
+        "effectiveTopRight": 8,
+        "frame": "{{8, 8}, {82, 684}}"
+      }
+    ],
+    "windowFrame": "{{0, 249}, {560, 700}}"
+  },
+  {
+    "contentFrame": "{{0, 0}, {560, 700}}",
+    "contentRect": "{{90, 217}, {560, 700}}",
+    "styleMask": 15,
+    "time": 1793036990.7241302,
+    "views": [],
+    "windowFrame": "{{90, 217}, {560, 732}}"
+  }
+]

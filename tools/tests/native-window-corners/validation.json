@@ -1,0 +1,258 @@
+{
+  "date": "2026-10-26",
+  "macOS": "27.0.1 (26A434)",
+  "xcode": "27.1 (27A9275)",
+  "client": "13.1.0 (283357), Debug arm64",
+  "nativeIntegration": "08d3618e",
+  "baseline": "d159d0b2 window-corner source with the existing private NSWindow radius override",
+  "candidate": "332f97de native corners, concentric pane corners and macOS 27 toolbar routing",
+  "method": "Actual authenticated client windows. A temporary setup helper changes the isolated account folder layout through the existing engine/preferences APIs and requests 1100x800 or 560x700 content sizes. The system accepts the frame sizes recorded here. It does not replace window chrome, sidebar views or corner calculations. The helper and local SDK/profile changes are excluded from the feature.",
+  "matrix": [
+    {
+      "mode": "no-folders-wide",
+      "frames": [
+        {
+          "phase": "before",
+          "image": "before-no-folders-wide.png",
+          "nativeImageSize": [
+            2200,
+            1600
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            250
+          ],
+          "sha256": "48c429e562aa0fa27cc523fc38f9f2500fbd84116340180f6db869c785b0a99b"
+        },
+        {
+          "phase": "after",
+          "image": "after-no-folders-wide.png",
+          "nativeImageSize": [
+            2200,
+            1664
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            250
+          ],
+          "sha256": "58a83a3d22f338d39091232280f742a0c3b8bf2f9a0a034a346fffed32244309"
+        }
+      ],
+      "nativeSizeMatches": false
+    },
+    {
+      "mode": "horizontal-wide",
+      "frames": [
+        {
+          "phase": "before",
+          "image": "before-horizontal-wide.png",
+          "nativeImageSize": [
+            2200,
+            1600
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            250
+          ],
+          "sha256": "bfbb1a5de0820a308bde065fb0848a01dca4cca9a5f4225622278c8169abaae1"
+        },
+        {
+          "phase": "after",
+          "image": "after-horizontal-wide.png",
+          "nativeImageSize": [
+            2200,
+            1664
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            250
+          ],
+          "sha256": "58a83a3d22f338d39091232280f742a0c3b8bf2f9a0a034a346fffed32244309"
+        }
+      ],
+      "nativeSizeMatches": false
+    },
+    {
+      "mode": "horizontal-compact",
+      "frames": [
+        {
+          "phase": "before",
+          "image": "before-horizontal-compact.png",
+          "nativeImageSize": [
+            1120,
+            1464
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            180
+          ],
+          "sha256": "70984c08c4033bdcde6f477511eb039e014cb63b7966277825346d41fa77660c"
+        },
+        {
+          "phase": "after",
+          "image": "after-horizontal-compact.png",
+          "nativeImageSize": [
+            1120,
+            1400
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            180
+          ],
+          "sha256": "534d6e688e84b7a0330b4f6739a75b28723e8d23e3d05edf1f5a2a5b4a8eb4da"
+        }
+      ],
+      "nativeSizeMatches": false
+    },
+    {
+      "mode": "vertical-wide",
+      "frames": [
+        {
+          "phase": "before",
+          "image": "before-vertical-wide.png",
+          "nativeImageSize": [
+            2380,
+            1664
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            250
+          ],
+          "sha256": "d63efb71916eb3dba17f3d5276df69b8e7a636458a506dd07c0d643f74dd8231"
+        },
+        {
+          "phase": "after",
+          "image": "after-vertical-wide.png",
+          "nativeImageSize": [
+            2380,
+            1664
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            250
+          ],
+          "sha256": "764b308da14ec7ed2659610625fbe581de252ec1dd5e091268079dddaf312d2c"
+        }
+      ],
+      "nativeSizeMatches": true
+    },
+    {
+      "mode": "vertical-compact",
+      "frames": [
+        {
+          "phase": "before",
+          "image": "before-vertical-compact.png",
+          "nativeImageSize": [
+            1120,
+            1400
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            180
+          ],
+          "sha256": "23996f228958570fa433150b797bf6a9383c19dcbf97d3a16cf5ca78db21c8c2"
+        },
+        {
+          "phase": "after",
+          "image": "after-vertical-compact.png",
+          "nativeImageSize": [
+            1120,
+            1400
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            180
+          ],
+          "sha256": "9809d9ada3f19464e438b2a8bc586fd3f28110f17aa6a0133349e2f75bbe3fed"
+        }
+      ],
+      "nativeSizeMatches": true
+    },
+    {
+      "mode": "no-folders-compact",
+      "frames": [
+        {
+          "phase": "before",
+          "image": "before-no-folders-compact.png",
+          "nativeImageSize": [
+            1120,
+            1464
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            180
+          ],
+          "sha256": "53404542b2e6a841e727f220865479902c82ad55f81584fe9eea74134b00bff4"
+        },
+        {
+          "phase": "after",
+          "image": "after-no-folders-compact.png",
+          "nativeImageSize": [
+            1120,
+            1464
+          ],
+          "crop": [
+            0,
+            0,
+            610,
+            180
+          ],
+          "sha256": "509b4d60cee3838227bec3016fd5a479fd55a40d4aa7b4f5a5a6b7d651c9f3ce"
+        }
+      ],
+      "nativeSizeMatches": true
+    }
+  ],
+  "limits": [
+    "Only macOS 27.0.1 is available. No runtime result is claimed for macOS 26 or earlier.",
+    "Captured native frame heights vary for some requested content sizes because native titlebar/chrome changes. Every accepted frame is recorded. The primary comparison uses the identical vertical-rail window frame.",
+    "Native window-sharing/titlebar UI remains visible in the captures; appearance outside a capture session needs independent confirmation.",
+    "Fullscreen, secondary displays and older compilers were not exercised."
+  ],
+  "folderSettingsRestored": true,
+  "primaryComparison": {
+    "scenario": "vertical folder rail, wide window",
+    "nativeFramePoints": [
+      1190,
+      832
+    ],
+    "crop": [
+      0,
+      0,
+      610,
+      196
+    ],
+    "images": {
+      "before": "f93b73c6eff249fb802265be535a50f37c12f40c902e6007f3038f5f49d4df93",
+      "after": "ae48438a831b126fb62092498aded97e8e9ac16dc3c318b6057c5ff377d4480a"
+    }
+  },
+  "affectedSourceHashes": {
+    "Telegram-Mac/app/ApplicationContext.swift": "b0d5ddad4cc4793af59789866ffe29dc8b09fe1bf2b8c04b6f89e0735e538589",
+    "Telegram-Mac/app/MainViewController.swift": "2546415473a2aef531e71a86a9277a6c25a65ca92f0d157f9aa0681e9468ab89",
+    "packages/SidebarUI/Sources/SidebarUI/LeftSidebarController.swift": "cc880e84bf83009a3e7f48e007aa00b2163ce3d3b3c49fc3003905bec9dcd9b3",
+    "packages/TGUIKit/Sources/Window.swift": "4278c4fdfc7751419990e66181e667e7bc7e0eeb6427227608994bec374ad6ee"
+  }
+}
