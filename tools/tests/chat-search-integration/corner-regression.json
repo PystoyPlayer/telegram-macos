@@ -1,0 +1,28 @@
+{
+  "beforeRef": "b322a7bb",
+  "beforeTotal": 163,
+  "beforeFailures": 5,
+  "afterPassed": 163,
+  "nativeTypes": [
+    "GlassContainerView",
+    "LiquidGlassView",
+    "NSGlassEffectView"
+  ],
+  "cases": [
+    "zero-height animated reveal",
+    "collapse and animated reopen",
+    "animated height reduction",
+    "standalone animated reveal",
+    "standalone animated height change"
+  ],
+  "liveClient": [
+    "Telegram Tips: open empty search",
+    "switch to Saved Messages while search is open",
+    "Saved Messages: open empty search with Unlock tags",
+    "narrow to 560 points",
+    "close search with Escape"
+  ],
+  "capture": "../chat-header/screenshots/review-after-search-corners.png",
+  "macOS": "27.0.1",
+  "app": "13.1.0 (283357)"
+}
