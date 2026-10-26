@@ -12,9 +12,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--revision')
 parser.add_argument('--expect-regression', action='store_true')
 parser.add_argument('--prepare-app', action='store_true')
+parser.add_argument('--fade-preview', action='store_true')
 parser.add_argument('--scratch-path', type=Path, required=True)
 parser.add_argument("--dependency-root", type=Path, default=root)
 args = parser.parse_args()
+if args.fade_preview and not args.prepare_app:
+    parser.error("--fade-preview requires --prepare-app")
 dependency_root = args.dependency_root.resolve()
 
 
@@ -121,7 +124,12 @@ struct ControllerGeometry {
         images[name] = str(image_set / filename)
     (sources / 'Assets.swift').write_text('let imagePaths: [String: String] = [' + ', '.join(json.dumps(name) + ': ' + json.dumps(path) for name, path in images.items()) + ']')
     for name in ['Models.swift', 'EmptySearchState.swift', 'main.swift']:
-        (sources / name).write_text((fixtures / name).read_text())
+        content = (fixtures / name).read_text()
+        if args.fade_preview and name == 'main.swift':
+            content = content.replace('  NSApp.run()', '  showFadePreview()\n  NSApp.run()')
+        (sources / name).write_text(content)
+    if args.fade_preview:
+        shutil.copy2(fixtures / 'FadePreview.swift', sources / 'FadePreview.swift')
     command = ['swift', 'run', '--package-path', str(directory), '--scratch-path', str(args.scratch_path.resolve()), '--disable-sandbox', '--jobs', '2', 'SearchIntegration']
     if args.expect_regression:
         command.append('--expect-regression')

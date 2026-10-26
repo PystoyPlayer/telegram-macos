@@ -1,0 +1,791 @@
+{
+  "date": "2026-10-27",
+  "macOS": "27.0.1 (26A434)",
+  "Xcode": "27.1 (27A9275)",
+  "baseline": "c3e9000c",
+  "candidate": "139042f7fa054d6d6b7d4b6846f5a87ca6f52355",
+  "nativeIntegration": "c800a68bee5a0a79278f9cda8535bdf59c274e1e",
+  "method": "Actual window captures of a native lifecycle fixture using the source-extracted production removal block and actual GlassContainerView/LiquidGlassView. Search/Unlock labels are controlled NSTextFields; no Telegram account or Premium UI is used. Text is a sibling of the glass host, as in the standalone search row. Closing shrinks the host from 550 to 62 points while removing an outgoing glass at y80, height80. A native setup button delays the operation 1.5 seconds so computer-use captures can sample the transition. Each recorded phase used a fresh process with the revision/PID in its title.",
+  "captures": {
+    "before": {
+      "pid": 61031,
+      "nativeImageSize": [
+        2000,
+        1156
+      ],
+      "gifCrop": [
+        0,
+        56,
+        2000,
+        400
+      ],
+      "gifFrames": [
+        14,
+        19
+      ],
+      "gifStartEndHoldMs": [
+        500,
+        700
+      ],
+      "gifSha256": "afb6c091f2f690ba7672cfc2462e25a9c6316c283a44e894d9e4f445d434c36f",
+      "lowBackgroundWithVisibleTextFrames": [
+        17
+      ],
+      "measurements": [
+        {
+          "frame": 0,
+          "ms": 751,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "7e5f6233e49aa3b9bdb2879516bd05cbb13c51f5b07b39ace0766ea827f7995c"
+        },
+        {
+          "frame": 1,
+          "ms": 803,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "0c5a2ac94dfeef85a474abde295e16fdbc42613b754ec564b704b948b0ecbffb"
+        },
+        {
+          "frame": 2,
+          "ms": 853,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "8f5dbc00371dba42a7f78d93998700dcc636929b2ffa68a56c21f9f691bd3286"
+        },
+        {
+          "frame": 3,
+          "ms": 903,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "ca9ee74793700a74bf6acc4eb1ef09f9b2d1c31e608e90119f205e1e30d4e7a8"
+        },
+        {
+          "frame": 4,
+          "ms": 953,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "72ac9d26295df3b21c7057561180d469e92f174480ffd379d1746bf59e3a2234"
+        },
+        {
+          "frame": 5,
+          "ms": 1003,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "84bad784c5553ea7bb7621adef2a3ad0e6f08ca5b82b92e6da34827a0d2c7468"
+        },
+        {
+          "frame": 6,
+          "ms": 1052,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "727f247c66676ee24ffe496bd412e752a5e706f79afcb1d6af7431343d6d508d"
+        },
+        {
+          "frame": 7,
+          "ms": 1119,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "4d118039aedfc886bb2052b72e37ca8e60a80c6bc6d17abde2a5ec36099b8172"
+        },
+        {
+          "frame": 8,
+          "ms": 1177,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "66f0f8f39606f24dc2b7098665b7d1a5431bfbdc8ae5536a7f19b2ecaa4a04c0"
+        },
+        {
+          "frame": 9,
+          "ms": 1237,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "c61c17cc0964d7ccb8ac2228574352562869a9360a2f36c29af5185dcdbe8a75"
+        },
+        {
+          "frame": 10,
+          "ms": 1286,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "180c6a41d92ac17e46f956be0bfd94dab810be0ec3e03219a4aac082c7cf4b48"
+        },
+        {
+          "frame": 11,
+          "ms": 1337,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "84f4b212e5dd7ded63f7409aaaa19e489947ef411f4be348b99cd9ba3731eb91"
+        },
+        {
+          "frame": 12,
+          "ms": 1395,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "236f113db68ccd0ae81796779dac0ed5405af7506f174b25d5d84d9a67d44af4"
+        },
+        {
+          "frame": 13,
+          "ms": 1469,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "d9df8b8d27cec2924b6725b28e0f3f8a96a3586979a2a5f62368bee20bf45f5a"
+        },
+        {
+          "frame": 14,
+          "ms": 1519,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "b74ff8cc940d060ac5dd74b9bb287c9e9f42e82a6a359ed2306ecfc1577c1071"
+        },
+        {
+          "frame": 15,
+          "ms": 1575,
+          "backgroundRGB": [
+            52,
+            60,
+            71
+          ],
+          "textPeak": 249,
+          "sha256": "041072b4a73b49f9f757ef03d773304c7280847b7e6e10e95a82541cdadc9bef"
+        },
+        {
+          "frame": 16,
+          "ms": 1633,
+          "backgroundRGB": [
+            40,
+            48,
+            59
+          ],
+          "textPeak": 165,
+          "sha256": "62656f36c85b76b6c18816830e9328375e6ad3a4efc0494dc32768d7380749a7"
+        },
+        {
+          "frame": 17,
+          "ms": 1686,
+          "backgroundRGB": [
+            31,
+            40,
+            49
+          ],
+          "textPeak": 91,
+          "sha256": "7ba3422821c54502e08371bfd94cd934880bc3450784ea692051b663bd36440d"
+        },
+        {
+          "frame": 18,
+          "ms": 1741,
+          "backgroundRGB": [
+            27,
+            36,
+            45
+          ],
+          "textPeak": 51,
+          "sha256": "acfa1bc7177841b450800de2fe56b50ab6c299f1770f142b310a453eb7f78a1b"
+        },
+        {
+          "frame": 19,
+          "ms": 1820,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "f9679d1dd6c9d93064cfc0707cb33d4bb4fd8ddf5452f114b9643491fc0a751a"
+        },
+        {
+          "frame": 20,
+          "ms": 1868,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "1665d4e99305ace77859283b755bf56cda7e07a640e641997edf9094147b992a"
+        },
+        {
+          "frame": 21,
+          "ms": 1920,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "6e6c3cd0fa01cdcbdd526e587ddc58ba927bab612d1e5db1dd6ab1e82df7d787"
+        },
+        {
+          "frame": 22,
+          "ms": 1975,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "9bc4e22472e1698f4af64dc95e4d0b2788a0400ea0e8c409159df36da468c817"
+        },
+        {
+          "frame": 23,
+          "ms": 2027,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "dca11907dbf24b4c3e9685af3939fd8b308b83fa3fabd9b4ab8a3e986360296a"
+        },
+        {
+          "frame": 24,
+          "ms": 2077,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "7dce635c712a373e64917fd651d347bc9da0175fc44408e4137dee572af363a9"
+        },
+        {
+          "frame": 25,
+          "ms": 2132,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "2c0aa6bde5d9dce912e511b12eb9c12c5897e154307484609ff9d2a8dee55c0d"
+        },
+        {
+          "frame": 26,
+          "ms": 2200,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "dab1fcce901031a4ee3cf064b30ceb111017cb713019f873c7fe3e99783fbe44"
+        },
+        {
+          "frame": 27,
+          "ms": 2252,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "d848c049d8fd9e2b4ccc01e54d03830d46703e2a35215cab0eff3f55c111bf0d"
+        },
+        {
+          "frame": 28,
+          "ms": 2301,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "9eaa0dd1844d27fd5c5a176ea1cf23cb4c2cd380e114002172616f4aa540909e"
+        },
+        {
+          "frame": 29,
+          "ms": 2351,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "ded295b6f53d93822205bd34a772020c935c5419cddbcaa8cc2d7f94fd747198"
+        },
+        {
+          "frame": 30,
+          "ms": 2402,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "3f4438edc71118185dee0d841cd03bf1f5c05777f8b85582f2dde117b1602cca"
+        },
+        {
+          "frame": 31,
+          "ms": 2451,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "b1236d5855cc331cd7912e181b099b810f4bb205d69f4e817643bcaf698346b4"
+        }
+      ]
+    },
+    "after": {
+      "pid": 61797,
+      "nativeImageSize": [
+        2000,
+        1156
+      ],
+      "gifCrop": [
+        0,
+        56,
+        2000,
+        400
+      ],
+      "gifFrames": [
+        13,
+        17
+      ],
+      "gifStartEndHoldMs": [
+        500,
+        700
+      ],
+      "gifSha256": "69edea2496e7eeec22fe2bae518bcb11806dd7531d569ac56207a8b899fe2416",
+      "lowBackgroundWithVisibleTextFrames": [],
+      "measurements": [
+        {
+          "frame": 0,
+          "ms": 741,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "db48489aee93a4955f295b2b1b03ebd2e4ebf61bef8f59f7e6abc278014ca7fb"
+        },
+        {
+          "frame": 1,
+          "ms": 807,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "a3f7220a52cac02048c956e375a2474cb555f9f880d7ea40d3c1e6d74ab6c501"
+        },
+        {
+          "frame": 2,
+          "ms": 860,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "212dc24116abcd86cc52da632f1ec8690c027e5e9717056760747391b1038362"
+        },
+        {
+          "frame": 3,
+          "ms": 910,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "6ef2fc72fa66a182c44a68d2d85ab281209f99798e17eb6f1f0de4b5d675b5a0"
+        },
+        {
+          "frame": 4,
+          "ms": 960,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "76c42067462d55eb15d7d3dc845e0cd6213c6ff5dae1394d87eb484721ec2683"
+        },
+        {
+          "frame": 5,
+          "ms": 1027,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "2c8c98e43dc74e1f795a43bf9d1b4bb7b8d6b77fe236306dad162a38ebc6de1d"
+        },
+        {
+          "frame": 6,
+          "ms": 1117,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "fa386446de867e40a81b92aaa7d8082c8205f434b8da9c61dc6dc8a45583a531"
+        },
+        {
+          "frame": 7,
+          "ms": 1183,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "76bcc802483d2c47f16b3671b67e42b64358ee93a5f197803ec183d51f4409f8"
+        },
+        {
+          "frame": 8,
+          "ms": 1251,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "9db0144ffaf7a25fc0959761abc13dceaf4a08df94566222f18406f556189064"
+        },
+        {
+          "frame": 9,
+          "ms": 1316,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "2a87581dcd7dec1298f215125502b4079190dfe29b2be69c06ce74a619c98daa"
+        },
+        {
+          "frame": 10,
+          "ms": 1369,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "4cc380137e9541aeab4d37b1290bcb5c3d8f26d3846e73e63d0f0beb3b103d5e"
+        },
+        {
+          "frame": 11,
+          "ms": 1427,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "d06d6016194ef68704bbdcc90072732d9e2c253af9525a981a818d18b179df08"
+        },
+        {
+          "frame": 12,
+          "ms": 1503,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "ab5ad13612d9cdb8b355aa70e8811ddea086e077f16965e45b09a510529268b4"
+        },
+        {
+          "frame": 13,
+          "ms": 1568,
+          "backgroundRGB": [
+            53,
+            61,
+            72
+          ],
+          "textPeak": 255,
+          "sha256": "cbd5398e8b49447351732694319e3af25aae314098565aae1338de9594851a21"
+        },
+        {
+          "frame": 14,
+          "ms": 1633,
+          "backgroundRGB": [
+            46,
+            55,
+            64
+          ],
+          "textPeak": 159,
+          "sha256": "8de76c311172e04c1c21cc4e1212be72d7df01470e418383817e82e732b55c1c"
+        },
+        {
+          "frame": 15,
+          "ms": 1711,
+          "backgroundRGB": [
+            32,
+            41,
+            50
+          ],
+          "textPeak": 50,
+          "sha256": "70bea6df2a23fe81a47540e7e25fa81da3310c6f9a9e8d2f24aa46eddb4ce91d"
+        },
+        {
+          "frame": 16,
+          "ms": 1786,
+          "backgroundRGB": [
+            27,
+            36,
+            45
+          ],
+          "textPeak": 45,
+          "sha256": "c5130c13d439b9a10ea0211b0fa6b4c2b6ad650edd7ab8565ba180bda559ce3c"
+        },
+        {
+          "frame": 17,
+          "ms": 1884,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "8fe25dfd14bc7e5d6f3dd8e50396f9f1f559724f4f247276742de7187018eed4"
+        },
+        {
+          "frame": 18,
+          "ms": 1954,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "e3a16189687723079a374942ccfb8ead1f17a61c78aaf326464317a52ecebc51"
+        },
+        {
+          "frame": 19,
+          "ms": 2036,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "380010131e4179bc9df02f5e9832707b00bd0360117382a08d646ee871f2c94d"
+        },
+        {
+          "frame": 20,
+          "ms": 2094,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "68fb93ee4721547d35e1a8c0a4e534168a0781bd9fab096d2063aa20b2c2acca"
+        },
+        {
+          "frame": 21,
+          "ms": 2144,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "8d48a7306ca67f803af738f49830dfdfe4e115aded92cc0b1020a8e59de54da3"
+        },
+        {
+          "frame": 22,
+          "ms": 2200,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "2e4ba2371cb68092a92c0346cf4bd0acf8e8817537706101d41e9d6ef58fc0fb"
+        },
+        {
+          "frame": 23,
+          "ms": 2266,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "e3cb9b77888c56e1456f161bad9a6c88d1b0483adf7d84889e41492067e4e9b2"
+        },
+        {
+          "frame": 24,
+          "ms": 2319,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "7b0737d2fc888eb3c8649b39860ccfb942e6f666d28baa26e0b422427e59defa"
+        },
+        {
+          "frame": 25,
+          "ms": 2368,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "00d2951323b0244c52a63b1a3e36e346ca6f3fdb7998a1a7bf3953e6390410e4"
+        },
+        {
+          "frame": 26,
+          "ms": 2426,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "1c52e7128b0172e62170e8717c3f967d601175a678bbfe830d13ac7e4f4d2757"
+        },
+        {
+          "frame": 27,
+          "ms": 2477,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "1bde74b70988e6037792388e822817ec007832c9914fab3c245e03f2093d6e1c"
+        },
+        {
+          "frame": 28,
+          "ms": 2526,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "9f86b7754626864ad02ea5d1630663526bc2584a4e33239be9959640e0235b64"
+        },
+        {
+          "frame": 29,
+          "ms": 2574,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "b0f59d681d64d33bdf7eefe4d7d33d275a949636653dd8300aabfe3a9a9a36e1"
+        },
+        {
+          "frame": 30,
+          "ms": 2641,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "5643711ee6012cb0a87f996e29e4f563f5d6792cf7d96e35d13e432db981f26e"
+        },
+        {
+          "frame": 31,
+          "ms": 2699,
+          "backgroundRGB": [
+            26,
+            35,
+            44
+          ],
+          "textPeak": 44,
+          "sha256": "b391912c52e874ab8f0cc44e4735c7f63369b3cfe95797033ec161c58108f8db"
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Rendered lifecycle fixture, not a video of the authenticated client.",
+    "Shared native-glass rendering sampled at roughly 50\u2013100 ms per captured frame on macOS 27.0.1 only.",
+    "Actual-client endpoint checks and full native build are recorded separately."
+  ],
+  "stillComparison": {
+    "method": "Direct crops at comparable remaining background brightness; no reconstruction or compositing.",
+    "crop": [
+      20,
+      210,
+      620,
+      390
+    ],
+    "beforeFrame": 17,
+    "afterFrame": 15
+  },
+  "passingChecks": 175,
+  "baselineRegressionScopes": {
+    "host-before-regression.txt": "Previous host, before the late-text check was added: four failures.",
+    "old-header-regression.txt": "Old ChatUI removal block with current corrected TGUIKit: one late-text failure."
+  },
+  "fullNativeBuild": "BUILD SUCCEEDED",
+  "authenticatedClientEndpoints": "client-validation.json",
+  "reproductionPreview": "../FadePreview.swift; run.py --prepare-app --fade-preview"
+}

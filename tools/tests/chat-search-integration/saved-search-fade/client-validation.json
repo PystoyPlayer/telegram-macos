@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-27",
+  "integration": "c800a68bee5a0a79278f9cda8535bdf59c274e1e",
+  "client": "Telegram Message Fixes, 13.1.0 (283357), Debug arm64",
+  "account": "Isolated authenticated test profile",
+  "savedMessagesQuery": "Photo",
+  "serverResultObserved": "1 of 1",
+  "cancelWithQueryClosedSearch": true,
+  "reopenedEmptySearch": true,
+  "reopenedArrowsDisabled": true,
+  "reopenedClearAbsent": true,
+  "finalEmptySearchClosed": true,
+  "diagnosticControlsAbsent": true,
+  "frameByFrameEvidence": "Separate native lifecycle fixture; not an authenticated-client video"
+}
