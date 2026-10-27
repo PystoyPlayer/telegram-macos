@@ -18,7 +18,16 @@ fixture = Path(__file__).with_name('SourceTests.swift').read_text()
 title = read('packages/ChatUI/Sources/ChatUI/ChatTitleBarView.swift')
 start = title.index('        let openInfo:(ChatInteraction)->Void = { chatInteraction in')
 end = title.index('\n        if hasBackButton {', start)
-fixture = fixture.replace('__SOURCE__', source).replace('__HEADER_ACTION__', title[start:end])
+controller = read('packages/ChatUI/Sources/ChatUI/ChatController.swift')
+marker = '    fileprivate func openPeerInfoFromHeader() {'
+offset = controller.index(marker) + len(marker)
+depth = 1
+last = offset
+while depth:
+    depth += (controller[last] == '{') - (controller[last] == '}')
+    last += 1
+modern = controller[offset:last - 1].replace('        let chatInteraction = self.chatInteraction', '')
+fixture = fixture.replace('__SOURCE__', source).replace('__HEADER_ACTION__', title[start:end]).replace('__MODERN_ACTION__', modern)
 with tempfile.TemporaryDirectory(prefix='discussion-source-') as directory:
     directory = Path(directory)
     (directory / 'main.swift').write_text(fixture)

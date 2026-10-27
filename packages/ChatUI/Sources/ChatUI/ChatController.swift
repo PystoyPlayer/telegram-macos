@@ -10307,6 +10307,8 @@ open class ChatController<Context: AccountContextProtocol>: TelegramGenericViewC
             }
             navigationController?.modal?.close()
             ChatUIHooks.shared.pushPeerInfoObserved(context.bindings.rootNavigation(), context, peerId, threadInfo, nil, nil, nil)
+        } else if let source = chatDiscussionSourceMessageId(mode: chatInteraction.mode, location: chatInteraction.chatLocation) {
+            chatInteraction.openInfoObserved(source.peerId, true, source, nil)
         } else if chatInteraction.presentation.isTopicMode {
             chatInteraction.openInfoObserved(chatInteraction.peerId, false, nil, nil)
         } else if chatInteraction.mode.isSavedMessagesThread, let threadId = chatInteraction.chatLocation.threadId {

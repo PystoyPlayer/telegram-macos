@@ -6,7 +6,7 @@ struct Thread { let peerId: PeerId; let channelMessageId: MessageId?; var isMono
 enum ChatLocation { case peer(PeerId); case thread(Thread); var threadId: Int64? { if case let .thread(thread) = self { return thread.threadId }; return nil } }
 enum ReplyThreadMode { case comments(origin: MessageId); case replies(origin: MessageId); case topic(origin: MessageId); case savedMessages(origin: MessageId) }
 enum ChatMode: Equatable {
-    case history, other, thread(ReplyThreadMode)
+    case history, other, preview, thread(ReplyThreadMode)
     static func == (lhs: ChatMode, rhs: ChatMode) -> Bool { if case .history = lhs, case .history = rhs { return true }; return false }
     var isSavedMessagesThread: Bool { if case .thread(.savedMessages) = self { return true }; return false }
 }
@@ -15,7 +15,18 @@ final class Navigation { var pushes = 0; func push(_ value: Int) { pushes += 1 }
 final class Bindings { let navigation = Navigation(); func rootNavigation() -> Navigation { navigation } }
 final class Context { let peerId = PeerId(1); let bindings = Bindings() }
 struct Presentation { var reportMode: Int?; var isTopicMode = false }
-struct Hook { func makePeerMediaController(_ context: Context, _ id: PeerId, _ value: Bool) -> Int { 0 } }
+struct Hook {
+    func makePeerMediaController(_ context: Context, _ id: PeerId, _ value: Bool) -> Int { 0 }
+    func makePeerMediaControllerObserved(_ context: Context, _ id: PeerId, isBot: Bool) -> Int { 0 }
+    func pushPeerInfoObserved(_ navigation: Navigation, _ context: Context, _ peer: PeerId, _ info: ThreadInfo?, _ stories: Int?, _ media: Int?, _ album: Int?) {}
+}
+struct ThreadInfo { init(message: Thread, isChannelPost: Bool, isMonoforumPost: Bool, isEmpty: Bool, contextHolder: Int) {} }
+enum Message { static let newTopicThreadId: Int64 = -1 }
+final class Modal { func close() {} }
+final class Controller { var modal: Modal? }
+let navigationController: Controller? = nil
+let chatLocationContextHolder = 0
+let context = Context()
 struct ChatUIHooks { static let shared = Hook() }
 final class ChatInteraction {
     let interactionContext = Context()
@@ -26,13 +37,26 @@ final class ChatInteraction {
     var calls: [(PeerId, Bool, MessageId?)] = []
     init(_ mode: ChatMode, _ location: ChatLocation, _ peerId: PeerId) { self.mode = mode; self.chatLocation = location; self.peerId = peerId }
     func openInfo(_ peer: PeerId, _ toChat: Bool, _ post: MessageId?, _ action: Int?) { calls.append((peer, toChat, post)) }
+    func openInfoObserved(_ peer: PeerId, _ toChat: Bool, _ post: MessageId?, _ action: Int?) { openInfo(peer, toChat, post, action) }
 }
 
 __SOURCE__
 
-func click(_ chatInteraction: ChatInteraction) {
+func clickLegacy(_ chatInteraction: ChatInteraction) {
 __HEADER_ACTION__
     openInfo(chatInteraction)
+}
+func clickModern(_ chatInteraction: ChatInteraction) {
+__MODERN_ACTION__
+}
+func click(_ chatInteraction: ChatInteraction) {
+    chatInteraction.calls.removeAll()
+    clickLegacy(chatInteraction)
+    let legacy = chatInteraction.calls
+    chatInteraction.calls.removeAll()
+    clickModern(chatInteraction)
+    let modern = chatInteraction.calls
+    check("glass and legacy title actions agree", legacy.count == modern.count && zip(legacy, modern).allSatisfy { $0.0 == $1.0 && $0.1 == $1.1 && $0.2 == $1.2 })
 }
 var checked = 0
 var failed = 0
