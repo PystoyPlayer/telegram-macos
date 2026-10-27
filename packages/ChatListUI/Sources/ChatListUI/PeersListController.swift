@@ -1082,7 +1082,7 @@ public class PeerListContainerView : Control {
     
     public let backgroundView = View(frame: NSZeroRect)
     
-    public let tableView = TableView(frame:NSZeroRect, drawBorder: true)
+    public let tableView: TableView = SidebarTableView(frame:NSZeroRect, drawBorder: true)
     
     
     private let containerView = Control()
@@ -1881,7 +1881,7 @@ public class PeerListContainerView : Control {
             }
             return true
         })
-        tableView.scrollerInsets = .init(left: 0, right: 0, top: top, bottom: contentBottomInset)
+        tableView.scrollerInsets = .init(left: 0, right: 0, top: top, bottom: 0)
         updateTableMask(spaceHeight: top)
     }
 

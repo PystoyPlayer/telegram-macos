@@ -1908,12 +1908,12 @@ public class SearchController<Context: AccountContextProtocol>: GenericViewContr
         super.updateContainerContentInsets(insets, transition: transition)
         if isLoaded() {
             genericView.contentInsets.bottom = insets.bottom
-            genericView.scrollerInsets.bottom = insets.bottom
+            genericView.scrollerInsets.bottom = 0
         }
     }
     
     public override func initializer() -> TableView {
-        return TableView(frame: NSMakeRect(_frameRect.minX, _frameRect.minY, _frameRect.width, _frameRect.height - bar.height), drawBorder: true);
+        return SidebarTableView(frame: NSMakeRect(_frameRect.minX, _frameRect.minY, _frameRect.width, _frameRect.height - bar.height), drawBorder: true);
     }
     
     public override func viewWillDisappear(_ animated: Bool) {

@@ -1,0 +1,5 @@
+macOS 27.0.1 (26A434), arm64
+Native AppKit/TGUIKit source regression
+Baseline e537320b28d79cecc1baf716bcbf822b02f93b7a: 216 checks, 12 failures (duplicated bottom scrollbar inset)
+Candidate: 216 checks, 0 failures
+Both runs use the actual TableView/NSScroller and extract inset assignments from the production sidebar controllers.

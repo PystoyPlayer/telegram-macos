@@ -1,0 +1,8 @@
+macOS 27.0.1 (26A434), arm64
+Telegram 13.1.0 (283357), Debug arm64
+Integration source: 7e93777e036872a312e59faec8f27733fc65843c
+xcodebuild workspace Telegram-Mac.xcworkspace, scheme Telegram, configuration Debug, destination platform=macOS,arch=arm64
+Result: ** BUILD SUCCEEDED **
+Ad-hoc signed isolated test app: Telegram Message Fixes
+
+The integration checkout contains other pending UI PRs and local SDK/native-library build compatibility overrides. The sidebar source files match the feature branch. API credentials, updater suppression and isolated profile/keychain overrides are local only and excluded from the patch. No distribution build or other macOS version was tested.
