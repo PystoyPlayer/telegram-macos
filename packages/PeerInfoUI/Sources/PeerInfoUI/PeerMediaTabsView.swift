@@ -351,8 +351,10 @@ final class PeerMediaTabsView: View, HorizontalScrollConsuming {
 
     override func scrollWheel(with event: NSEvent) {
         let visibleWidth = clipView.frame.width
-        if abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY), contentWidth > visibleWidth {
-            let delta = event.hasPreciseScrollingDeltas ? event.scrollingDeltaX : event.scrollingDeltaX * 10
+        let horizontal = abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY)
+        if contentWidth > visibleWidth, horizontal || !event.hasPreciseScrollingDeltas {
+            let axisDelta = horizontal ? event.scrollingDeltaX : event.scrollingDeltaY
+            let delta = event.hasPreciseScrollingDeltas ? axisDelta : axisDelta * 10
             scrollOffset = clampedScrollOffset(scrollOffset - delta, visibleWidth: visibleWidth)
             contentView.setFrameOrigin(NSMakePoint(-scrollOffset, 0))
         } else {
