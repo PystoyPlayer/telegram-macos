@@ -1,0 +1,15 @@
+PASS: enter Settings keeps Settings sidebar
+PASS: Back restores chat and Chats sidebar together
+PASS: sidebar restoration never navigates the content stack a second time
+PASS: Back within nested settings retains Settings sidebar
+PASS: second Back leaves nested settings and restores Chats
+PASS: explicit Chats selection still restores the previous content
+PASS: repeated entry and Back refresh the saved return target
+PASS: Back preserves an already-open peer profile
+PASS: empty detail pane restores Chats too
+PASS: entry from Contacts restores Contacts rather than forcing Chats
+PASS: return sidebar follows controller identity when Calls tab is removed
+PASS: single-column Settings does not install a wide-layout return target
+PASS: wallet-create exception keeps its navigation unchanged
+13/13 behavior checks passed
+PASS: MainViewController registers the root-navigation listener
