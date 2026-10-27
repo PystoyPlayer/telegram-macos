@@ -92,7 +92,7 @@ final class PeerMediaTabsView: View, HorizontalScrollConsuming {
     }
 
     private let glass = LiquidGlassView(frame: NSZeroRect, cornerRadius: PeerMediaTabsView.height / 2, hasShadow: true, hasBorder: true)
-    private let clipView = View()
+    private let scrollView = HorizontalScrollView()
     private let contentView = View()
     private let selectionView = View()
     private var itemViews: [Int64: ItemView] = [:]
@@ -100,7 +100,6 @@ final class PeerMediaTabsView: View, HorizontalScrollConsuming {
     private(set) var tabs: [Tab] = []
     private(set) var selectedId: Int64?
     private var selectionPosition: CGFloat?
-    private var scrollOffset: CGFloat = 0
     private var currentTheme: TelegramPresentationTheme = theme
     private var account: Account?
     private var focusSelectedOnLayout = false
@@ -113,10 +112,11 @@ final class PeerMediaTabsView: View, HorizontalScrollConsuming {
         layer?.masksToBounds = false
         isHidden = true
         addSubview(glass)
-        clipView.layer?.masksToBounds = true
-        clipView.layer?.cornerRadius = (PeerMediaTabsView.height - PeerMediaTabsView.lensInset * 2) / 2
-        addSubview(clipView)
-        clipView.addSubview(contentView)
+        scrollView.layer?.masksToBounds = true
+        scrollView.layer?.cornerRadius = (PeerMediaTabsView.height - PeerMediaTabsView.lensInset * 2) / 2
+        scrollView.background = .clear
+        scrollView.documentView = contentView
+        addSubview(scrollView)
         selectionView.isHidden = true
         selectionView.layer?.cornerRadius = (PeerMediaTabsView.height - PeerMediaTabsView.lensInset * 2) / 2
         contentView.addSubview(selectionView)
@@ -269,7 +269,7 @@ final class PeerMediaTabsView: View, HorizontalScrollConsuming {
 
         let inset = PeerMediaTabsView.lensInset
         let clipFrame = NSMakeRect(inset, inset, max(0, size.width - inset * 2), max(0, size.height - inset * 2))
-        transition.updateFrame(view: clipView, frame: clipFrame)
+        transition.updateFrame(view: scrollView, frame: clipFrame)
 
         let frames = itemFrames
         var selection: NSRect?
@@ -277,7 +277,7 @@ final class PeerMediaTabsView: View, HorizontalScrollConsuming {
             selection = selectionFrame(at: position, frames: frames)
         }
 
-        var offset = clampedScrollOffset(scrollOffset, visibleWidth: clipFrame.width)
+        var offset = clampedScrollOffset(scrollView.clipView.bounds.minX, visibleWidth: clipFrame.width)
         if focusSelected, let selection {
             let lookahead = PeerMediaTabsView.scrollLookahead
             if offset + clipFrame.width - lookahead < selection.maxX {
@@ -288,8 +288,10 @@ final class PeerMediaTabsView: View, HorizontalScrollConsuming {
             }
             offset = clampedScrollOffset(offset, visibleWidth: clipFrame.width)
         }
-        scrollOffset = offset
-        transition.updateFrame(view: contentView, frame: NSMakeRect(-offset, 0, max(contentWidth, clipFrame.width), clipFrame.height))
+        transition.updateFrame(view: contentView, frame: NSMakeRect(0, 0, max(contentWidth, clipFrame.width), clipFrame.height))
+        if offset != scrollView.clipView.bounds.minX {
+            scrollView.clipView.scroll(to: NSMakePoint(offset, 0), animated: focusSelected && transition.isAnimated)
+        }
 
         if let selection {
             let selectionTransition: ContainedViewLayoutTransition = selectionView.isHidden ? .immediate : transition
@@ -346,17 +348,12 @@ final class PeerMediaTabsView: View, HorizontalScrollConsuming {
     }
 
     func consumesHorizontalScroll(atWindowPoint windowPoint: NSPoint) -> Bool {
-        return !isHidden && contentWidth > clipView.frame.width && bounds.contains(convert(windowPoint, from: nil))
+        return !isHidden && contentWidth > scrollView.frame.width && bounds.contains(convert(windowPoint, from: nil))
     }
 
     override func scrollWheel(with event: NSEvent) {
-        let visibleWidth = clipView.frame.width
-        let horizontal = abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY)
-        if contentWidth > visibleWidth, horizontal || !event.hasPreciseScrollingDeltas {
-            let axisDelta = horizontal ? event.scrollingDeltaX : event.scrollingDeltaY
-            let delta = event.hasPreciseScrollingDeltas ? axisDelta : axisDelta * 10
-            scrollOffset = clampedScrollOffset(scrollOffset - delta, visibleWidth: visibleWidth)
-            contentView.setFrameOrigin(NSMakePoint(-scrollOffset, 0))
+        if contentWidth > scrollView.frame.width {
+            scrollView.scrollWheel(with: event)
         } else {
             super.scrollWheel(with: event)
         }

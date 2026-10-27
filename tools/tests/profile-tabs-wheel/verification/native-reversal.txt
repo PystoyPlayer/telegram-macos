@@ -1,0 +1,7 @@
+macOS 27.0.1, Telegram 13.1.0 (283357), Debug arm64
+Production PeerMediaTabsView using the same HorizontalScrollView class as chat folders.
+Native internal probe: PASS for immediate reversal from both bounds, retained offset after layout, and unchanged selection.
+CUA scroll at the trailing end: offset 260.
+Back-to-back CUA scroll down 2 pages, then up 0.1 page: offset 226, changed in the same tool call (0.615 seconds including observation).
+Prior custom handler in the paired view: offset 0 for precise vertical input.
+No messages, profile data or server settings were changed.

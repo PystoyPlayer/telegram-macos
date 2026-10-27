@@ -1,11 +1,9 @@
-FAIL ordinary vertical mouse wheel reveals later tabs
-FAIL overflowing tab strip consumes mouse wheel
-FAIL reverse mouse wheel returns toward first tab
-PASS horizontal mouse wheel remains supported
-PASS trackpad horizontal movement retains pixel precision
-PASS vertical trackpad gesture scrolls the profile
-FAIL last tab remains bounded
-FAIL first tab remains bounded
-PASS fitting strip forwards mouse wheel to profile
-PASS fitting strip forwards horizontal trackpad movement
-5/10 checks passed
+FAIL ordinary mouse wheel reaches the shared folder scroller unchanged
+FAIL immediate reversal reaches the shared folder scroller unchanged
+FAIL precise vertical input reaches the shared folder scroller unchanged
+FAIL horizontal trackpad input reaches the shared folder scroller unchanged
+FAIL diagonal input reaches the shared folder scroller unchanged
+FAIL zero end event reaches the shared folder scroller unchanged
+FAIL all events retain their sequence
+PASS fitting strip forwards events without recursion
+1/8 checks passed

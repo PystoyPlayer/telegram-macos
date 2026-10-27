@@ -6,19 +6,24 @@ import subprocess
 parser = argparse.ArgumentParser()
 parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[3])
 parser.add_argument('--log', type=Path, required=True)
+parser.add_argument('--baseline', default='05b79f3a')
 parser.add_argument('command', nargs=argparse.REMAINDER)
 args = parser.parse_args()
-target = args.repo / 'packages/PeerInfoUI/Sources/PeerInfoUI/PeerMediaTabsView.swift'
+relative = 'packages/PeerInfoUI/Sources/PeerInfoUI/PeerMediaTabsView.swift'
+target = args.repo / relative
 original = target.read_bytes()
 text = original.decode()
+baseline = subprocess.check_output(['git', 'show', args.baseline + ':' + relative], cwd=args.repo, text=True)
 marker = '    override func scrollWheel(with event: NSEvent) {\n'
-assert text.count(marker) == 1
-legacy = '        defer { codexScrollObserved?(scrollOffset) }\n        if codexLegacyWheel {\n            let visibleWidth = clipView.frame.width\n            if abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY), contentWidth > visibleWidth {\n                let delta = event.hasPreciseScrollingDeltas ? event.scrollingDeltaX : event.scrollingDeltaX * 10\n                scrollOffset = clampedScrollOffset(scrollOffset - delta, visibleWidth: visibleWidth)\n                contentView.setFrameOrigin(NSMakePoint(-scrollOffset, 0))\n            } else { super.scrollWheel(with: event) }\n            return\n        }\n'
-text = text.replace(marker, '    var codexLegacyWheel = false\n    var codexScrollObserved: ((CGFloat) -> Void)?\n' + marker + legacy)
+def observe(source, expression):
+    assert source.count(marker) == 1
+    return source.replace(marker, '    var codexScrollObserved: ((CGFloat) -> Void)?\n    var codexScrollOffset: CGFloat { ' + expression + ' }\n' + marker + '        defer { codexScrollObserved?(codexScrollOffset) }\n')
+text = observe(text, 'scrollView.clipView.bounds.minX')
+baseline = observe(baseline, 'scrollOffset').replace('PeerMediaTabsView', 'LegacyPeerMediaTabsView')
 marker = '        self.account = account\n'
 assert text.count(marker) == 1
 text = text.replace(marker, marker + '        DispatchQueue.main.async { codexInstallProfileWheelEvidence(account: account) }\n')
-text += (Path(__file__).parent / 'NativeHarness.swift').read_text()
+text += '\n' + baseline + (Path(__file__).parent / 'NativeHarness.swift').read_text()
 command = args.command
 if command and command[0] == '--': command = command[1:]
 if not command:

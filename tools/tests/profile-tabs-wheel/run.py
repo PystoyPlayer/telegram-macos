@@ -6,6 +6,11 @@ import sys
 root = Path(__file__).resolve().parents[3]
 source = Path(sys.argv[1]) if len(sys.argv) > 1 else root / "packages/PeerInfoUI/Sources/PeerInfoUI/PeerMediaTabsView.swift"
 text = source.read_text()
+folders = (root / 'packages/TGUIKit/Sources/ScrollableSegmentView.swift').read_text()
+if len(sys.argv) == 1:
+    assert 'private let scrollView = HorizontalScrollView()' in text
+    assert 'scrollView:ScrollView = HorizontalScrollView()' in folders
+    assert 'scrollOffset = clampedScrollOffset(scrollOffset -' not in text
 
 def method(signature):
     start = text.index(signature)
