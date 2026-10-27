@@ -822,8 +822,11 @@ public class InputContextViewController : GenericViewController<InputContextView
     public func layout(_ animated:Bool) {
         if let superview = superview, let relativeView = genericView.relativeView {
             let relativeRect = anchorFrame(for: relativeView, in: superview)
-            let availableHeight = max(0, (genericView.position == .above ? relativeRect.minY : superview.bounds.maxY - relativeRect.maxY) - 10)
-            var height = min(getHeight?() ?? floor(superview.frame.height / 2), availableHeight)
+            var height = getHeight?() ?? floor(superview.frame.height / 2)
+            if fullWidthInset != nil {
+                let availableHeight = max(0, (genericView.position == .above ? relativeRect.minY : superview.bounds.maxY - relativeRect.maxY) - 10)
+                height = min(height, availableHeight)
+            }
             if genericView.tableView.firstItem is ContextClueRowItem {
                 height = min(height, 120)
             }

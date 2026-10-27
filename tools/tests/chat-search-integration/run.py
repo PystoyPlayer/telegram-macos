@@ -123,7 +123,7 @@ struct ControllerGeometry {
         filename = next(image['filename'] for image in variants if image.get('filename') and image.get('scale') == '1x')
         images[name] = str(image_set / filename)
     (sources / 'Assets.swift').write_text('let imagePaths: [String: String] = [' + ', '.join(json.dumps(name) + ': ' + json.dumps(path) for name, path in images.items()) + ']')
-    for name in ['Models.swift', 'EmptySearchState.swift', 'main.swift']:
+    for name in ['Models.swift', 'EmptySearchState.swift', 'StorySuggestions.swift', 'main.swift']:
         content = (fixtures / name).read_text()
         if args.fade_preview and name == 'main.swift':
             content = content.replace('  NSApp.run()', '  showFadePreview()\n  NSApp.run()')

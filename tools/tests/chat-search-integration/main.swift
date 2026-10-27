@@ -226,6 +226,7 @@ check(
   composerContext.controller.anchorFrame(for: composerAnchor, in: root) == composerAnchor.frame,
   "Composer suggestions no longer follow their own input width")
 composerAnchor.removeFromSuperview()
+runStorySuggestionChecks()
 runHeaderLayoutChecks()
 runHeaderRemovalChecks()
 runFlippedGlassHostChecks()
