@@ -1,0 +1,7 @@
+FAIL: comment link opens channel
+FAIL: opens chat rather than profile
+FAIL: focuses source post
+FAIL: resolved source wins over comment origin
+FAIL: thread source wins over navigation origin
+FAIL: channel origin works before source cache
+17/23 discussion navigation checks passed
