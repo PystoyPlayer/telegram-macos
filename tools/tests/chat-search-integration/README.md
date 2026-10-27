@@ -11,7 +11,7 @@ python3 tools/tests/chat-search-integration/run.py --revision a190a124 --expect-
 
 The patched run checks the real query/input state machine, request delivery, response display, six successive width changes (including 742 pt from the maintainer's example), short windows, input focus/query preservation, result navigation, refocusing, sender filtering, the peer/query request parameters, cancellation and result removal. Search results use the full chat width with 12 pt side insets, independently of the inline field's width. Composer suggestions retain their own anchor width. The popup is also tested above/below its anchor with a requested height larger than available space.
 
-The baseline must reproduce the cramped text viewport and stale/detached result geometry. It reports 57 expected viewport, popup, initial-placement, empty-control, closing-glass and saved-tag-inset failures; any unrelated failure fails the baseline run as well. The current patched run passes 177 checks. The 57-failure baseline count above records the original pass; the newer closing regressions are documented below.
+The baseline must reproduce the cramped text viewport and stale/detached result geometry. It reports 57 expected viewport, popup, initial-placement, empty-control, closing-glass and saved-tag-inset failures; any unrelated failure fails the baseline run as well. The current patched run passes 217 checks. The 57-failure baseline count above records the original pass; the newer closing regressions are documented below.
 
 ## What runs
 
@@ -33,10 +33,16 @@ Validated on macOS 27.0.1 / Xcode 27.1. App version/build: N/A, native test exec
 
 ## Saved Messages search input background (2026-10-27)
 
-The current suite passes **177 checks**. The native glass host remains tall enough for the outgoing row and releases that height after closing; reopening cancels a pending shrink. Search content, including the input background, now uses the full 0.2-second exit rather than the earlier 0.12-second fade. The inline merge keeps its existing behavior.
+The current suite passes **217 checks**. The native glass host remains tall enough for the outgoing row and releases that height after closing; reopening cancels a pending shrink. Search content, including the input background, now uses the full 0.2-second exit rather than the earlier 0.12-second fade. The inline merge keeps its existing behavior.
 
 A regression with the old header and corrected host fails the input-background timing check. The fixture includes a real ChatSearchView with a nontransparent background. `search-input-background/` records the passing/current and failing/old-header scopes, native before/after captures and authenticated-client endpoint checks.
 
 The reproducible scene uses actual ChatSearchHeader / ChatSearchView controls, the production removal block and real glass views. Its Unlock label is controlled text, not the Premium renderer. Direct native crops record the input-background transition; verification.json records fresh process IDs, frame times, hashes and limits. The earlier `saved-search-fade/` text-only scene is historical and does not establish the input-background behavior.
 
 Run the usual harness command with `--prepare-app --fade-preview` and open the printed application path. Press **Close after 1.5 seconds** once and use **Quit Preview** before rebuilding. `--revision` selects ChatUI source only; reproducing the old host also requires dependencies checked out before that fix. No preview code is included in the Telegram target.
+
+## Stories reply suggestions (2026-10-27)
+
+The chat-search anchor-height cap now applies only to full-width search results. Ordinary input suggestions retain the caller-supplied height policy. Stories supplies 150 points while its list host initially has a height of 1 point, then expands that host from the size callback; using the host as the initial cap prevents the list from ever growing.
+
+`StorySuggestions.swift` adds 40 checks using the production helper layout/attachment and native views with controlled rows. Hosts initially 0 or 1 point tall expand for one or five mention rows, respect the 150-point request and existing 120-point emoji cap, retain their anchor width/gap, clear and reopen. The previous source fails 28 checks. The corrected suite passes 217 checks, also when combined with the recorded current master. This is a dynamic-container regression test, not an authenticated Stories reply or bot-command-resolution test. See `stories-suggestions/verification.json` and its output summaries.

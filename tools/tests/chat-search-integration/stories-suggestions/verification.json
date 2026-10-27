@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-27",
+  "reviewComment": "https://github.com/TelegramMessenger/telegram-macos/pull/76#issuecomment-6437736499",
+  "environment": {
+    "macOS": "27.0.1 (26A434)",
+    "Xcode": "27.1 (27A9275)"
+  },
+  "beforeFeature": "948252e6848d7a6332c142ef30a0315ab3a38df5",
+  "candidateFeature": "d356a55aa9a6b188f62ef706fa70c2362ce384f8",
+  "nativeIntegration": "b6b6f488",
+  "currentMaster": "e537320b28d79cecc1baf716bcbf822b02f93b7a",
+  "mergedTree": "b03a53b2f265d95688f3539d613d621a3b40c86c",
+  "sourceHashes": {
+    "before": "99621c4fb287d6194cfa836ca550ea25e4582605897d655988798d16bafff3a5",
+    "after": "b2a2c2a6de8daa3c216abad0c46220c9d9492b0bb111ff78f737ccaa3e89b794"
+  },
+  "reproduction": {
+    "sourceCaller": "packages/StoriesUI/Sources/StoriesUI/StoryInputView.swift: updateInputContext and updateLayout",
+    "initialContainerHeights": [
+      0,
+      1
+    ],
+    "requestedHeight": 150,
+    "regularRowCounts": [
+      1,
+      5
+    ],
+    "regularRowHeight": 44,
+    "expectedRegularListHeights": [
+      44,
+      150
+    ],
+    "clueRowHeight": 180,
+    "expectedClueListHeight": 120,
+    "callback": "updatedSize grows the container and moves its anchor to the new bottom edge, matching the Stories reply layout contract.",
+    "checks": "First expansion, callback size, container feedback, width, anchor gap, subsequent layout, emoji cap, removal and reopening."
+  },
+  "results": {
+    "newChecks": 40,
+    "failedBefore": 28,
+    "passedAfter": 217,
+    "passedWithCurrentMaster": 217,
+    "fullClientBuild": "Complete Debug arm64 build succeeded with actual dependencies on macOS 27.0.1 / Xcode 27.1. No dependency implementation is stubbed."
+  },
+  "limits": [
+    "The harness runs source-extracted production helper layout and actual TGUIKit views with controlled mention/result/clue rows. It does not resolve live Stories tokens, render the complete StoryInputView or validate bot command delivery.",
+    "The native client uses the real account and actual dependencies; a live Story reply scenario is not claimed."
+  ]
+}
