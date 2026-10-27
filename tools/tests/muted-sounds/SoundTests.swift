@@ -1,0 +1,73 @@
+final class NSSound {
+    static var created = 0
+    static var played = 0
+    static var lastOutput: String?
+    var playbackDeviceIdentifier: String?
+    var volume: Float = 1
+    init?(contentsOfFile: String, byReference: Bool) { Self.created += 1 }
+    @discardableResult func play() -> Bool { Self.played += 1; Self.lastOutput = playbackDeviceIdentifier; return true }
+}
+final class Bundle {
+    static let main = Bundle()
+    func path(forResource: String, ofType: String) -> String? { "/test/sent.mp3" }
+}
+var device: AudioDeviceID? = 7
+var uid: String? = "speakers"
+var mutes: [UInt32: UInt32] = [:]
+var volumes: [UInt32: Float32] = [:]
+var channels: [UInt32]? = [1, 2]
+func readTestProperty(_ object: AudioObjectID, _ address: UnsafePointer<AudioObjectPropertyAddress>, _ qualifierSize: UInt32, _ qualifier: UnsafeRawPointer?, _ size: UnsafeMutablePointer<UInt32>, _ data: UnsafeMutableRawPointer) -> OSStatus {
+    switch address.pointee.mSelector {
+    case kAudioHardwarePropertyDefaultOutputDevice:
+        guard let device else { return -1 }
+        data.assumingMemoryBound(to: AudioDeviceID.self).pointee = device
+    case kAudioDevicePropertyDeviceUID:
+        guard let uid else { return -1 }
+        data.assumingMemoryBound(to: Optional<CFString>.self).pointee = uid as CFString
+    case kAudioDevicePropertyMute:
+        guard let value = mutes[address.pointee.mElement] else { return -1 }
+        data.assumingMemoryBound(to: UInt32.self).pointee = value
+    case kAudioDevicePropertyVolumeScalar:
+        guard let value = volumes[address.pointee.mElement] else { return -1 }
+        data.assumingMemoryBound(to: Float32.self).pointee = value
+    case kAudioDevicePropertyPreferredChannelsForStereo:
+        guard let channels else { return -1 }
+        for (i, value) in channels.enumerated() { data.assumingMemoryBound(to: UInt32.self)[i] = value }
+    default: return -1
+    }
+    return noErr
+}
+var failures = 0
+var checks = 0
+func reset() {
+    device = 7; uid = "speakers"; mutes = [:]; volumes = [:]; channels = [1, 2]
+    NSSound.created = 0; NSSound.played = 0; NSSound.lastOutput = nil
+}
+func check(_ name: String, _ condition: Bool) {
+    checks += 1
+    if !condition { failures += 1 }
+    print("\(condition ? "PASS" : "FAIL") \(name)")
+}
+func suppressed(_ name: String) {
+    playSoundEffect(.sent)
+    check(name, NSSound.created == 0 && NSSound.played == 0)
+}
+reset(); mutes[0] = 1; suppressed("system mute skips sound allocation and playback")
+reset(); volumes[0] = 0; suppressed("zero master volume skips audio activation")
+reset(); mutes = [1: 1, 2: 1]; suppressed("both output channels muted")
+reset(); volumes = [1: 0, 2: 0]; suppressed("zero volume on both channels")
+reset(); mutes[1] = 1; volumes[2] = 0; suppressed("mixed mute and zero volume remains silent")
+reset(); device = nil; suppressed("missing default output does not fall back to another device")
+reset(); device = 0; suppressed("unknown device is not activated")
+reset(); uid = nil; suppressed("unresolvable output does not use an implicit device")
+reset(); volumes = [1: 0, 2: 0.5]; playSoundEffect(.sent)
+check("one audible channel still plays", NSSound.created == 1 && NSSound.played == 1)
+reset(); channels = nil; playSoundEffect(.sent)
+check("fixed-volume output without channel controls remains supported", NSSound.played == 1)
+check("sound is explicitly bound to selected output", NSSound.lastOutput == "speakers")
+uid = "wired-headphones"; playSoundEffect(.sent)
+check("manual device changes are read on the next sound", NSSound.lastOutput == "wired-headphones")
+mutes[0] = 1; let prior = NSSound.created; playSoundEffect(.sent)
+check("muting after playback prevents the next allocation", NSSound.created == prior)
+print("\(checks - failures)/\(checks) checks passed")
+exit(failures == 0 ? 0 : 1)
