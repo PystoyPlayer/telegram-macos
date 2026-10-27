@@ -37,7 +37,7 @@ struct Message {
 enum PeerAllowedReactions { case all, limited([Reaction]), empty }
 struct CachedChannelData { var boostsToUnrestrict: Int32?; var appliedBoosts: Int32? }
 struct Presentation { var allowedReactions: PeerAllowedReactions? = .all; var cachedData: Any? }
-struct Interaction { var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation() }
+final class Interaction { var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation(); init(peer: Peer?) { self.peer = peer } }
 struct Available { var enabledValues: [Reaction] = [.builtin] }
 struct AdditionalData { var reactions: Available? = Available() }
 struct Entry { var isFakeMessage = false; var additionalData = AdditionalData() }
@@ -57,6 +57,11 @@ final class Row {
     }
     var reactionPermissionPeer: Peer? { __REACTION_PEER__ }
     var canSendReactions: Bool { __CAN_SEND_REACTIONS__ }
+    var reactionPermission: () -> Bool { __REACTION_PERMISSION__ }
+    func chipPermission() -> () -> Bool {
+        let reactionPermission = self.reactionPermission
+        return __LAYOUT_PERMISSION__
+    }
     var canReact: Bool { __CAN_REACT__ }
     func pickerActions(message: Message, context: Context, isTags: Bool) -> [(Reaction) -> Void] {
         __CAN_APPLY_REACTION__
@@ -73,6 +78,7 @@ final class Row {
         return [normal, large, expanded]
     }
     func openStars(message: Message, context: Context) {
+        let reactionPermission = self.reactionPermission
         let action = { [weak self] in __STAR_ACTION__ }
         action()
     }
@@ -284,5 +290,22 @@ expect(!boosted.canReact, "another chat's boosts never unlock fallback message p
 boosted.chatInteraction.peer = restricted
 boosted.chatInteraction.presentation.cachedData = nil
 expect(!boosted.canReact, "missing cached boost data does not bypass defaults")
+let refreshedContext = Context(peerId: PeerId(value: 1))
+let refreshedInteraction = Interaction(peer: allowed)
+var refreshedRow: Row? = Row(firstMessage: message, chatInteraction: refreshedInteraction)
+weak var originalRow = refreshedRow
+var openPickerActions = refreshedRow!.pickerActions(message: message, context: refreshedContext, isTags: false)
+let retiredChipPermission = originalRow!.chipPermission()
+refreshedRow = nil
+expect(originalRow == nil, "reaction callbacks do not retain a retired table row")
+expect(retiredChipPermission(), "existing reaction chip remains usable after its row is replaced")
+for action in openPickerActions { action(.builtin) }
+expect(refreshedContext.reactions.calls == 3, "normal, large and expanded picker actions survive a row refresh without boosts")
+refreshedInteraction.peer = restricted
+expect(!retiredChipPermission(), "retired chip observes a new live restriction")
+for action in openPickerActions { action(.builtin) }
+expect(refreshedContext.reactions.calls == 3, "row-independent picker still observes a live restriction")
+openPickerActions.removeAll()
+expect(originalRow == nil, "closing the picker releases its retired row")
 print("\(checks - failures)/\(checks) reaction permission checks passed")
 exit(failures == 0 ? 0 : 1)
