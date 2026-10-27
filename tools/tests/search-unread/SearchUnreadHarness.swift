@@ -54,8 +54,17 @@ private final class SearchReadEvidence {
         return peerContextMenuItems(peer: peer, pinnedItems: [], arguments: arguments, isRecent: true)
     }
     func show(top: Bool, button: NSButton) {
-        guard let event = NSApp.currentEvent ?? NSEvent.mouseEvent(with: .rightMouseDown, location: button.convert(NSMakePoint(20, 20), to: nil), modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1) else { return }
-        request.set((menu(top: top) |> deliverOnMainQueue).start(next: { items in ContextMenu.show(items: items, view: button, event: event) }))
+        request.set((menu(top: top) |> deliverOnMainQueue).start(next: { [weak self] items in
+            guard let self, let host = self.window.contentView else { return }
+            host.subviews.filter { $0 is NSPopUpButton }.forEach { $0.removeFromSuperview() }
+            let popup = NSPopUpButton(frame: NSMakeRect(300, 90, 310, 35), pullsDown: true)
+            let menu = NSMenu(title: "Search chat actions")
+            menu.addItem(NSMenuItem(title: top ? "Top-peer context menu" : "Result context menu", action: nil, keyEquivalent: ""))
+            for item in items { menu.addItem(item) }
+            popup.menu = menu
+            popup.setAccessibilityLabel("Production search actions")
+            host.addSubview(popup)
+        }))
     }
     func record(_ name: String, _ pass: Bool) { checks.append(["name": name, "pass": pass]) }
     func run() {
