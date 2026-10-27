@@ -12,9 +12,10 @@ struct PeerId: Hashable {
 struct Peer {
     let id: PeerId
     let allowsReactions: Bool
+    var personalBan = false
 }
 struct EnginePeer { let peer: Peer; init(_ peer: Peer) { self.peer = peer } }
-func canSendReactionsToPeer(_ peer: EnginePeer) -> Bool { peer.peer.allowsReactions }
+func canSendReactionsToPeer(_ peer: EnginePeer, ignoreDefault: Bool = false) -> Bool { !peer.peer.personalBan && (peer.peer.allowsReactions || ignoreDefault) }
 struct MessageId { let peerId: PeerId; var namespace = Namespaces.Message.Cloud }
 struct MessageFlags: OptionSet {
     let rawValue: Int
@@ -34,7 +35,8 @@ struct Message {
     var flags: MessageFlags = []
 }
 enum PeerAllowedReactions { case all, limited([Reaction]), empty }
-struct Presentation { var allowedReactions: PeerAllowedReactions? = .all }
+struct CachedChannelData { var boostsToUnrestrict: Int32?; var appliedBoosts: Int32? }
+struct Presentation { var allowedReactions: PeerAllowedReactions? = .all; var cachedData: Any? }
 struct Interaction { var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation() }
 struct Available { var enabledValues: [Reaction] = [.builtin] }
 struct AdditionalData { var reactions: Available? = Available() }
@@ -54,6 +56,7 @@ final class Row {
         self.chatInteraction = chatInteraction
     }
     var reactionPermissionPeer: Peer? { __REACTION_PEER__ }
+    var canSendReactions: Bool { __CAN_SEND_REACTIONS__ }
     var canReact: Bool { __CAN_REACT__ }
     func pickerActions(message: Message, context: Context, isTags: Bool) -> [(Reaction) -> Void] {
         __CAN_APPLY_REACTION__
@@ -106,9 +109,10 @@ struct ChatHistoryUIHooks {
     func messageNewReactions(_ message: Message, _ update: Int, _ tags: Bool) -> [Int] { [update] }
     func messageNewReactions(_ message: Message, _ update: UpdateMessageReaction, _ tags: Bool) -> [Int] { [1] }
 }
-func tap(message: Message, context: Context, mode: Mode, engine: Engine, value: Reaction = .builtin, isFilterTag: Bool = false, reactionPeer: (() -> Peer?)? = nil, tagAction: (Reaction) -> Void = { _ in }) {
+func tap(message: Message, context: Context, mode: Mode, engine: Engine, value: Reaction = .builtin, isFilterTag: Bool = false, reactionPeer: (() -> Peer?)? = nil, canSend: (() -> Bool)? = nil, tagAction: (Reaction) -> Void = { _ in }) {
     let source = Source()
     let reactionPeer = reactionPeer ?? { message.peers[message.id.peerId] }
+    let canSendReactions = canSend ?? { reactionPeer().map { canSendReactionsToPeer(EnginePeer($0)) } ?? false }
     __CHIP_ACTION__
 }
 struct ParsedFile {
@@ -229,5 +233,56 @@ let tagContext = Context(peerId: chatId)
 row.chatInteraction.peer = restricted
 for action in row.pickerActions(message: message, context: tagContext, isTags: true) { action(.builtin) }
 expect(tagContext.reactions.calls == 3, "open saved-tag actions preserve their update route")
+let boosted = Row(firstMessage: message, chatInteraction: Interaction(peer: restricted))
+func boosts(_ required: Int32?, _ applied: Int32?) {
+    boosted.chatInteraction.presentation.cachedData = CachedChannelData(boostsToUnrestrict: required, appliedBoosts: applied)
+}
+for (required, applied, permitted): (Int32?, Int32?, Bool) in [(nil, nil, false), (0, 0, false), (2, nil, false), (2, 1, false), (2, 2, true), (2, 3, true)] {
+    boosts(required, applied)
+    expect(boosted.canReact == permitted, "default restriction uses boost threshold \(String(describing: required))/\(String(describing: applied))")
+}
+boosts(2, 2)
+boosted.context.reactions.calls = 0
+_ = boosted.reactAction()
+expect(boosted.context.reactions.calls == 1, "boost exemption permits the common quick-reaction send path")
+let boostedActions = boosted.pickerActions(message: message, context: boosted.context, isTags: false)
+for (index, action) in boostedActions.enumerated() {
+    boosted.context.reactions.calls = 0
+    action(.builtin)
+    expect(boosted.context.reactions.calls == 1, "boost exemption permits open picker callback \(index)")
+}
+let beforeBoostedStars = starPickers
+boosted.openStars(message: message, context: boosted.context)
+expect(starPickers == beforeBoostedStars + 1, "boost exemption permits paid-reaction entry point")
+for value in [Reaction.builtin, .stars] {
+    let send = Engine()
+    tap(message: message, context: boosted.context, mode: .full, engine: send, value: value, reactionPeer: { boosted.reactionPermissionPeer }, canSend: { boosted.canSendReactions })
+    expect(send.calls == 1, "boost exemption permits existing reaction chip \(value)")
+}
+boosts(2, 1)
+for (index, action) in boostedActions.enumerated() {
+    boosted.context.reactions.calls = 0
+    action(.builtin)
+    expect(boosted.context.reactions.calls == 0, "open picker observes lost boost exemption \(index)")
+}
+boosts(2, 2)
+boosted.chatInteraction.peer = Peer(id: chatId, allowsReactions: false, personalBan: true)
+expect(!boosted.canReact, "boosts never bypass a personal reaction ban")
+boosted.context.reactions.calls = 0
+_ = boosted.reactAction()
+expect(boosted.context.reactions.calls == 0, "personally banned boosted member cannot quick-react")
+for value in [Reaction.builtin, .stars] {
+    let send = Engine()
+    tap(message: message, context: boosted.context, mode: .full, engine: send, value: value, reactionPeer: { boosted.reactionPermissionPeer }, canSend: { boosted.canSendReactions })
+    expect(send.calls == 0, "boosts do not bypass personal ban through existing chips \(value)")
+}
+var restrictedHistory = message
+restrictedHistory.peers[chatId] = restricted
+boosted.firstMessage = restrictedHistory
+boosted.chatInteraction.peer = Peer(id: PeerId(value: 3), allowsReactions: true)
+expect(!boosted.canReact, "another chat's boosts never unlock fallback message permissions")
+boosted.chatInteraction.peer = restricted
+boosted.chatInteraction.presentation.cachedData = nil
+expect(!boosted.canReact, "missing cached boost data does not bypass defaults")
 print("\(checks - failures)/\(checks) reaction permission checks passed")
 exit(failures == 0 ? 0 : 1)

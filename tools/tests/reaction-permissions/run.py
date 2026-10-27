@@ -21,6 +21,8 @@ rows = (args.source_root / 'packages/ChatUI/Sources/ChatUI/ChatRowItem.swift').r
 chips = (args.source_root / 'packages/ChatUI/Sources/ChatUI/ChatReactionsView.swift').read_text()
 fixture = Path(__file__).with_name('ReactionPermissionTests.swift').read_text()
 fixture = fixture.replace('__CAN_REACT__', body(rows, 'public var canReact: Bool {'))
+permission = body(rows, 'private var canSendReactions: Bool {') if 'private var canSendReactions: Bool {' in rows else 'guard let peer = reactionPermissionPeer else { return false }; return canSendReactionsToPeer(EnginePeer(peer))'
+fixture = fixture.replace('__CAN_SEND_REACTIONS__', permission)
 if 'private var reactionPermissionPeer: Peer? {' in rows:
     permission_peer = body(rows, 'private var reactionPermissionPeer: Peer? {')
 else:

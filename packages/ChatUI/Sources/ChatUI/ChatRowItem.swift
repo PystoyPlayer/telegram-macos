@@ -1042,10 +1042,22 @@ public class ChatRowItem: TableRowItem {
         return chatInteraction.peer.flatMap { $0.id == message.id.peerId ? $0 : nil } ?? message.peers[message.id.peerId]
     }
 
+    private var canSendReactions: Bool {
+        guard let peer = reactionPermissionPeer else { return false }
+        var ignoreDefault = false
+        if chatInteraction.peer?.id == peer.id,
+           let cachedData = chatInteraction.presentation.cachedData as? CachedChannelData,
+           let required = cachedData.boostsToUnrestrict, required > 0,
+           let applied = cachedData.appliedBoosts {
+            ignoreDefault = applied >= required
+        }
+        return canSendReactionsToPeer(EnginePeer(peer), ignoreDefault: ignoreDefault)
+    }
+
     public var canReact: Bool {
         if let message = firstMessage {
 
-            guard let peer = reactionPermissionPeer, canSendReactionsToPeer(EnginePeer(peer)) else {
+            guard canSendReactions else {
                 return false
             }
 
@@ -1805,8 +1817,8 @@ public class ChatRowItem: TableRowItem {
             let context = self.context
             let chatInteraction = self.chatInteraction
             if let reactions = reactions, !reactions.reactions.isEmpty, let available = context.reactions.available {
-                let layout = ChatReactionsLayout(context: chatInteraction.interactionContext, message: message, available: available, peerAllowed: chatInteraction.presentation.allowedReactions, savedMessageTags: entry.additionalData.savedMessageTags, engine: chatInteraction.interactionContext.reactions, theme: presentation, renderType: renderType, currentTag: currentTag, isIncoming: isIncoming, isOutOfBounds: isBubbleFullFilled && (self.captionLayouts.isEmpty || invertMedia) && (commentsBubbleData == nil || !invertMedia), hasWallpaper: presentation.hasWallpaper, stateOverlayTextColor: isStateOverlayLayout ? stateOverlayTextColor : (!hasBubble ? presentation.colors.grayText : presentation.chat.grayText(isIncoming, entry.renderType == .bubble)), reactionPeer: { [weak self] in
-                    self?.reactionPermissionPeer
+                let layout = ChatReactionsLayout(context: chatInteraction.interactionContext, message: message, available: available, peerAllowed: chatInteraction.presentation.allowedReactions, savedMessageTags: entry.additionalData.savedMessageTags, engine: chatInteraction.interactionContext.reactions, theme: presentation, renderType: renderType, currentTag: currentTag, isIncoming: isIncoming, isOutOfBounds: isBubbleFullFilled && (self.captionLayouts.isEmpty || invertMedia) && (commentsBubbleData == nil || !invertMedia), hasWallpaper: presentation.hasWallpaper, stateOverlayTextColor: isStateOverlayLayout ? stateOverlayTextColor : (!hasBubble ? presentation.colors.grayText : presentation.chat.grayText(isIncoming, entry.renderType == .bubble)), canSendReactions: { [weak self] in
+                    self?.canSendReactions == true
                 }, openInfo: { peerId in
                     ChatHistoryUIHooks.shared.pushReactionPeerInfoObserved(context.bindings.rootNavigation(), context, peerId, message.id)
                 }, runEffect: { [weak chatInteraction] value, isLarge in
