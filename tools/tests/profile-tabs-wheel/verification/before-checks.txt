@@ -1,0 +1,11 @@
+FAIL ordinary vertical mouse wheel reveals later tabs
+FAIL overflowing tab strip consumes mouse wheel
+FAIL reverse mouse wheel returns toward first tab
+PASS horizontal mouse wheel remains supported
+PASS trackpad horizontal movement retains pixel precision
+PASS vertical trackpad gesture scrolls the profile
+FAIL last tab remains bounded
+FAIL first tab remains bounded
+PASS fitting strip forwards mouse wheel to profile
+PASS fitting strip forwards horizontal trackpad movement
+5/10 checks passed
