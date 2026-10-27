@@ -184,12 +184,15 @@ public extension ChatTextInputAttribute {
             return self.weight == rhs.weight
         case .italic:
             return self.weight == rhs.weight
-        case .pre:
-            return self.weight == rhs.weight
+        case let .pre(_, language):
+            if case let .pre(_, otherLanguage) = rhs {
+                return language == otherLanguage
+            }
+            return false
         case .code:
             return self.weight == rhs.weight
         case .quote:
-            return self.weight == rhs.weight
+            return false
         case let .uid(_, id):
             switch rhs {
             case .uid(_, id):
@@ -515,8 +518,8 @@ public final class ChatTextInputState: Codable, Equatable {
                 result.addAttribute(TextInputAttributes.italic, value: true as NSNumber, range: range)
             case .code:
                 result.addAttribute(TextInputAttributes.monospace, value: true as NSNumber, range: range)
-            case .pre(_, _):
-                break
+            case let .pre(_, language):
+                result.addAttribute(TextInputAttributes.code, value: language ?? "", range: range)
             case let .uid(_, id):
                 result.addAttribute(TextInputAttributes.textMention, value: ChatTextInputTextMentionAttribute(peerId: PeerId(id)), range: range)
             case let .url(_, url):
