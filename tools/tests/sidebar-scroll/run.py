@@ -1,6 +1,7 @@
 import argparse
 import json
 import plistlib
+import re
 import shutil
 import subprocess
 import tempfile
@@ -24,21 +25,41 @@ search = source('packages/ChatListUI/Sources/ChatListUI/SearchController.swift')
 chat_insets = next(line.strip() for line in peers.splitlines() if 'tableView.scrollerInsets = .init(' in line)
 search_insets = '\n'.join(line.strip() for line in search.splitlines() if 'genericView.contentInsets.bottom = ' in line or 'genericView.scrollerInsets.bottom = ' in line)
 assert chat_insets and search_insets
-try:
-    sidebar = source('packages/ChatListUI/Sources/ChatListUI/SidebarTableView.swift')
-except (subprocess.CalledProcessError, FileNotFoundError):
-    sidebar = 'import TGUIKit\ntypealias SidebarTableView = TableView\n'
+settings = source('packages/SettingsUI/Sources/SettingsUI/AccountViewController.swift')
+calls = source('packages/CallsUI/Sources/CallsUI/RecentCallsViewController.swift')
+forms = source('packages/InputDataUI/Sources/InputDataUI/InputDataController.swift')
+settings_insets = next(line.strip() for line in settings.splitlines() if 'tableView.scrollerInsets.bottom = ' in line)
+calls_insets = next(line.strip() for line in calls.splitlines() if 'genericView.tableView.scrollerInsets.bottom = ' in line)
+forms_insets = next(line.strip() for line in forms.splitlines() if 'tableView.scrollerInsets.bottom = ' in line)
+history = source('packages/ChatUI/Sources/ChatUI/ChatController.swift')
+history_content = next(line.strip() for line in history.splitlines() if 'tableView.contentInsets = .init(top:' in line and 'state.height' not in line)
+history_scroller = next(line.strip() for line in history.splitlines() if 'tableView.scrollerInsets = NSEdgeInsets(bottom: scrollInset)' in line)
+kit = args.scratch_path.resolve() / 'scrollbar-dependencies/TGUIKit'
+kit.mkdir(parents=True, exist_ok=True)
+for folder in ['Sources', 'Tests']:
+    shutil.copytree(deps / 'packages/TGUIKit' / folder, kit / folder, dirs_exist_ok=True)
+for name in ['ScrollView.swift', 'TableView.swift', 'ThemedScroller.swift']:
+    target = kit / 'Sources' / name
+    try:
+        target.write_text(source('packages/TGUIKit/Sources/' + name))
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        if name != 'ThemedScroller.swift':
+            raise
+        target.unlink(missing_ok=True)
+manifest = (deps / 'packages/TGUIKit/Package.swift').read_text()
+manifest = re.sub(r'path: "(\.\.[^"]+)"', lambda m: 'path: ' + json.dumps(str((deps / 'packages/TGUIKit' / m.group(1)).resolve())), manifest)
+(kit / 'Package.swift').write_text(manifest)
+themed = (kit / 'Sources/ThemedScroller.swift').exists()
 with tempfile.TemporaryDirectory(prefix='telegram-sidebar-scroll-') as tmp:
     tmp = Path(tmp)
     sources = tmp / 'Sources'
     sources.mkdir()
-    dependencies = ', '.join('.package(path: ' + json.dumps(str(deps / 'packages' / name)) + ')' for name in ['TGUIKit', 'ColorPalette'])
+    dependencies = ', '.join('.package(path: ' + json.dumps(str(path)) + ')' for path in [kit, deps / 'packages/ColorPalette'])
     (tmp / 'Package.swift').write_text('''// swift-tools-version:5.9
 import PackageDescription
 let package = Package(name: "SidebarScrollValidation", platforms: [.macOS(.v12)], dependencies: [DEPENDENCIES], targets: [.executableTarget(name: "SidebarScrollValidation", dependencies: ["TGUIKit", "ColorPalette"], path: "Sources")])
 '''.replace('DEPENDENCIES', dependencies))
-    (sources / 'SidebarTableView.swift').write_text(sidebar)
-    main = (fixtures / 'main.swift').read_text().replace('__CHAT_INSETS__', chat_insets).replace('__SEARCH_INSETS__', search_insets)
+    main = (fixtures / 'main.swift').read_text().replace('__CHAT_INSETS__', chat_insets).replace('__SEARCH_INSETS__', search_insets).replace('__SETTINGS_INSETS__', settings_insets).replace('__CALLS_INSETS__', calls_insets).replace('__FORMS_INSETS__', forms_insets).replace('__HISTORY_CONTENT__', history_content).replace('__HISTORY_SCROLLER__', history_scroller).replace('__THEMED_CHECKS__', (fixtures / 'ThemedChecks.swift.txt').read_text() if themed else '')
     (sources / 'main.swift').write_text(main)
     images = {}
     for name in ['Icon_SearchField', 'Icon_SearchClear', 'Icon_Quote', 'Icon_Quote_Collapse', 'Icon_Quote_Expand']:

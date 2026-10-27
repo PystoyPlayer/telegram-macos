@@ -1082,7 +1082,7 @@ public class PeerListContainerView : Control {
     
     public let backgroundView = View(frame: NSZeroRect)
     
-    public let tableView: TableView = SidebarTableView(frame:NSZeroRect, drawBorder: true)
+    public let tableView = TableView(frame:NSZeroRect, drawBorder: true)
     
     
     private let containerView = Control()

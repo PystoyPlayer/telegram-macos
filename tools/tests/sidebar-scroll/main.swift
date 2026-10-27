@@ -11,6 +11,7 @@ let assets = imagePaths.map { name, path -> NSImage in
 }
 let originalTheme = PresentationTheme.current
 func applyTheme(dark: Bool) {
+    NSApp.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
     updateTheme(PresentationTheme(colors: dark ? nightAccentPalette : whitePalette, search: originalTheme.search, inputTheme: originalTheme.inputTheme))
 }
 applyTheme(dark: true)
@@ -32,16 +33,26 @@ final class RowView: TableRowView {
     }
     override func layout() { super.layout(); title.frame.origin = NSMakePoint(20, 22) }
 }
-func configure(_ table: TableView, search: Bool, bottom: CGFloat, top: CGFloat) {
+enum Scenario: String, CaseIterable { case chats, search, settings, calls, forms }
+func configure(_ table: TableView, scenario: Scenario, bottom: CGFloat, top: CGFloat) {
     table.contentInsets.bottom = bottom
-    if search {
-        let genericView = table
-        let insets = NSEdgeInsets(top: 0, left: 0, bottom: bottom, right: 0)
-        __SEARCH_INSETS__
-    } else {
-        let tableView = table
-        let contentBottomInset = bottom
+    let tableView = table
+    let genericView = table
+    let insets = NSEdgeInsets(top: 0, left: 0, bottom: bottom, right: 0)
+    let contentBottomInset = bottom
+    switch scenario {
+    case .chats:
         __CHAT_INSETS__
+    case .search:
+        __SEARCH_INSETS__
+    case .settings:
+        __SETTINGS_INSETS__
+    case .calls:
+        let genericView = (tableView: table, unused: false)
+        __CALLS_INSETS__
+    case .forms:
+        let contentInsets = table.contentInsets
+        __FORMS_INSETS__
     }
 }
 func scroll(_ table: TableView, progress: CGFloat) {
@@ -58,16 +69,16 @@ window.contentView = root
 
 if Bundle.main.bundleIdentifier == "local.codex.telegram.SidebarScrollValidation" {
     NSApp.setActivationPolicy(.regular)
-    window.title = "Native sidebar · controlled rows · PID \(ProcessInfo.processInfo.processIdentifier)"
-    let table = SidebarTableView(frame: root.bounds)
+    window.title = "Native scrollbars · controlled rows · PID \(ProcessInfo.processInfo.processIdentifier)"
+    let table = TableView(frame: root.bounds)
     table.getBackgroundColor = { presentation.colors.background }
     root.addSubview(table)
     for index in 0..<32 { _ = table.addItem(item: Row(table.bounds.size, stableId: index)) }
-    configure(table, search: false, bottom: 72, top: 140)
+    configure(table, scenario: .chats, bottom: 72, top: 140)
     let header = View(frame: NSMakeRect(0, 0, 420, 140))
     header.backgroundColor = presentation.colors.background
     root.addSubview(header)
-    let note = NSTextField(labelWithString: "Production sidebar · native scrollbar · controlled rows")
+    let note = NSTextField(labelWithString: "Production TableView · native scrollbar · controlled rows")
     note.frame = NSMakeRect(12, 16, 396, 24)
     note.textColor = presentation.colors.grayText
     header.addSubview(note)
@@ -108,22 +119,22 @@ if Bundle.main.bundleIdentifier == "local.codex.telegram.SidebarScrollValidation
     var checks = 0
     var failures = 0
     func check(_ ok: Bool, _ message: String) { checks += 1; if !ok { failures += 1; print("FAIL: \(message)") } }
-    for search in [false, true] {
+    for scenario in Scenario.allCases {
         for height: CGFloat in [400, 800] {
             for bottom: CGFloat in [0, 56, 80] {
-                for top: CGFloat in search ? [0] : [0, 90] {
+                for top: CGFloat in scenario == .chats ? [0, 90] : [0] {
                     for count in [2, 40] {
-                        let table = SidebarTableView(frame: search ? NSMakeRect(0, 0, 320, height) : .zero, drawBorder: true)
+                        let table = TableView(frame: scenario != .chats ? NSMakeRect(0, 0, 320, height) : .zero, drawBorder: true)
                         table.setFrameSize(NSMakeSize(320, height))
                         root.addSubview(table)
                         for index in 0..<count { _ = table.addItem(item: Row(table.bounds.size, stableId: index)) }
-                        configure(table, search: search, bottom: bottom, top: top)
+                        configure(table, scenario: scenario, bottom: bottom, top: top)
                         table.layoutSubtreeIfNeeded()
                         guard let scroller = table.verticalScroller else { check(false, "Missing native scrollbar"); continue }
                         check(scroller.scrollerStyle == .overlay, "Sidebar scrollbar disabled native overlay behavior")
                         check(table.contentView.frame.height == height, "Scrollbar styling changed the content viewport")
                         if table.documentSize.height > height {
-                            let tag = "search=\(search) height=\(height) bottom=\(bottom) top=\(top)"
+                            let tag = "scenario=\(scenario.rawValue) height=\(height) bottom=\(bottom) top=\(top)"
                             check(abs(scroller.frame.maxY - (height - bottom)) < 0.5, "Duplicate bottom scrollbar inset: \(tag)")
                             scroll(table, progress: 0)
                             check(abs(scroller.doubleValue) < 0.001, "Top scroll progress is incorrect: \(tag)")
@@ -144,7 +155,25 @@ if Bundle.main.bundleIdentifier == "local.codex.telegram.SidebarScrollValidation
             }
         }
     }
-    print("Sidebar scrollbar: \(checks) checks, \(failures) failures; actual native TableView/NSScroller; source-extracted sidebar inset configuration.")
+    for height: CGFloat in [400, 800] {
+        for bottom: CGFloat in [0, 56, 80] {
+            let tableView = TableView(frame: NSMakeRect(0, 0, 320, height), isFlipped: false)
+            root.addSubview(tableView)
+            for index in 0..<40 { _ = tableView.addItem(item: Row(tableView.bounds.size, stableId: index)) }
+            let content: CGFloat = 90
+            let bubbleBarHeight = content
+            let scrollInset = bottom
+            __HISTORY_CONTENT__
+            __HISTORY_SCROLLER__
+            tableView.layoutSubtreeIfNeeded()
+            check(tableView.hasVerticalScroller, "Chat history lost its native scroller")
+            check(tableView.contentInsets.top == content && tableView.contentInsets.bottom == 0, "Chat history content insets changed")
+            check(abs((tableView.verticalScroller?.frame.maxY ?? -1) - (height - bottom)) < 0.5, "Chat history input-panel exclusion was lost")
+            tableView.removeFromSuperview()
+        }
+    }
+    __THEMED_CHECKS__
+    print("Application scrollbars: \(checks) checks, \(failures) failures; actual native TableView/NSScroller; source-extracted production inset configuration.")
     window.close()
     exit(failures == 0 ? 0 : 1)
 }

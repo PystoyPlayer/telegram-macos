@@ -1913,7 +1913,7 @@ public class SearchController<Context: AccountContextProtocol>: GenericViewContr
     }
     
     public override func initializer() -> TableView {
-        return SidebarTableView(frame: NSMakeRect(_frameRect.minX, _frameRect.minY, _frameRect.width, _frameRect.height - bar.height), drawBorder: true);
+        return TableView(frame: NSMakeRect(_frameRect.minX, _frameRect.minY, _frameRect.width, _frameRect.height - bar.height), drawBorder: true);
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
