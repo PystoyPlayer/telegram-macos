@@ -8,6 +8,7 @@ import TelegramContext
 import TelegramUtils
 import ChatHistoryModel
 import InputView
+import MessageUtils
 
 private var copyEvidence: CopyEvidence?
 private let copyEvidenceRoot = URL(fileURLWithPath: ProcessInfo.processInfo.environment["TELEGRAM_COPY_EVIDENCE"] ?? NSTemporaryDirectory()).appendingPathComponent("telegram-copy-formatting")
@@ -27,8 +28,8 @@ private final class CopyEvidence {
     var item: ChatMessageItem!
 
     init(source: ChatInteraction) {
-        self.source = source
         try? FileManager.default.createDirectory(at: copyEvidenceRoot, withIntermediateDirectories: true)
+        self.source = source
         let rect = NSMakeRect(0, 0, 860, 650)
         window = Window(contentRect: rect, styleMask: [.titled, .closable], backing: .buffered, defer: false)
         window.title = "Message formatting — native clipboard round trip"
@@ -61,7 +62,7 @@ private final class CopyEvidence {
         host.addSubview(button)
         window.contentView = host
         let text = "Inline code: let answer = 42\n\nFirst quote\nSecond quote\n\nfunc hello() {\n    print(\"Hello\")\n}"
-        let entities: [MessageTextEntity] = [entity(text, "let answer = 42", .Code), entity(text, "First quote\n", .BlockQuote(isCollapsed: false)), entity(text, "Second quote", .BlockQuote(isCollapsed: false)), entity(text, "func hello() {\n    print(\"Hello\")\n}", .Pre(language: "swift"))]
+        let entities: [MessageTextEntity] = [entity(text, "let answer = 42", .Code), entity(text, "First quote", .BlockQuote(isCollapsed: false)), entity(text, "Second quote", .BlockQuote(isCollapsed: false)), entity(text, "func hello() {\n    print(\"Hello\")\n}", .Pre(language: "swift"))]
         item = row(text, entities)
         _ = table.addItem(item: item)
         window.center()
@@ -110,12 +111,21 @@ private final class CopyEvidence {
             guard lower < upper else { return nil }
             return MessageTextEntity(range: lower - start ..< upper - start, type: entity.type)
         }
-        let attributes = chatTextAttributes(from: TextEntitiesMessageAttribute(entities: expected))
         let actualEntities = sent.messageTextEntities([])
-        let normalized = ChatTextInputState(inputText: selected.string, selectionRange: 0 ..< selected.length, attributes: attributes).subInputState(from: NSRange(location: 0, length: selected.length))
-        check(name + ": copy entities", sameEntities(decoded.subInputState(from: NSRange(location: 0, length: selected.length)).messageTextEntities([]), normalized.messageTextEntities([])))
-        check(name + ": pasted entities", sameEntities(state.subInputState(from: NSRange(location: 0, length: selected.length)).messageTextEntities([]), normalized.messageTextEntities([])))
-        check(name + ": send preparation", sameEntities(actualEntities, normalized.messageTextEntities([])))
+        let selectedString = selected.string as NSString
+        var trimStart = 0
+        var trimEnd = selectedString.length
+        while trimStart < trimEnd, selectedString.substring(with: NSRange(location: trimStart, length: 1)).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { trimStart += 1 }
+        while trimEnd > trimStart, selectedString.substring(with: NSRange(location: trimEnd - 1, length: 1)).trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { trimEnd -= 1 }
+        let sendExpected = expected.compactMap { entity -> MessageTextEntity? in
+            let lower = max(trimStart, entity.range.lowerBound)
+            let upper = min(trimEnd, entity.range.upperBound)
+            guard lower < upper else { return nil }
+            return MessageTextEntity(range: lower - trimStart ..< upper - trimStart, type: entity.type)
+        }
+        check(name + ": copy entities", sameEntities(decoded.messageTextEntities([]), expected))
+        check(name + ": pasted entities", sameEntities(state.messageTextEntities([]), expected))
+        check(name + ": send preparation", sameEntities(actualEntities, sendExpected))
         check(name + ": quote boundaries", actualEntities.filter { if case .BlockQuote = $0.type { return true }; return false }.count == expected.filter { if case .BlockQuote = $0.type { return true }; return false }.count)
     }
 
@@ -126,8 +136,21 @@ private final class CopyEvidence {
             }
             return entity
         }
-        var remaining = rhs.map(canonical)
-        for entity in lhs.map(canonical) {
+        func merged(_ entities: [MessageTextEntity]) -> [MessageTextEntity] {
+            var result: [MessageTextEntity] = []
+            for entity in entities.map(canonical).sorted(by: { $0.range.lowerBound < $1.range.lowerBound }) {
+                if case .BlockQuote = entity.type {
+                    result.append(entity)
+                } else if let index = result.lastIndex(where: { $0.type == entity.type && $0.range.upperBound >= entity.range.lowerBound }) {
+                    result[index].range = result[index].range.lowerBound ..< max(result[index].range.upperBound, entity.range.upperBound)
+                } else {
+                    result.append(entity)
+                }
+            }
+            return result
+        }
+        var remaining = merged(rhs)
+        for entity in merged(lhs) {
             guard let index = remaining.firstIndex(of: entity) else { return false }
             remaining.remove(at: index)
         }
@@ -143,14 +166,19 @@ private final class CopyEvidence {
             roundTrip("pre " + (language ?? "none"), text: text, entities: [MessageTextEntity(range: 0 ..< (text as NSString).length, type: .Pre(language: language))])
         }
         let quote = "First quote\nSecond quote"
-        roundTrip("adjacent quotes", text: quote, entities: [entity(quote, "First quote\n", .BlockQuote(isCollapsed: false)), entity(quote, "Second quote", .BlockQuote(isCollapsed: false))])
+        roundTrip("adjacent quotes", text: quote, entities: [entity(quote, "First quote", .BlockQuote(isCollapsed: false)), entity(quote, "Second quote", .BlockQuote(isCollapsed: false))])
         roundTrip("collapsed quote", text: quote, entities: [MessageTextEntity(range: 0 ..< (quote as NSString).length, type: .BlockQuote(isCollapsed: true))])
         let mixed = "🦄 quoted code text"
-        roundTrip("UTF16 mixed selection", text: mixed, entities: [entity(mixed, "quoted code text", .BlockQuote(isCollapsed: false)), entity(mixed, "code", .Code), entity(mixed, "quoted", .Bold)], range: NSRange(location: 4, length: 11))
+        roundTrip("UTF16 mixed selection", text: mixed, entities: [MessageTextEntity(range: 0 ..< (mixed as NSString).length, type: .BlockQuote(isCollapsed: false)), entity(mixed, "code", .Code), entity(mixed, "quoted", .Bold)], range: NSRange(location: 4, length: 11))
         let plain = "Plain text stays unchanged"
         roundTrip("plain", text: plain, entities: [])
         let languages = ChatTextInputState(inputText: "aaaabbbb", selectionRange: 0 ..< 0, attributes: [.pre(0..<4, "swift"), .pre(4..<8, "python")]).subInputState(from: NSRange(location: 0, length: 8))
         check("adjacent code languages do not merge", languages.attributes.count == 2)
+        let quotes = ChatTextInputState(inputText: "aaaabbbb", selectionRange: 0 ..< 0, attributes: [.quote(0..<4, false), .quote(4..<8, true)]).subInputState(from: NSRange(location: 0, length: 8))
+        check("adjacent input quotes do not merge", quotes.attributes.count == 2)
+        check("adjacent rendered quotes do not merge", concatMessageAttributes([.init(range: 0..<4, type: .BlockQuote(isCollapsed: false)), .init(range: 4..<8, type: .BlockQuote(isCollapsed: true))]).count == 2)
+        check("adjacent rendered code languages do not merge", concatMessageAttributes([.init(range: 0..<4, type: .Pre(language: "swift")), .init(range: 4..<8, type: .Pre(language: "python"))]).count == 2)
+
         if let decoded = copy(item.messageText) {
             input.attributedText = textAttributedStringForStateText(decoded.unique(isPremium: false).attributedString(), fontSize: 15, textColor: theme.colors.text, accentTextColor: theme.colors.accent, writingDirection: nil, spoilersRevealed: false, availableEmojis: [])
             input.updateLayout(size: NSMakeSize(400, 520), textHeight: 500, transition: .immediate)
@@ -164,6 +192,7 @@ private final class CopyEvidence {
 }
 
 func codexInstallCopyEvidence(source: ChatInteraction, parent: NSView) {
+    guard source.mode == .history else { return }
     guard !parent.subviews.contains(where: { $0 is CopyEvidenceButton }) else { return }
     let button = CopyEvidenceButton(frame: NSMakeRect(20, 130, 230, 30))
     button.title = "Clipboard formatting validation"
