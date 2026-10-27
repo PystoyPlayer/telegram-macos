@@ -1,0 +1,23 @@
+FAIL: current read state determines title
+FAIL: standard read/unread icon
+FAIL: explicit action targets original chat
+FAIL: current read state determines title
+FAIL: standard read/unread icon
+FAIL: explicit action targets original chat
+FAIL: current read state determines title
+FAIL: standard read/unread icon
+FAIL: explicit action targets original chat
+FAIL: current read state determines title
+FAIL: standard read/unread icon
+FAIL: explicit action targets original chat
+FAIL: current read state determines title
+FAIL: standard read/unread icon
+FAIL: explicit action targets original chat
+FAIL: current read state determines title
+FAIL: standard read/unread icon
+FAIL: explicit action targets original chat
+FAIL: unread forum can be marked read
+FAIL: top peer has unread action
+FAIL: Saved Messages has read action
+FAIL: reopened top peer uses live manual unread mark
+8/30 search unread checks passed

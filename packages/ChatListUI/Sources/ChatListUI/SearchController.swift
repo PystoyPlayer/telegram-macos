@@ -416,10 +416,10 @@ private func peerContextMenuItems(peer: Peer, pinnedItems:[PinnedItemId], argume
                         }).start()
                     }, state: data.includePeers.peers.contains(peerId) ? NSControl.StateValue.on : nil))
                 }
-                
+
             }
         }
-        
+
         if !submenu.isEmpty {
             items.append(ContextSeparatorItem())
             let item = ContextMenuItem(strings().chatListFilterAddToFolder, itemImage: MenuAnimation.menu_add_to_folder.value)
@@ -430,15 +430,15 @@ private func peerContextMenuItems(peer: Peer, pinnedItems:[PinnedItemId], argume
             item.submenu = menu
             items.append(item)
         }
-        
+
         if isRecent {
             items.append(ContextSeparatorItem())
-            
+
             items.append(ContextMenuItem(strings().searchRemoveFromRecent, handler: {
                 arguments.removeRecentPeerId(peer.id)
             }, itemMode: .destruct, itemImage: MenuAnimation.menu_delete.value))
         }
-        
+
         return items
     }
 }
