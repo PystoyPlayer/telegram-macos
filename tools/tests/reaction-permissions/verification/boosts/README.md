@@ -6,7 +6,7 @@ The row now computes reaction permission from the matching current peer and Cach
 
 ## Swift regression
 
-Run `python3 tools/tests/reaction-permissions/run.py` on macOS. **53/53 pass**. The same fixture with the preceding reaction source (`e1883098`) passes **44/53**; all nine new failures concern boosted members' eligibility, quick/paid reactions, open picker callbacks and existing chips. Additional cases preserve personal bans, missing/zero thresholds, insufficient boosts, unrelated peer caches, revoked/restored rights, protected messages and Saved Messages tags.
+The initial boost regression passed **53/53** checks; the preceding reaction source (`e1883098`) passed **44/53**. All nine new failures concerned boosted members' eligibility, quick/paid reactions, open picker callbacks and existing chips. The expanded current suite passes **63/63** and also covers row replacement; see [lifetime verification](../lifetime/README.md). Run `python3 tools/tests/reaction-permissions/run.py` on macOS. Additional cases preserve personal bans, missing/zero thresholds, insufficient boosts, unrelated peer caches, revoked/restored rights, protected messages and Saved Messages tags.
 
 These tests extract the actual production getter, permission helper, existing-chip callback, quick-send method and ordinary/large/expanded picker callbacks, using fixture collaborators for controlled send counters. The current row view calls `reactAction` for the configurable Force Touch reaction action; its double-click handler replies. No gesture setting is changed, and no physical double-click-to-react result is claimed.
 

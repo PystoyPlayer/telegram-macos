@@ -34,7 +34,9 @@ else:
     permission_peer = 'guard let message = firstMessage else { return nil }; return chatInteraction.peer.flatMap { $0.id == message.id.peerId ? $0 : nil } ?? message.peers[message.id.peerId]'
 fixture = fixture.replace('__REACTION_PEER__', permission_peer)
 fixture = fixture.replace('__CHIP_ACTION__', body(chips, 'action: { value, isFilterTag in'))
-stars = body(rows, '}, starReact: {').replace(' [weak self] in', '', 1)
+stars = body(rows, '}, starReact: {')
+fixture = fixture.replace('__STAR_CAPTURE__', ' [weak self] in' if ' [weak self] in' in stars else '')
+stars = stars.replace(' [weak self] in', '', 1)
 fixture = fixture.replace('__STAR_ACTION__', stars)
 fixture = fixture.replace('__QUICK_ACTION__', body(rows, 'public func reactAction() -> Bool {'))
 apply_guard = next((line.strip() for line in rows.splitlines() if 'let canApplyReaction: () -> Bool =' in line), 'let canApplyReaction: () -> Bool = { true }')

@@ -79,7 +79,7 @@ final class Row {
     }
     func openStars(message: Message, context: Context) {
         let reactionPermission = self.reactionPermission
-        let action = { [weak self] in __STAR_ACTION__ }
+        let action = {__STAR_CAPTURE__ __STAR_ACTION__ }
         action()
     }
 }
@@ -305,6 +305,15 @@ refreshedInteraction.peer = restricted
 expect(!retiredChipPermission(), "retired chip observes a new live restriction")
 for action in openPickerActions { action(.builtin) }
 expect(refreshedContext.reactions.calls == 3, "row-independent picker still observes a live restriction")
+for value in [Reaction.builtin, .stars] {
+    let retiredChipEngine = Engine()
+    refreshedInteraction.peer = allowed
+    tap(message: message, context: refreshedContext, mode: .full, engine: retiredChipEngine, value: value, reactionPeer: { retiredChipPermission() ? allowed : nil }, canSend: retiredChipPermission)
+    expect(retiredChipEngine.calls == 1, "retired existing chip still submits \(value)")
+    refreshedInteraction.peer = restricted
+    tap(message: message, context: refreshedContext, mode: .full, engine: retiredChipEngine, value: value, reactionPeer: { retiredChipPermission() ? allowed : nil }, canSend: retiredChipPermission)
+    expect(retiredChipEngine.calls == 1, "retired existing chip rejects a new restriction \(value)")
+}
 openPickerActions.removeAll()
 expect(originalRow == nil, "closing the picker releases its retired row")
 print("\(checks - failures)/\(checks) reaction permission checks passed")
