@@ -3,7 +3,7 @@
 Run `python3 tools/tests/settings-sidebar/run.py` on macOS with Xcode installed.
 `--baseline` runs the same fixture against upstream e18830989542a063dd66c5bdc4dbe6a70cbbd175; `--baseline-ref REF` selects another original revision.
 
-The runner extracts the actual `checkSettings`, `backFromSettings` and navigation-listener methods and their stored state from MainViewController.swift. Swift collaborators model the navigation stack and sidebar selection; the production navigation decisions are not reimplemented. Thirteen behavior checks cover Back, nested settings, repeated entry, explicit tab selection, a previous profile/empty pane, entry from Contacts, Calls-tab removal, single-column layout and the wallet-create exception. A separate source check verifies listener registration. The original code passes 6/13 behavior checks and fails listener registration; the patch passes all checks.
+The runner extracts the actual `checkSettings`, `backFromSettings` and navigation-listener methods and their stored state from MainViewController.swift. Swift collaborators model the navigation stack and sidebar selection; the production navigation decisions are not reimplemented. Sixteen behavior checks cover Back, nested settings, repeated entry, explicit tab selection, a previous profile/empty pane, entry from Contacts, Calls-tab removal, single-column layout and the wallet-create exception. A separate source check verifies listener registration. The original code passes 6/13 original behavior checks and fails listener registration; the patch passes all checks.
 
 These checks establish controller/selection behavior with controlled navigation callbacks. They do not establish AppKit animation, gesture timing, or accessibility behavior. Native-client observations are recorded separately below.
 
@@ -18,3 +18,5 @@ These checks establish controller/selection behavior with controlled navigation 
 - Nested settings and other layout exceptions are covered by the controlled checks, not claimed as native-client validation. Interactive swipe cancellation was not exercised.
 
 `verification/before.png` and `after.png` are identical crops `(180, 14, 2900, 110)` from 3024x1770 native window screenshots. Only the sidebar heading and Saved Messages header are retained. Chat lists, account details and message contents are excluded. No interface content is reconstructed.
+
+Review follow-up: the entry controller is tracked until it is removed by a Settings section that replaces the stack. Back within that new Settings stack does not accidentally select Chats when the saved target was the shared empty controller. A missing return tab falls back to Chats and clears the pending return state. The runner now passes 16/16 behavior checks plus registration; earlier native screenshots remain the same scenario.

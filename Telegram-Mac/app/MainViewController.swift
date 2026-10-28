@@ -768,15 +768,27 @@ class MainViewController: TelegramGenericViewController<MainController_View> {
     private var previousIndex: Int? = nil
     private weak var settingsReturnController: ViewController?
     private weak var settingsReturnSidebar: ViewController?
+    private weak var settingsEntryController: ViewController?
 
     override func navigationWillChangeController() {
         super.navigationWillChangeController()
-        guard tabController.current === settings,
-              context.bindings.rootNavigation().controller === settingsReturnController,
-              let sidebar = settingsReturnSidebar,
-              let index = (0 ..< tabController.count).first(where: { tabController.tab(at: $0).controller === sidebar }) else {
+        guard tabController.current === settings, settingsReturnController != nil else { return }
+        let navigation = context.bindings.rootNavigation()
+        guard navigation.controller === settingsReturnController else {
+            var entryIsInStack = false
+            navigation.enumerateControllers { controller, _ in
+                entryIsInStack = controller === self.settingsEntryController
+                return entryIsInStack
+            }
+            if !entryIsInStack {
+                settingsReturnController = nil
+                settingsReturnSidebar = nil
+                settingsEntryController = nil
+            }
             return
         }
+        let index = (0 ..< tabController.count).first(where: { tabController.tab(at: $0).controller === settingsReturnSidebar }) ?? chatIndex
+        settingsEntryController = nil
         settingsReturnController = nil
         settingsReturnSidebar = nil
         previousIndex = index
@@ -798,10 +810,13 @@ class MainViewController: TelegramGenericViewController<MainController_View> {
                     settingsReturnSidebar = previousIndex.flatMap { index in
                         (0 ..< tabController.count).contains(index) ? tabController.tab(at: index).controller : nil
                     } ?? self.navigation
-                    navigation.push(GeneralSettingsViewController(context), false)
+                    let controller = GeneralSettingsViewController(context)
+                    settingsEntryController = controller
+                    navigation.push(controller, false)
                 } else {
                     settingsReturnController = nil
                     settingsReturnSidebar = nil
+                    settingsEntryController = nil
                     navigation.enumerateControllers( { controller, index in
                         if (controller is ChatController) || (controller is PeerInfoController) || (controller is ChannelAdminsViewController) || (controller is ChannelAdminsViewController) || (controller is EmptyChatViewController) {
                             self.backFromSettings(index)

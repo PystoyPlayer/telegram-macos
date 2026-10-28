@@ -11,5 +11,8 @@ PASS: entry from Contacts restores Contacts rather than forcing Chats
 PASS: return sidebar follows controller identity when Calls tab is removed
 PASS: single-column Settings does not install a wide-layout return target
 PASS: wallet-create exception keeps its navigation unchanged
-13/13 behavior checks passed
+PASS: Back inside a replaced Settings stack does not switch to Chats
+PASS: removed return sidebar falls back to Chats
+PASS: fallback clears stale Settings return state
+16/16 behavior checks passed
 PASS: MainViewController registers the root-navigation listener

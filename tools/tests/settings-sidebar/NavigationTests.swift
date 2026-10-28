@@ -19,7 +19,8 @@ final class Navigation: ViewController {
     var toCalls = 0
     var controller: ViewController { stack.last! }
     init(_ controller: ViewController) { stack = [controller] }
-    func push(_ controller: ViewController, _ animated: Bool = true) {
+    func push(_ controller: ViewController, _ animated: Bool = true, clearStack: Bool = false) {
+        if clearStack { stack = [stack[0]] }
         stack.append(controller)
         listener?.navigationWillChangeController()
     }
@@ -76,6 +77,7 @@ final class MainController: ViewController {
     let calls = ViewController()
     let tabController: TabController
     var quickController: QuickController?
+    var chatIndex: Int { tabController.tabs.firstIndex(where: { $0.controller === navigation })! }
     init(_ root: ViewController = ChatController()) {
         context = Context(Navigation(root))
         tabController = TabController([])
@@ -165,6 +167,25 @@ do {
     main.enterSettings()
     main.navigationWillChangeController()
     check(main.context.bindings.root.controller === wallet && main.tabController.current === main.settings, "wallet-create exception keeps its navigation unchanged")
+}
+do {
+    let main = MainController(EmptyChatViewController())
+    main.enterSettings()
+    main.context.bindings.root.push(InputDataController(), clearStack: true)
+    main.context.bindings.root.back()
+    check(main.tabController.current === main.settings, "Back inside a replaced Settings stack does not switch to Chats")
+}
+do {
+    let main = MainController()
+    main.tabController.select(index: 1)
+    main.enterSettings()
+    main.tabController.tabs.remove(at: 1)
+    main.tabController.selectedIndex = 2
+    main.context.bindings.root.back()
+    check(main.tabController.current === main.navigation, "removed return sidebar falls back to Chats")
+    main.enterSettings()
+    main.context.bindings.root.back()
+    check(main.tabController.current === main.navigation, "fallback clears stale Settings return state")
 }
 print("\(checks - failures)/\(checks) behavior checks passed")
 exit(failures == 0 ? 0 : 1)
