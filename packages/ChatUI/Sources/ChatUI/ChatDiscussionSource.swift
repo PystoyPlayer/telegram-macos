@@ -1,3 +1,4 @@
+import TGUIKit
 import Postbox
 import TelegramCore
 import TelegramContext
@@ -18,17 +19,29 @@ func chatDiscussionSourceMessageId(mode: ChatMode, location: ChatLocation) -> Me
 
 func openChatDiscussionSource(_ source: MessageId, interaction: ChatInteraction) {
     let navigation = interaction.interactionContext.bindings.rootNavigation()
-    var existing: (any ChatControllerKind, Int)?
-    navigation.enumerateControllers { controller, index in
+    var existing: ViewController?
+    navigation.enumerateControllers { controller, _ in
         guard let chat = controller as? any ChatControllerKind,
               chat.chatInteraction.mode == .history,
               chat.chatInteraction.peerId == source.peerId else { return false }
-        existing = (chat, index)
+        existing = controller
         return true
     }
-    if let (chat, index) = existing {
-        navigation.to(index: index)
-        chat.chatInteraction.focusMessageId(nil, .init(messageId: source, string: nil), .CenterEmpty)
+    if let existing {
+        let current = navigation.controller
+        current.ableToNextController(existing, { [weak navigation, weak existing, weak current] _, allowed in
+            guard allowed, let navigation, let existing, let current,
+                  navigation.controller === current else { return }
+            var targetIndex: Int?
+            navigation.enumerateControllers { controller, index in
+                guard controller === existing else { return false }
+                targetIndex = index
+                return true
+            }
+            guard let targetIndex, let chat = existing as? any ChatControllerKind else { return }
+            navigation.to(index: targetIndex)
+            chat.chatInteraction.focusMessageId(nil, .init(messageId: source, string: nil), .CenterEmpty)
+        })
     } else {
         interaction.openInfoObserved(source.peerId, true, source, nil)
     }

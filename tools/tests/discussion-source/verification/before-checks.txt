@@ -4,4 +4,12 @@ FAIL: focuses source post
 FAIL: resolved source wins over comment origin
 FAIL: thread source wins over navigation origin
 FAIL: channel origin works before source cache
-17/23 discussion navigation checks passed
+FAIL: same-source channel is reused
+FAIL: reuse focuses the original post
+FAIL: same-source channel is reused
+FAIL: reuse focuses the original post
+FAIL: recording requests navigation confirmation
+FAIL: confirmed recording exit reuses channel
+FAIL: recording requests navigation confirmation
+FAIL: confirmed recording exit reuses channel
+24/38 discussion navigation checks passed
