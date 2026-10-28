@@ -21,6 +21,7 @@ private final class SearchReadEvidence {
     var peer: Peer?
     var request = MetaDisposable()
     let previewRequest = MetaDisposable()
+    let accountChanges = MetaDisposable()
     var isRunning = false
     var checks: [[String: Any]] = []
     var original = false
@@ -52,11 +53,19 @@ private final class SearchReadEvidence {
             host.addSubview(button)
         }
         previewRequest.set((context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.peerId)) |> deliverOnMainQueue).start(next: { [weak self] peer in self?.peer = peer?._asPeer() }))
+        let accountId = context.account.id
+        accountChanges.set((context.sharedContext.activeAccounts |> deliverOnMainQueue).start(next: { [weak self] state in
+            if state.primary?.id != accountId {
+                self?.window.close()
+            }
+        }))
         window.center()
         window.makeKeyAndOrderFront(nil)
     }
     func windowWillClose(_ notification: Notification) {
         previewRequest.set(nil)
+        accountChanges.set(nil)
+        window.contentView?.subviews.filter { $0 is NSPopUpButton }.forEach { $0.removeFromSuperview() }
         if searchReadEvidence === self {
             searchReadEvidence = nil
         }
@@ -65,6 +74,7 @@ private final class SearchReadEvidence {
         if let closeObserver { NotificationCenter.default.removeObserver(closeObserver) }
         request.dispose()
         previewRequest.dispose()
+        accountChanges.dispose()
     }
     func menu(top: Bool) -> Signal<[ContextMenuItem], NoError> {
         guard let context = operationContext ?? context, context.isCurrent || isRunning, let peer else { return .single([]) }
