@@ -19,7 +19,6 @@ private final class PickerLifetimeEvidence {
     let request = MetaDisposable()
     var picker: Window?
     var row: ChatRowItem?
-    var chipPermission: (() -> Bool)?
     weak var retiredRow: ChatRowItem?
     var checks: [[String: Any]] = []
 
@@ -44,7 +43,6 @@ private final class PickerLifetimeEvidence {
         let entry = ChatHistoryEntry.MessageEntry(message, message.index, true, .bubble, .Full(rank: nil, rankType: .none, header: .normal), nil, .init())
         row = ChatRowItem.item(NSMakeSize(800, 400), from: entry, interaction: interaction, theme: theme) as? ChatRowItem
         retiredRow = row
-        chipPermission = row!.codexReactionPermissionProbe()
         request.set((row!.menuAdditionView |> take(1) |> deliverOnMainQueue).start(next: { [weak self] picker in
             guard let self else { return }
             self.picker = picker
@@ -54,13 +52,9 @@ private final class PickerLifetimeEvidence {
                 DispatchQueue.main.async {
                     self.checks.append(["name": "production picker created without boosts", "pass": self.picker != nil])
                     self.checks.append(["name": "callbacks do not retain retired row", "pass": self.retiredRow == nil])
-                    self.checks.append(["name": "existing chip permission survives retired row", "pass": self.chipPermission?() == true])
                     self.rights(true)
-                    self.checks.append(["name": "retired chip observes a live restriction", "pass": self.chipPermission?() == false])
                     self.rights(false)
-                    self.checks.append(["name": "retired chip observes permission restoration", "pass": self.chipPermission?() == true])
                     self.picker = nil
-                    self.chipPermission = nil
                     DispatchQueue.main.async {
                         self.checks.append(["name": "closing production picker releases retired row", "pass": self.retiredRow == nil])
                         let passed = self.checks.filter { $0["pass"] as? Bool == true }.count

@@ -62,6 +62,8 @@ final class Row {
         let reactionPermission = self.reactionPermission
         return __LAYOUT_PERMISSION__
     }
+    var reactionMessageIsEligible: Bool { __MESSAGE_ELIGIBILITY__ }
+    var reactionApplicationPermission: () -> Bool { __APPLICATION_PERMISSION__ }
     var canReact: Bool { __CAN_REACT__ }
     func pickerActions(message: Message, context: Context, isTags: Bool) -> [(Reaction) -> Void] {
         __CAN_APPLY_REACTION__
@@ -79,6 +81,7 @@ final class Row {
     }
     func openStars(message: Message, context: Context) {
         let reactionPermission = self.reactionPermission
+        let canApplyReaction = self.reactionApplicationPermission
         let action = {__STAR_CAPTURE__ __STAR_ACTION__ }
         action()
     }
@@ -316,5 +319,30 @@ for value in [Reaction.builtin, .stars] {
 }
 openPickerActions.removeAll()
 expect(originalRow == nil, "closing the picker releases its retired row")
+for flag in ["unsent", "failed", "ephemeral", "secret", "fake", "saved"] {
+    let interaction = Interaction(peer: allowed)
+    let item = Row(firstMessage: message, chatInteraction: interaction)
+    switch flag {
+    case "unsent": item.isUnsent = true
+    case "failed": item.isFailed = true
+    case "ephemeral": item.firstMessage?.activeEphemeralReplacementMessage = 1
+    case "secret": item.firstMessage?.containsSecretMedia = true
+    case "fake": item.entry.isFakeMessage = true
+    default: interaction.isPeerSavedMessages = true
+    }
+    let output = Context(peerId: PeerId(value: 1))
+    for action in item.pickerActions(message: message, context: output, isTags: false) { action(.builtin) }
+    expect(output.reactions.calls == 0, "all picker callbacks retain message eligibility: \(flag)")
+    let before = starPickers
+    item.openStars(message: message, context: output)
+    expect(starPickers == before, "paid picker retains message eligibility: \(flag)")
+}
+var releasedInteraction: Interaction? = Interaction(peer: allowed)
+weak var weakInteraction = releasedInteraction
+var releasedRow: Row? = Row(firstMessage: message, chatInteraction: releasedInteraction!)
+let releasedPermission = releasedRow!.chipPermission()
+releasedRow = nil
+releasedInteraction = nil
+expect(weakInteraction == nil && !releasedPermission(), "chip callback does not retain its chat interaction")
 print("\(checks - failures)/\(checks) reaction permission checks passed")
 exit(failures == 0 ? 0 : 1)

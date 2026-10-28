@@ -2,7 +2,7 @@
 
 The reaction guard introduced in #83 captured ChatRowItem weakly. Reaction chip views reuse unchanged layouts across row replacements, so their action can outlive the original row. An already-open picker can also survive a row replacement. Both actions then silently failed their permission check even in an unrestricted chat.
 
-The production permission closure now captures the message and the shared ChatInteraction, reads current peer rights and boost data when invoked, and does not depend on the row lifetime. It does not retain the old row. Revoked permissions still block the action; restored permissions make it usable again.
+The production permission closure now captures the message and a weak reference to the shared ChatInteraction, reads current peer rights and boost data when invoked, and does not depend on the row lifetime. It does not retain the old row. Revoked permissions still block the action; restored permissions make it usable again.
 
 ## Source callback regression
 
@@ -23,3 +23,7 @@ The candidate full client passes **6/6** checks, including the same row release 
 The native probe tests picker creation, object lifetime and permission evaluation. It does not click reaction assets or invoke the engine sender; actual callback bodies are tested with controlled counters in the source regression. No messages or reactions are sent and no chat permissions are changed.
 
 Environment: macOS 27.0.1 (26A434), Xcode 27.1, Telegram 13.1.0 (283357), Debug arm64. The integration checkout contains other pending UI changes and local build/profile overrides excluded from this PR. Only this macOS version was available.
+
+## Review follow-up
+
+The current runner has 76 checks, including eligibility in all three picker callbacks and the paid picker for unsent, failed, ephemeral, secret, fake and Saved Messages rows. Permission callbacks do not retain the row or ChatInteraction. The lifetime harness now uses only shipping APIs and checks picker/row lifetime; chip permission is covered by the executable source fixture. The boost harness has distinct symbols, installer `codexInstallBoostReactionEvidence`, and writes below `TELEGRAM_BOOST_EVIDENCE` (or the temporary directory). These harness sources are committed diagnostic material under tools, not part of the shipping target. Previous JSON/images are historical component evidence, not a native rerun of this follow-up.

@@ -9,15 +9,15 @@ import ChatHistoryModel
 import GeneralRows
 import InAppSettings
 
-private var reactionEvidence: ReactionEvidence?
-private let reactionEvidenceRoot = URL(fileURLWithPath: "/Users/pystoyplayer/dev/telegram-message-validation/reaction-boost")
+private var boostReactionEvidence: BoostReactionEvidence?
+private let boostReactionEvidenceRoot = URL(fileURLWithPath: ProcessInfo.processInfo.environment["TELEGRAM_BOOST_EVIDENCE"] ?? NSTemporaryDirectory()).appendingPathComponent("reaction-boost")
 
-final class ReactionEvidenceButton: NSButton {
+final class BoostReactionEvidenceButton: NSButton {
     var invoke: (() -> Void)?
     @objc func run() { invoke?() }
 }
 
-private final class ReactionEvidence {
+private final class BoostReactionEvidence {
     let window: Window
     let table: TableView
     let interaction: ChatInteraction
@@ -61,11 +61,11 @@ private final class ReactionEvidence {
     }
 
     func addButton(_ title: String, x: CGFloat, action: @escaping () -> Void) {
-        let button = ReactionEvidenceButton(frame: NSMakeRect(x, 92, 175, 30))
+        let button = BoostReactionEvidenceButton(frame: NSMakeRect(x, 92, 175, 30))
         button.title = title
         button.bezelStyle = .rounded
         button.target = button
-        button.action = #selector(ReactionEvidenceButton.run)
+        button.action = #selector(BoostReactionEvidenceButton.run)
         button.invoke = action
         window.contentView?.addSubview(button)
     }
@@ -117,7 +117,7 @@ private final class ReactionEvidence {
         interaction.update(animated: false) { $0.withUpdatedCachedData(nil) }
         check("missing cached data does not bypass defaults", false)
         if let data = try? JSONSerialization.data(withJSONObject: checks, options: [.sortedKeys, .prettyPrinted]) {
-            try? data.write(to: reactionEvidenceRoot.appendingPathComponent("models.json"), options: .atomic)
+            try? data.write(to: boostReactionEvidenceRoot.appendingPathComponent("models.json"), options: .atomic)
         }
         setState(mode)
     }
@@ -126,7 +126,7 @@ private final class ReactionEvidence {
         var check: [String: Any] = ["event": event, "mode": mode, "canReact": row?.canReact ?? false, "messagePeerRestricted": true, "time": Date().timeIntervalSince1970]
         if let hasPicker { check["hasPickerWindow"] = hasPicker }
         report.append(check)
-        if let data = try? JSONSerialization.data(withJSONObject: report, options: [.sortedKeys, .prettyPrinted]) { try? data.write(to: reactionEvidenceRoot.appendingPathComponent("observations.json"), options: .atomic) }
+        if let data = try? JSONSerialization.data(withJSONObject: report, options: [.sortedKeys, .prettyPrinted]) { try? data.write(to: boostReactionEvidenceRoot.appendingPathComponent("observations.json"), options: .atomic) }
     }
 
     func showMenu() {
@@ -150,15 +150,15 @@ private final class ReactionEvidence {
     }
 }
 
-func codexInstallReactionEvidence(source: ChatInteraction, parent: NSView) {
-    guard !parent.subviews.contains(where: { $0 is ReactionEvidenceButton }) else { return }
-    let button = ReactionEvidenceButton(frame: NSMakeRect(20, 130, 230, 30))
+func codexInstallBoostReactionEvidence(source: ChatInteraction, parent: NSView) {
+    guard !parent.subviews.contains(where: { $0 is BoostReactionEvidenceButton }) else { return }
+    let button = BoostReactionEvidenceButton(frame: NSMakeRect(20, 130, 230, 30))
     button.title = "Reaction permission validation"
     button.bezelStyle = .rounded
     button.target = button
-    button.action = #selector(ReactionEvidenceButton.run)
+    button.action = #selector(BoostReactionEvidenceButton.run)
     button.invoke = {
-        reactionEvidence = ReactionEvidence(source: source)
+        boostReactionEvidence = BoostReactionEvidence(source: source)
     }
     parent.addSubview(button)
 }

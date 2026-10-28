@@ -1040,7 +1040,8 @@ public class ChatRowItem: TableRowItem {
     private var reactionPermission: () -> Bool {
         let chatInteraction = self.chatInteraction
         guard let message = firstMessage else { return { false } }
-        return {
+        return { [weak chatInteraction] in
+            guard let chatInteraction else { return false }
             guard let peer = chatInteraction.peer.flatMap({ $0.id == message.id.peerId ? $0 : nil }) ?? message.peers[message.id.peerId] else { return false }
             var ignoreDefault = false
             if chatInteraction.peer?.id == peer.id,
@@ -1057,12 +1058,18 @@ public class ChatRowItem: TableRowItem {
         return reactionPermission()
     }
 
-    public var canReact: Bool {
-        if let message = firstMessage {
+    private var reactionApplicationPermission: () -> Bool {
+        let messageIsEligible = reactionMessageIsEligible
+        let permission = reactionPermission
+        return { messageIsEligible && permission() }
+    }
 
-            guard canSendReactions else {
-                return false
-            }
+    public var canReact: Bool {
+        return reactionMessageIsEligible && canSendReactions
+    }
+
+    private var reactionMessageIsEligible: Bool {
+        if let message = firstMessage {
 
             if message.activeEphemeralReplacementMessage != nil {
                 return false
@@ -1820,6 +1827,7 @@ public class ChatRowItem: TableRowItem {
             let context = self.context
             let chatInteraction = self.chatInteraction
             let reactionPermission = self.reactionPermission
+            let canApplyReaction = self.reactionApplicationPermission
             if let reactions = reactions, !reactions.reactions.isEmpty, let available = context.reactions.available {
                 let layout = ChatReactionsLayout(context: chatInteraction.interactionContext, message: message, available: available, peerAllowed: chatInteraction.presentation.allowedReactions, savedMessageTags: entry.additionalData.savedMessageTags, engine: chatInteraction.interactionContext.reactions, theme: presentation, renderType: renderType, currentTag: currentTag, isIncoming: isIncoming, isOutOfBounds: isBubbleFullFilled && (self.captionLayouts.isEmpty || invertMedia) && (commentsBubbleData == nil || !invertMedia), hasWallpaper: presentation.hasWallpaper, stateOverlayTextColor: isStateOverlayLayout ? stateOverlayTextColor : (!hasBubble ? presentation.colors.grayText : presentation.chat.grayText(isIncoming, entry.renderType == .bubble)), canSendReactions: reactionPermission, openInfo: { peerId in
                     ChatHistoryUIHooks.shared.pushReactionPeerInfoObserved(context.bindings.rootNavigation(), context, peerId, message.id)
@@ -1832,7 +1840,7 @@ public class ChatRowItem: TableRowItem {
                         chatInteraction?.setLocationTag(.customTag(ReactionsMessageAttribute.messageTag(reaction: reaction), nil))
                     }
                 }, starReact: {
-                    guard reactionPermission() else { return }
+                    guard canApplyReaction() else { return }
                     showModal(with: Star_ReactionsController(context: context, source: .message(.init(message))), for: context.window)
                 })
                 
@@ -4055,7 +4063,7 @@ public class ChatRowItem: TableRowItem {
             let signal = combineLatest(queue: .mainQueue(), builtin, peerAllowed, orderedReactions, maximumReactionsLimit, starsAllowed)
             |> take(1)
 
-            let canApplyReaction: () -> Bool = reactionPermission
+            let canApplyReaction: () -> Bool = reactionApplicationPermission
 
             return (signal) |> map { builtin, peerAllowed, reactions, maximumReactionsLimit, starsAllowed in
                 let enabled = builtin?.enabled ?? []
