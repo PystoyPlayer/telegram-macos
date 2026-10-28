@@ -19,6 +19,7 @@ struct CachedItem { let id: PeerId }
 struct EnginePeer { let peer: Peer; func _asPeer() -> Peer { peer } }
 struct ReadState { var count=0; var marked=false; var isUnread: Bool { count>0 || marked } }
 enum Group { case root, archive }
+enum SearchControllerTarget { case common(Group), forum(PeerId), savedMessages(PeerId), community(PeerId) }
 struct ReadItem { let id: PeerId }
 struct GroupItem { let id: PeerId }
 struct PeerItem { let id: PeerId }
@@ -57,6 +58,7 @@ final class Popular {
  func menuItems() -> Signal<[ContextMenuItem],NoError> { __POPULAR_BODY__ }
 }
 __HELPER__
+__LEASE__
 var count=0, failures=0
 func check(_ name:String,_ pass:Bool) {count+=1;if !pass {failures+=1;print("FAIL: "+name)} }
 let context=Context(); let id=PeerId(namespace:0,id:42);let peer=Peer(id);context.engine.data.peer=EnginePeer(peer:peer)
@@ -110,5 +112,22 @@ check("reopened forum menu reflects cleared mark", searchPeerReadMenuItem(contex
 searchPeerReadMenuItem(context: context, peerId: id).value?.handler?()
 check("Unread action can set the peer-level mark again", context.account.postbox.data.rawState.marked)
 check("forum round trip returns Mark as Read", searchPeerReadMenuItem(context: context, peerId: id).value?.title == "Read")
+context.engine.data.requests=[]; context.calls=[]
+check("Saved Messages sub-chat search omits the real peer read action",searchPeerReadMenuItem(context:context,peerId:id,target:.savedMessages(id)).value == nil)
+check("Saved Messages sub-chat search never reads private-chat counters",context.engine.data.requests.isEmpty)
+check("Saved Messages sub-chat menu cannot send read receipts",context.calls.isEmpty)
+var firstWindow: NSObject?=NSObject()
+weak var retainedRun=firstWindow
+check("first diagnostic window acquires the run",SearchReadRunLease.begin(firstWindow!))
+firstWindow=nil
+check("closing the owner window preserves the active restore operation",retainedRun != nil)
+let reopenedWindow=NSObject()
+check("reopened window cannot overlap the restore run",!SearchReadRunLease.begin(reopenedWindow))
+SearchReadRunLease.end(reopenedWindow)
+check("another window cannot release the active lease",!SearchReadRunLease.begin(reopenedWindow))
+SearchReadRunLease.end(retainedRun!)
+check("finishing releases the old run owner",retainedRun == nil)
+check("a later window can start after restoration",SearchReadRunLease.begin(reopenedWindow))
+SearchReadRunLease.end(reopenedWindow)
 print("\(count-failures)/\(count) search unread checks passed")
 exit(failures==0 ? 0:1)

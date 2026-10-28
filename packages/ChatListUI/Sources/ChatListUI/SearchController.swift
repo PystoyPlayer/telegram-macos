@@ -384,7 +384,7 @@ private func peerContextMenuItems(peer: Peer, pinnedItems:[PinnedItemId], argume
     
     let peerId = peer.id
     
-    return combineLatest(searchPeerReadMenuItem(context: arguments.context, peerId: peerId), chatListFilterPreferences(engine: arguments.context.engine)) |> take(1) |> deliverOnMainQueue |> map { readItem, filters -> [ContextMenuItem] in
+    return combineLatest(searchPeerReadMenuItem(context: arguments.context, peerId: peerId, target: arguments.target), chatListFilterPreferences(engine: arguments.context.engine)) |> take(1) |> deliverOnMainQueue |> map { readItem, filters -> [ContextMenuItem] in
         var items = items
         if let readItem {
             items.append(readItem)

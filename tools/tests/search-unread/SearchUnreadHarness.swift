@@ -8,6 +8,17 @@ import TelegramTheme
 import Localization
 
 private var searchReadEvidence: SearchReadEvidence?
+private enum SearchReadRunLease {
+    private static var owner: AnyObject?
+    static func begin(_ candidate: AnyObject) -> Bool {
+        guard owner == nil else { return false }
+        owner = candidate
+        return true
+    }
+    static func end(_ candidate: AnyObject) {
+        if owner === candidate { owner = nil }
+    }
+}
 private final class SearchReadButton: NSButton {
     var invoke: (() -> Void)?
     @objc func run() { invoke?() }
@@ -99,6 +110,10 @@ private final class SearchReadEvidence {
     func record(_ name: String, _ pass: Bool) { checks.append(["name": name, "pass": pass]) }
     func run() {
         guard !isRunning, let context, context.isCurrent else { return }
+        guard SearchReadRunLease.begin(self) else {
+            status.stringValue = "Another validation is restoring its unread flag. Wait for it to finish."
+            return
+        }
         isRunning = true
         operationContext = context
         previewRequest.set(nil)
@@ -106,7 +121,7 @@ private final class SearchReadEvidence {
         checks.removeAll()
         request.set((context.engine.data.get(TelegramEngine.EngineData.Item.Messages.PeerReadCounters(id: context.peerId)) |> deliverOnMainQueue).start(next: { [weak self] state in
             guard let self else { return }
-            guard state.count == 0 else { self.isRunning = false; self.operationContext = nil; self.status.stringValue = "Skipped: Saved Messages has unread incoming messages"; return }
+            guard state.count == 0 else { self.isRunning = false; self.operationContext = nil; SearchReadRunLease.end(self); self.status.stringValue = "Skipped: Saved Messages has unread incoming messages"; return }
             self.original = state.markedUnread
             self.phase(unread: !self.original, completion: { self.phase(unread: self.original, completion: { self.finish() }) })
         }))
@@ -133,6 +148,7 @@ private final class SearchReadEvidence {
         isRunning = false
         request.set(nil)
         operationContext = nil
+        SearchReadRunLease.end(self)
         let passed = checks.filter { $0["pass"] as? Bool == true }.count
         status.stringValue = "\(passed)/\(checks.count) checks passed" + (passed == checks.count ? " · Original unread flag restored" : " · Verification failed; inspect unread flag")
         let file = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("search-unread.json")

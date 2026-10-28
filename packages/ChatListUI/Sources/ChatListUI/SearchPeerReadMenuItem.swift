@@ -6,7 +6,8 @@ import TelegramContext
 import Localization
 import LocalAnimations
 
-func searchPeerReadMenuItem(context: any AccountContextProtocol, peerId: PeerId) -> Signal<ContextMenuItem?, NoError> {
+func searchPeerReadMenuItem(context: any AccountContextProtocol, peerId: PeerId, target: SearchControllerTarget = .common(.root)) -> Signal<ContextMenuItem?, NoError> {
+    if case .savedMessages = target { return .single(nil) }
     guard peerId.namespace != Namespaces.Peer.SecretChat else {
         return .single(nil)
     }
