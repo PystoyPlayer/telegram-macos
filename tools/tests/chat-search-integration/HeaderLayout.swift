@@ -62,6 +62,10 @@ func runHeaderLayoutChecks() {
   header.currentView.addSubview(utility)
   header.updateLayout(size: NSMakeSize(600, 40), transition: .immediate)
   check(utility.frame.height == 40, "utility hit area does not fill the inline glass")
+  header._headerState.canDisplayInline = false
+  header.updateLayout(size: NSMakeSize(600, 76), transition: .immediate)
+  check(utility.frame.height == 36, "primary slot retained its stretched height when another bar appeared")
+  header._headerState.canDisplayInline = true
   header.updateLayout(size: NSMakeSize(320, 36), transition: .immediate)
   check(utility.frame.height == 36, "utility kept the inline height in its fallback row")
   header._headerState.canDisplayInline = false
