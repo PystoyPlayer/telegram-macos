@@ -643,14 +643,19 @@ public final class ChatInteraction : InterfaceObserver  {
         }
         
         if selectedRange.lowerBound - 1 >= 0 && chatTextAttributes(from: text).allSatisfy({ attribute in
-            if case .animated = attribute { return true }
-            return false
+            switch attribute {
+            case .animated, .uid, .url, .date:
+                return true
+            default:
+                return false
+            }
         }) {
             let attributes = inputText.attributes(at: selectedRange.lowerBound - 1, effectiveRange: nil)
                 .filter { (key, value) in
-                    if value is TextInputTextCustomEmojiAttribute {
+                    switch key {
+                    case TextInputAttributes.customEmoji, TextInputAttributes.embedded, TextInputAttributes.textMention, TextInputAttributes.textUrl, TextInputAttributes.formattedDate:
                         return false
-                    } else {
+                    default:
                         return true
                     }
                 }

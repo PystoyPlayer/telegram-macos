@@ -18,7 +18,7 @@ final class CopyEvidenceButton: NSButton {
     @objc func run() { invoke?() }
 }
 
-private final class CopyEvidence {
+private final class CopyEvidence: NSObject, NSWindowDelegate {
     let window: Window
     let source: ChatInteraction
     let table: TableView
@@ -32,6 +32,7 @@ private final class CopyEvidence {
         self.source = source
         let rect = NSMakeRect(0, 0, 860, 650)
         window = Window(contentRect: rect, styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
         window.title = "Message formatting — native clipboard round trip"
         let host = View(frame: rect)
         host.backgroundColor = theme.colors.chatBackground
@@ -43,6 +44,8 @@ private final class CopyEvidence {
         status = NSTextField(labelWithString: "Run the production Copy callback, then paste into the native input.")
         status.textColor = theme.colors.text
         status.frame = NSMakeRect(20, 12, 820, 24)
+        super.init()
+        window.delegate = self
         host.addSubview(status)
         for (title, x) in [("Source message", 20.0), ("Pasted draft", 450.0)] {
             let label = NSTextField(labelWithString: title)
@@ -67,6 +70,12 @@ private final class CopyEvidence {
         _ = table.addItem(item: item)
         window.center()
         window.makeKeyAndOrderFront(nil)
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        if copyEvidence === self {
+            copyEvidence = nil
+        }
     }
 
     func entity(_ text: String, _ part: String, _ type: MessageTextEntityType) -> MessageTextEntity {
@@ -199,6 +208,10 @@ func codexInstallCopyEvidence(source: ChatInteraction, parent: NSView) {
     button.bezelStyle = .rounded
     button.target = button
     button.action = #selector(CopyEvidenceButton.run)
-    button.invoke = { copyEvidence = CopyEvidence(source: source) }
+    button.invoke = { [weak source] in
+        guard let source else { return }
+        copyEvidence?.window.close()
+        copyEvidence = CopyEvidence(source: source)
+    }
     parent.addSubview(button)
 }

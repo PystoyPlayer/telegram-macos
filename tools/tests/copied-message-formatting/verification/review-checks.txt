@@ -10,5 +10,12 @@ PASS: typed custom emoji inherits surrounding bold
 PASS: typed custom emoji retains its own metadata in bold
 PASS: typed custom emoji inherits surrounding quote
 PASS: typed custom emoji retains its own metadata in quote
+PASS: typed mention inherits surrounding spoiler
+PASS: typed mention retains target in spoiler
+PASS: typed mention inherits surrounding bold
+PASS: typed mention retains target in bold
+PASS: typed mention inherits surrounding quote
+PASS: typed mention retains target in quote
+PASS: plain insertion inherits style without preceding mention/link/date/emoji metadata
 PASS: rich emoji paste keeps its own quote instead of acquiring surrounding spoiler
-13/13 formatting checks passed; production parser and insertion block
+20/20 formatting checks passed; production parser and insertion block

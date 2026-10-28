@@ -19,7 +19,7 @@ enum TextInputAttributes {
 }
 class TextInputTextCustomEmojiAttribute: NSObject { let emoji="⭐"; let fileId: Int64=1; let file: Int?=nil; let collectionId: Int?=nil }
 class EmbeddedCustomEmojiAttributeValue: NSObject { let customEmojiAttribute: TextInputTextCustomEmojiAttribute?=TextInputTextCustomEmojiAttribute() }
-struct PeerId { func toInt64()->Int64 {1} }
+struct PeerId { struct Id { func _internalGetInt64Value()->Int64 {1} }; let id=Id(); func toInt64()->Int64 {1} }
 class ChatTextInputTextMentionAttribute: NSObject { let peerId=PeerId() }
 class TextInputTextUrlAttribute: NSObject { let url="https://example.com" }
 class TextInputTextDateAttribute: NSObject { let date=Date() }
@@ -62,6 +62,16 @@ for (key,value) in [(TextInputAttributes.spoiler, true as Any),(TextInputAttribu
  check(result.attribute(key,at:0,effectiveRange:nil) != nil,"typed custom emoji inherits surrounding \\(key.rawValue)")
  check(result.attribute(TextInputAttributes.customEmoji,at:0,effectiveRange:nil) as? TextInputTextCustomEmojiAttribute === emoji,"typed custom emoji retains its own metadata in \\(key.rawValue)")
 }
+for (key,value) in [(TextInputAttributes.spoiler, true as Any),(TextInputAttributes.bold,true as Any),(TextInputAttributes.quote,quote as Any)] {
+ let mention=ChatTextInputTextMentionAttribute()
+ let surrounding=NSAttributedString(string:"x",attributes:[key:value,TextInputAttributes.textMention:ChatTextInputTextMentionAttribute()])
+ let result=inherited(NSAttributedString(string:"Mention",attributes:[TextInputAttributes.textMention:mention]),after:surrounding)
+ check(result.attribute(key,at:0,effectiveRange:nil) != nil,"typed mention inherits surrounding \\(key.rawValue)")
+ check(result.attribute(TextInputAttributes.textMention,at:0,effectiveRange:nil) as? ChatTextInputTextMentionAttribute === mention,"typed mention retains target in \\(key.rawValue)")
+}
+let priorSemantic=NSAttributedString(string:"x",attributes:[TextInputAttributes.textMention:ChatTextInputTextMentionAttribute(),TextInputAttributes.textUrl:TextInputTextUrlAttribute(),TextInputAttributes.formattedDate:TextInputTextDateAttribute(),TextInputAttributes.embedded:EmbeddedCustomEmojiAttributeValue(),TextInputAttributes.bold:true])
+let ordinary=inherited(NSAttributedString(string:"plain"),after:priorSemantic)
+check(chatTextAttributes(from:ordinary).count == 1,"plain insertion inherits style without preceding mention/link/date/emoji metadata")
 let richQuote=inherited(NSAttributedString(string:"⭐",attributes:[TextInputAttributes.customEmoji:TextInputTextCustomEmojiAttribute(),TextInputAttributes.quote:quote]),after:NSAttributedString(string:"x",attributes:[TextInputAttributes.spoiler:true]))
 check(richQuote.attribute(TextInputAttributes.spoiler,at:0,effectiveRange:nil)==nil,"rich emoji paste keeps its own quote instead of acquiring surrounding spoiler")
 print("\\(checks-failures)/\\(checks) formatting checks passed; production parser and insertion block")
