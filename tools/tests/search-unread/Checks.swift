@@ -1,11 +1,12 @@
 import Foundation
-protocol AccountContextProtocol: AnyObject { var engine: Engine { get } }
+protocol AccountContextProtocol: AnyObject { var engine: Engine { get }; var account: Account { get } }
 enum NoError: Error {}
 struct Signal<T, E> { let value: T; static func single(_ value: T) -> Self { Self(value: value) }; func start() {} }
 precedencegroup PipePrecedence { associativity: left }
 infix operator |> : PipePrecedence
 func |> <A, B>(value: A, transform: (A) -> B) -> B { transform(value) }
 func map<A, B, E>(_ f: @escaping (A) -> B) -> (Signal<A, E>) -> Signal<B, E> { { .single(f($0.value)) } }
+func mapToSignal<A, B, E>(_ f: @escaping (A) -> Signal<B, E>) -> (Signal<A, E>) -> Signal<B, E> { { f($0.value) } }
 func deliverOnMainQueue<A, E>(_ signal: Signal<A, E>) -> Signal<A, E> { signal }
 struct PeerId: Equatable { let namespace: Int; let id: Int }
 enum Namespaces { enum Peer { static let SecretChat = 3 } }
@@ -29,7 +30,16 @@ final class DataEngine {
 }
 final class Peers { var removed: [PeerId]=[]; func removeRecentPeer(peerId: PeerId) -> Signal<Int, NoError> { removed.append(peerId); return .single(0) } }
 final class Engine { let data=DataEngine(); let peers=Peers() }
-final class Context: AccountContextProtocol { let engine=Engine(); var calls: [(PeerId,Bool)]=[] }
+final class Transaction {
+ var rawState = ReadState()
+ func getCombinedPeerReadState(_ id: PeerId) -> ReadState? { rawState }
+}
+final class Postbox {
+ let data = Transaction()
+ func transaction<T>(_ body: (Transaction) -> T) -> Signal<T, NoError> { .single(body(data)) }
+}
+final class Account { let postbox = Postbox() }
+final class Context: AccountContextProtocol { let account = Account(); let engine=Engine(); var calls: [(PeerId,Bool)]=[] }
 struct Labels { let chatListContextMaskAsRead="Read"; let chatListContextMaskAsUnread="Unread"; let searchPopularDelete="Remove" }
 func strings() -> Labels { Labels() }
 enum MenuAnimation { case menu_read, menu_unread, menu_delete; var value: Int { switch self { case .menu_read:0;case .menu_unread:1;case .menu_delete:2 } } }
@@ -37,8 +47,8 @@ enum ItemMode { case destruct }
 class ContextMenuItem { let title: String; let handler:(()->Void)?; let image: Int?; init(_ title:String,handler:(()->Void)?=nil,itemMode: ItemMode?=nil,itemImage:Int?=nil) { self.title=title;self.handler=handler;image=itemImage } }
 final class ContextSeparatorItem: ContextMenuItem { init() { super.init("separator") } }
 enum ChatListRowItem {
- static func markAsRead(context:any AccountContextProtocol,peerId:PeerId) { (context as! Context).calls.append((peerId,false)) }
- static func markAsUnread(context:any AccountContextProtocol,peerId:PeerId) { (context as! Context).calls.append((peerId,true)) }
+ static func markAsRead(context:any AccountContextProtocol,peerId:PeerId) { (context as! Context).calls.append((peerId,false)); context.account.postbox.data.rawState.marked = false }
+ static func markAsUnread(context:any AccountContextProtocol,peerId:PeerId) { (context as! Context).calls.append((peerId,true)); context.account.postbox.data.rawState.marked = true }
 }
 enum PopularItemType { case peer(Peer,Int?,Bool), savedMessages(Peer), articles(Int32) }
 final class Popular {
@@ -90,5 +100,15 @@ let tabsForum = TelegramChannel(id, forum: true)
 tabsForum.flags = [.displayForumAsTabs]
 context.engine.data.peer = EnginePeer(peer: tabsForum)
 check("forum displayed as tabs retains Mark as Unread", searchPeerReadMenuItem(context: context, peerId: id).value?.title == "Unread")
+context.engine.data.state = ReadState()
+context.account.postbox.data.rawState = ReadState(marked: true)
+let markedForum = searchPeerReadMenuItem(context: context, peerId: id).value
+check("regular-chat forum reads its peer-level manual unread mark", markedForum?.title == "Read")
+markedForum?.handler?()
+check("Read action clears the forum peer-level mark", !context.account.postbox.data.rawState.marked)
+check("reopened forum menu reflects cleared mark", searchPeerReadMenuItem(context: context, peerId: id).value?.title == "Unread")
+searchPeerReadMenuItem(context: context, peerId: id).value?.handler?()
+check("Unread action can set the peer-level mark again", context.account.postbox.data.rawState.marked)
+check("forum round trip returns Mark as Read", searchPeerReadMenuItem(context: context, peerId: id).value?.title == "Read")
 print("\(count-failures)/\(count) search unread checks passed")
 exit(failures==0 ? 0:1)

@@ -25,6 +25,7 @@ private final class SearchReadEvidence {
     init(context: any AccountContextProtocol) {
         self.context = context
         window = Window(contentRect: NSMakeRect(0, 0, 650, 350), styleMask: [.titled, .closable], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
         window.title = "Search chat actions — Saved Messages only"
         let host = View(frame: NSMakeRect(0, 0, 650, 350))
         host.backgroundColor = theme.colors.chatBackground
