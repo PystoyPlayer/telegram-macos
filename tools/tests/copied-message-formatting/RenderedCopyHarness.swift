@@ -18,7 +18,8 @@ final class CopyEvidenceButton: NSButton {
     @objc func run() { invoke?() }
 }
 
-private final class CopyEvidence: NSObject, NSWindowDelegate {
+private final class CopyEvidence {
+    var closeObserver: NSObjectProtocol?
     let window: Window
     let source: ChatInteraction
     let table: TableView
@@ -44,8 +45,9 @@ private final class CopyEvidence: NSObject, NSWindowDelegate {
         status = NSTextField(labelWithString: "Run the production Copy callback, then paste into the native input.")
         status.textColor = theme.colors.text
         status.frame = NSMakeRect(20, 12, 820, 24)
-        super.init()
-        window.delegate = self
+        closeObserver = NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: .main) { [weak self] notification in
+            self?.windowWillClose(notification)
+        }
         host.addSubview(status)
         for (title, x) in [("Source message", 20.0), ("Pasted draft", 450.0)] {
             let label = NSTextField(labelWithString: title)
@@ -72,6 +74,9 @@ private final class CopyEvidence: NSObject, NSWindowDelegate {
         window.makeKeyAndOrderFront(nil)
     }
 
+    deinit {
+        if let closeObserver { NotificationCenter.default.removeObserver(closeObserver) }
+    }
     func windowWillClose(_ notification: Notification) {
         if copyEvidence === self {
             copyEvidence = nil
