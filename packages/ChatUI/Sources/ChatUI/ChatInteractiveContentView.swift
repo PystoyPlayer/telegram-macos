@@ -1000,7 +1000,7 @@ public class ChatInteractiveContentView: ChatMediaContentView {
         }
         
         let isSpoiler = (messageSpoiler || forceSpoiler || isSensitive) && (parameters?.isRevealed == false)
-        let bypassSharedPreviewCache = parent != nil && parent?.containsSecretMedia != true && !isSensitive && isSpoiler && media is TelegramMediaImage
+        let bypassSharedPreviewCache = parent != nil && parent?.containsSecretMedia != true && isSpoiler
 
         
         let corners = mediaCorners(positionFlags, parameters)

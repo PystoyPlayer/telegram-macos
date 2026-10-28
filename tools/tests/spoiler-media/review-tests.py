@@ -17,8 +17,8 @@ let cases: [(String, Bool, Bool)] = [
 ("revealed photo uses ordinary cache", bypass(Parent(), false, false, image), false),
 ("send preview without parent keeps ordinary cache", bypass(nil, false, true, image), false),
 ("secret-media recycling retains original cache behavior", bypass(Parent(containsSecretMedia: true), false, true, image), false),
-("video preview keeps original cache behavior", bypass(Parent(), false, true, "video"), false),
-("sensitive media keeps original cache behavior", bypass(Parent(), true, true, image), false)]
+("concealed message video bypasses shared preview cache", bypass(Parent(), false, true, "video"), true),
+("concealed sensitive photo bypasses shared preview cache", bypass(Parent(), true, true, image), true)]
 var failures = 0
 for (name, actual, expected) in cases { print("\\(actual == expected ? "PASS" : "FAIL"): \\(name)"); if actual != expected { failures += 1 } }
 exit(failures == 0 ? 0 : 1)
