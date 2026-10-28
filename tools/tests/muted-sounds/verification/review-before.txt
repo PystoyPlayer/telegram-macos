@@ -11,6 +11,8 @@ PASS fixed-volume output without channel controls remains supported
 FAIL sound is explicitly bound to selected output
 FAIL manual device changes are read on the next sound
 FAIL muting after playback prevents the next allocation
-2/13 checks passed
 FAIL incorrect-answer system beep respects mute
 PASS audible incorrect answer retains the system beep
+PASS muted ordinary output does not mute a separate audible alert device
+FAIL muted alert device blocks beep while ordinary output stays audible
+4/17 checks passed

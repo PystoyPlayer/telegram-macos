@@ -32,7 +32,7 @@ public enum SoundEffect {
 }
 
 
-private func soundEffectOutputIdentifier() -> String? {
+private func soundEffectOutputIdentifier(_ outputSelector: AudioObjectPropertySelector = kAudioHardwarePropertyDefaultOutputDevice) -> String? {
     func property<Value>(_ device: AudioObjectID, _ selector: AudioObjectPropertySelector, _ scope: AudioObjectPropertyScope, _ element: AudioObjectPropertyElement, _ initial: Value) -> Value? {
         var address = AudioObjectPropertyAddress(mSelector: selector, mScope: scope, mElement: element)
         var value = initial
@@ -44,7 +44,7 @@ private func soundEffectOutputIdentifier() -> String? {
         return value
     }
 
-    guard let device = property(AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyDefaultOutputDevice, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain, AudioDeviceID(0)), device != kAudioObjectUnknown else { return nil }
+    guard let device = property(AudioObjectID(kAudioObjectSystemObject), outputSelector, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain, AudioDeviceID(0)), device != kAudioObjectUnknown else { return nil }
     let scope = kAudioDevicePropertyScopeOutput
     let main = kAudioObjectPropertyElementMain
     if property(device, kAudioDevicePropertyMute, scope, main, UInt32(0)) == 1 { return nil }
@@ -82,6 +82,6 @@ public func playSoundEffect(_ sound: SoundEffect) {
 }
 
 public func playSoundEffectBeep() {
-    guard soundEffectOutputIdentifier() != nil else { return }
+    guard soundEffectOutputIdentifier(kAudioHardwarePropertyDefaultSystemOutputDevice) != nil else { return }
     NSSound.beep()
 }
