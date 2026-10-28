@@ -18,9 +18,9 @@ func chatDiscussionSourceMessageId(mode: ChatMode, location: ChatLocation) -> Me
 
 func openChatDiscussionSource(_ source: MessageId, interaction: ChatInteraction) {
     let navigation = interaction.interactionContext.bindings.rootNavigation()
-    var existing: (ChatController, Int)?
+    var existing: (any ChatControllerKind, Int)?
     navigation.enumerateControllers { controller, index in
-        guard let chat = controller as? ChatController,
+        guard let chat = controller as? any ChatControllerKind,
               chat.chatInteraction.mode == .history,
               chat.chatInteraction.peerId == source.peerId else { return false }
         existing = (chat, index)

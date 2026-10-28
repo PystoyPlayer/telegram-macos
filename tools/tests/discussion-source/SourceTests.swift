@@ -32,7 +32,8 @@ struct ThreadInfo { init(message: Thread, isChannelPost: Bool, isMonoforumPost: 
 enum Message { static let newTopicThreadId: Int64 = -1 }
 final class Modal { func close() {} }
 class Controller { var modal: Modal? }
-final class ChatController: Controller {
+protocol ChatControllerKind: AnyObject { var chatInteraction: ChatInteraction { get } }
+final class ChatController: Controller, ChatControllerKind {
     let chatInteraction: ChatInteraction
     init(_ interaction: ChatInteraction) { chatInteraction = interaction }
 }
