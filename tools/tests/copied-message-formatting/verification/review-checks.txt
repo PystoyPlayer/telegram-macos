@@ -1,0 +1,6 @@
+PASS: legacy editor keeps its existing fenced representation
+PASS: fenced edit text has no overlapping code run that blocks markdown parsing
+PASS: ordinary attributed state preserves structured code
+PASS: paste keeps its own code language
+PASS: paste does not inherit preceding quote
+PASS: plain typing retains surrounding formatting

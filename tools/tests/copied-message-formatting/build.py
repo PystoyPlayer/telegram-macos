@@ -1,13 +1,14 @@
 import argparse
 from pathlib import Path
 import subprocess
+from isolated_native import isolated_source_root
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--source-root', type=Path, default=Path(__file__).resolve().parents[3])
 parser.add_argument('--derived-data', type=Path, required=True)
 parser.add_argument('--baseline')
 args = parser.parse_args()
-root = args.source_root.resolve()
+root = isolated_source_root(args.source_root)
 harness = root / 'packages/ChatUI/Sources/ChatUI/CopyFormattingHarness.swift'
 controller = root / 'packages/ChatUI/Sources/ChatUI/ChatController.swift'
 paths = [controller] + [root / path for path in [

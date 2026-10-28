@@ -554,6 +554,7 @@ public final class ChatTextInputState: Codable, Equatable {
             switch attribute {
             case let .pre(range, language):
                 if addPreAsBlock {
+                    string.removeAttribute(TextInputAttributes.code, range: NSRange(location: range.lowerBound, length: range.count))
                     pres.append((range, language ?? ""))
                 }
             default:
