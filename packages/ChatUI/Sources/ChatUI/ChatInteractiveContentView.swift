@@ -1000,7 +1000,7 @@ public class ChatInteractiveContentView: ChatMediaContentView {
         }
         
         let isSpoiler = (messageSpoiler || forceSpoiler || isSensitive) && (parameters?.isRevealed == false)
-        let isConcealed = parent?.containsSecretMedia == true || isSpoiler
+        let bypassSharedPreviewCache = parent != nil && parent?.containsSecretMedia != true && !isSensitive && isSpoiler && media is TelegramMediaImage
 
         
         let corners = mediaCorners(positionFlags, parameters)
@@ -1064,7 +1064,7 @@ public class ChatInteractiveContentView: ChatMediaContentView {
                 
                 updateLivePhoto(image, parent: parent, context: context, isSpoiler: isSpoiler, isProtected: isProtected, corners: corners)
                 
-                if let parent = parent, isConcealed {
+                if let parent = parent, parent.containsSecretMedia || isSpoiler {
                     updateImageSignal = chatSecretPhoto(account: context.account, imageReference: ImageMediaReference.message(message: MessageReference(parent), media: image), scale: backingScaleFactor, synchronousLoad: approximateSynchronousValue)
                 } else {
                     updateImageSignal = chatMessagePhoto(account: context.account, imageReference: parent != nil ? ImageMediaReference.message(message: MessageReference(parent!), media: image) : ImageMediaReference.standalone(media: image), scale: backingScaleFactor, synchronousLoad: approximateSynchronousValue)
@@ -1103,7 +1103,7 @@ public class ChatInteractiveContentView: ChatMediaContentView {
                     videoAccessory = nil
                 }
                 
-                if let parent = parent, isConcealed {
+                if let parent = parent, parent.containsSecretMedia || isSpoiler {
                     updateImageSignal = chatSecretMessageVideo(account: context.account, fileReference: fileReference, scale: backingScaleFactor)
                 } else {
                     updateImageSignal = chatMessageVideo(account: context.account, fileReference: fileReference, scale: backingScaleFactor) //chatMessageVideo(account: account, video: file, scale: backingScaleFactor)
@@ -1151,10 +1151,10 @@ public class ChatInteractiveContentView: ChatMediaContentView {
                 }
             }
             
-            self.image.setSignal(signal: isConcealed ? .single(nil) : cachedMedia(media: media, arguments: arguments, scale: backingScaleFactor, positionFlags: positionFlags), clearInstantly: clearInstantly)
+            self.image.setSignal(signal: bypassSharedPreviewCache ? .single(nil) : cachedMedia(media: media, arguments: arguments, scale: backingScaleFactor, positionFlags: positionFlags), clearInstantly: clearInstantly)
 
             var alreadyRendered: TransformImageArguments? = nil
-            if !isConcealed, self.image.isFullyLoaded, case .none = arguments.resizeMode {
+            if !bypassSharedPreviewCache, self.image.isFullyLoaded, case .none = arguments.resizeMode {
                 alreadyRendered = arguments
             }
 
@@ -1162,7 +1162,7 @@ public class ChatInteractiveContentView: ChatMediaContentView {
                 self.image.ignoreFullyLoad = mediaUpdated
 
                 self.image.setSignal(updateImageSignal, animate: removeViewAnimated, cacheImage: { [weak media] result in
-                    if let media = media, !isConcealed {
+                    if let media = media, !bypassSharedPreviewCache {
                         cacheMedia(result, media: media, arguments: arguments, scale: System.backingScale, positionFlags: positionFlags)
                     }
                 }, isProtected: isProtected, alreadyRendered: alreadyRendered)

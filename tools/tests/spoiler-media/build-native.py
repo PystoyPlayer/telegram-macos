@@ -1,7 +1,8 @@
 import argparse,subprocess
 from pathlib import Path
+from isolated_native import isolated_source_root
 p=argparse.ArgumentParser();p.add_argument('--source-root',type=Path,default=Path(__file__).resolve().parents[3]);p.add_argument('--derived-data',type=Path,required=True);p.add_argument('--baseline');args=p.parse_args()
-r=args.source_root.resolve();base=r/'packages/ChatUI/Sources/ChatUI';paths=[base/'ChatController.swift',base/'ChatInteractiveContentView.swift'];saved={x:x.read_bytes() for x in paths};helper=base/'SpoilerMediaHarness.swift';assert not helper.exists()
+r=isolated_source_root(args.source_root);base=r/'packages/ChatUI/Sources/ChatUI';paths=[base/'ChatController.swift',base/'ChatInteractiveContentView.swift'];saved={x:x.read_bytes() for x in paths};helper=base/'SpoilerMediaHarness.swift';assert not helper.exists()
 try:
  if args.baseline:paths[1].write_bytes(subprocess.check_output(['git','show',args.baseline+':'+str(paths[1].relative_to(r))],cwd=r))
  helper.write_bytes(Path(__file__).with_name('SpoilerMediaHarness.swift').read_bytes())
