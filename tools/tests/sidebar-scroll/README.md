@@ -60,8 +60,10 @@ See the [build and runtime record](evidence/native-build.txt). Only the availabl
 
 ## Review follow-up
 
-The AppKit knob slot is drawn by NSScroller again, preserving native hover/drag track feedback. Increase Contrast uses an opaque system label color and the expanded 5 pt thumb instead of a fixed-alpha palette color. The system preference itself has not yet been exercised; this is the explicit drawing policy.
+The AppKit knob slot is drawn by NSScroller again, preserving native hover/drag track feedback. Increase Contrast uses the active Telegram palette’s opaque text color and the expanded 5 pt thumb instead of a fixed-alpha palette color. The system preference itself has not yet been exercised; this is the explicit drawing policy.
 
 Common installation, identity and horizontal-only behavior are now covered by ThemedScrollerTests in the existing TGUIKitTests target (`swift test --package-path packages/TGUIKit --filter ThemedScrollerTests`). The standalone native fixture remains necessary for per-screen extracted assignments and visible endpoint geometry; it does not run in CI automatically. The unused after-top image was removed.
 
 The prior full-client record names an integration checkout and is historical integration evidence, not an independent build of this PR head. For independent native component reproduction the runner copies the selected PR sources into a temporary TGUIKit package and uses initialized dependencies supplied with --dependency-root. Content clearance excludes the floating footer already; scrollerInsets.bottom is the additional exclusion and must be zero there to avoid applying it twice. The changed ChatListUI test encodes that geometry; it is not maintainer approval of product design.
+
+The palette test now checks both Telegram light/dark palettes against both Aqua/Dark Aqua appearances with expanded/collapsed thumbs. The high-contrast branch uses palette text at alpha 1; it no longer resolves NSColor.labelColor from an unrelated system appearance. This exercises the drawing color policy without changing the user's accessibility preference.

@@ -10,9 +10,13 @@ final class ThemedScroller: NSScroller {
         let highContrast = NSWorkspace.shared.accessibilityDisplayShouldIncreaseContrast
         let width: CGFloat = expanded || highContrast ? 5 : 3
         let rect = NSMakeRect(knob.midX - width / 2, knob.minY, width, knob.height)
-        let color = highContrast ? NSColor.labelColor : presentation.colors.grayText.withAlphaComponent(expanded ? 0.85 : 0.55)
+        let color = knobColor(expanded: expanded, highContrast: highContrast)
         color.setFill()
         NSBezierPath(roundedRect: rect, xRadius: width / 2, yRadius: width / 2).fill()
+    }
+
+    func knobColor(expanded: Bool, highContrast: Bool) -> NSColor {
+        return highContrast ? presentation.colors.text.withAlphaComponent(1) : presentation.colors.grayText.withAlphaComponent(expanded ? 0.85 : 0.55)
     }
 
     override func drawKnobSlot(in slotRect: NSRect, highlight flag: Bool) {

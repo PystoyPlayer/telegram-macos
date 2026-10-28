@@ -1,5 +1,6 @@
 import XCTest
 import AppKit
+import ColorPalette
 @testable import TGUIKit
 
 final class ThemedScrollerTests: XCTestCase {
@@ -26,4 +27,23 @@ final class ThemedScrollerTests: XCTestCase {
         let view = HorizontalScrollView(frame: NSRect(x: 0, y: 0, width: 320, height: 400))
         XCTAssertFalse(view.hasVerticalScroller)
     }
+    func testHighContrastFollowsTelegramPaletteWithOppositeSystemAppearance() {
+        let original = PresentationTheme.current
+        defer { updateTheme(original) }
+        let scroller = ThemedScroller(frame: NSRect(x: 0, y: 0, width: 16, height: 200))
+        for palette in [nightAccentPalette, whitePalette] {
+            updateTheme(PresentationTheme(colors: palette, search: original.search, inputTheme: original.inputTheme))
+            for appearance in [NSAppearance.Name.aqua, .darkAqua] {
+                scroller.appearance = NSAppearance(named: appearance)
+                scroller.effectiveAppearance.performAsCurrentDrawingAppearance {
+                    for expanded in [false, true] {
+                        let color = scroller.knobColor(expanded: expanded, highContrast: true)
+                        XCTAssertEqual(color, palette.text.withAlphaComponent(1))
+                        XCTAssertEqual(color.alphaComponent, 1)
+                    }
+                }
+            }
+        }
+    }
+
 }
