@@ -1,4 +1,12 @@
 import Foundation
+infix operator |> : AdditionPrecedence
+func |> <T,U>(value:T, transform:(T)->U)->U { transform(value) }
+struct Signal<T> {
+ let value: T
+ func startStandalone(next: (T)->Void) { next(value) }
+}
+func take<T>(_ count:Int) -> (Signal<T>)->Signal<T> { { $0 } }
+func deliverOnMainQueue<T>(_ signal:Signal<T>)->Signal<T> { signal }
 
 struct Namespace: Equatable { let rawValue: Int }
 enum Namespaces {
@@ -33,11 +41,15 @@ struct Message {
     var containsSecretMedia = false
     var extendedMedia: Media?
     var flags: MessageFlags = []
+    var selectedReactions: [Int] = []
 }
 enum PeerAllowedReactions { case all, limited([Reaction]), empty }
 struct CachedChannelData { var boostsToUnrestrict: Int32?; var appliedBoosts: Int32? }
 struct Presentation { var allowedReactions: PeerAllowedReactions? = .all; var cachedData: Any? }
-final class Interaction { var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation(); init(peer: Peer?) { self.peer = peer } }
+final class Interaction {
+    var latestMessage: Message?
+    func getMessages(_ ids: [MessageId], _ album: Bool) -> Signal<[Message]> { Signal(value: latestMessage.map { [$0] } ?? []) }
+    var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation(); init(peer: Peer?) { self.peer = peer } }
 struct Available { var enabledValues: [Reaction] = [.builtin] }
 struct AdditionalData { var reactions: Available? = Available() }
 struct Entry { var isFakeMessage = false; var additionalData = AdditionalData() }
@@ -54,6 +66,7 @@ final class Row {
     init(firstMessage: Message?, chatInteraction: Interaction) {
         self.firstMessage = firstMessage
         self.chatInteraction = chatInteraction
+        chatInteraction.latestMessage = firstMessage
     }
     var reactionPermissionPeer: Peer? { __REACTION_PEER__ }
     var canSendReactions: Bool { __CAN_SEND_REACTIONS__ }
@@ -66,7 +79,11 @@ final class Row {
     var reactionApplicationPermission: () -> Bool { __APPLICATION_PERMISSION__ }
     var canReact: Bool { __CAN_REACT__ }
     func pickerActions(message: Message, context: Context, isTags: Bool) -> [(Reaction) -> Void] {
+        let chatInteraction = self.chatInteraction
+        let messageId = message.id
         __CAN_APPLY_REACTION__
+        let applyReaction: (UpdateMessageReaction, CGRect?, Bool) -> Void = { __LATEST_REACTION__ }
+
         let openSavedTagsPremium = { }
         let reactions: [RecentReactionItem] = []
         let fromRect: CGRect? = nil
@@ -88,7 +105,7 @@ final class Row {
 }
 enum Reaction: Equatable {
     case builtin, custom, stars
-    func toUpdate(_ file: Int? = nil) -> Int { 1 }
+    func toUpdate(_ file: Int? = nil) -> UpdateMessageReaction { .builtin("👍") }
 }
 typealias FixtureReaction = Reaction
 enum MessageReaction { typealias Reaction = FixtureReaction }
@@ -107,8 +124,9 @@ func showModal(with controller: Star_ReactionsController, for window: Int) { sta
 enum Mode { case tag, full }
 final class Engine {
     var calls = 0
+    var values: [Int] = []
     func sendStarsReaction(_ messageId: MessageId, count: Int, fromRect: CGRect? = nil) { calls += 1 }
-    func react(_ messageId: MessageId, values: [Int], fromRect: CGRect? = nil, storeAsRecentlyUsed: Bool = false, isLarge: Bool = false) { calls += 1 }
+    func react(_ messageId: MessageId, values: [Int], fromRect: CGRect? = nil, storeAsRecentlyUsed: Bool = false, isLarge: Bool = false) { calls += 1; self.values = values }
 }
 struct ReactionSettings { var quickReaction: Reaction = .builtin }
 struct ChatInterfaceHooks { static let shared = ChatInterfaceHooks(); func freezeAlert(_ context: Context) {} }
@@ -116,7 +134,7 @@ struct ChatHistoryUIHooks {
     static let shared = ChatHistoryUIHooks()
     func reactionSettings(_ context: Context) -> ReactionSettings { ReactionSettings() }
     func messageNewReactions(_ message: Message, _ update: Int, _ tags: Bool) -> [Int] { [update] }
-    func messageNewReactions(_ message: Message, _ update: UpdateMessageReaction, _ tags: Bool) -> [Int] { [1] }
+    func messageNewReactions(_ message: Message, _ update: UpdateMessageReaction, _ tags: Bool) -> [Int] { message.selectedReactions + [1] }
 }
 func tap(message: Message, context: Context, mode: Mode, engine: Engine, value: Reaction = .builtin, isFilterTag: Bool = false, reactionPeer: (() -> Peer?)? = nil, canSend: (() -> Bool)? = nil, tagAction: (Reaction) -> Void = { _ in }) {
     let source = Source()
@@ -344,5 +362,23 @@ let releasedPermission = releasedRow!.chipPermission()
 releasedRow = nil
 releasedInteraction = nil
 expect(weakInteraction == nil && !releasedPermission(), "chip callback does not retain its chat interaction")
+for index in 0..<3 {
+ let interaction = Interaction(peer: allowed)
+ var opening = message
+ opening.selectedReactions = [2]
+ let currentRow = Row(firstMessage: opening, chatInteraction: interaction)
+ let output = Context(peerId: PeerId(value: 1))
+ let action = currentRow.pickerActions(message: opening, context: output, isTags: false)[index]
+ interaction.latestMessage?.selectedReactions = []
+ action(.builtin)
+ expect(output.reactions.values == [1], "picker \(index) never resurrects a remotely removed reaction")
+ interaction.latestMessage?.selectedReactions = [3]
+ action(.builtin)
+ expect(output.reactions.values == [3,1], "picker \(index) preserves a reaction added after opening")
+ let count = output.reactions.calls
+ interaction.latestMessage = nil
+ action(.builtin)
+ expect(output.reactions.calls == count, "picker \(index) ignores a deleted message")
+}
 print("\(checks - failures)/\(checks) reaction permission checks passed")
 exit(failures == 0 ? 0 : 1)

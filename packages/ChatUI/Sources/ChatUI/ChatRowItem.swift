@@ -4064,6 +4064,17 @@ public class ChatRowItem: TableRowItem {
             |> take(1)
 
             let canApplyReaction: () -> Bool = reactionApplicationPermission
+            let messageId = message.id
+            let applyReaction: (UpdateMessageReaction, NSRect?, Bool) -> Void = { [weak chatInteraction] value, fromRect, isLarge in
+                guard let chatInteraction, isTags || canApplyReaction() else { return }
+                _ = (chatInteraction.getMessages([messageId], false)
+                |> take(1)
+                |> deliverOnMainQueue).startStandalone(next: { messages in
+                    guard let current = messages.first, isTags || canApplyReaction() else { return }
+                    let updated = ChatHistoryUIHooks.shared.messageNewReactions(current, value, isTags)
+                    context.reactions.react(messageId, values: updated, fromRect: fromRect, storeAsRecentlyUsed: true, isLarge: isLarge)
+                })
+            }
 
             return (signal) |> map { builtin, peerAllowed, reactions, maximumReactionsLimit, starsAllowed in
                 let enabled = builtin?.enabled ?? []
@@ -4287,8 +4298,7 @@ public class ChatRowItem: TableRowItem {
                                         prem(with: PremiumBoardingController(context: context, source: .premium_stickers), for: context.window)
                                     })
                                 } else {
-                                    let updated = ChatHistoryUIHooks.shared.messageNewReactions(message, value, isTags)
-                                    context.reactions.react(message.id, values: updated, fromRect: fromRect, storeAsRecentlyUsed: true, isLarge: isLarge)
+                                    applyReaction(value, fromRect, isLarge)
                                 }
                             }
                         }
@@ -4315,12 +4325,12 @@ public class ChatRowItem: TableRowItem {
                         if value == .stars {
                             context.reactions.sendStarsReaction(message.id, count: 1, fromRect: fromRect)
                         } else {
-                            context.reactions.react(message.id, values: ChatHistoryUIHooks.shared.messageNewReactions(message, value.toUpdate(), isTags), fromRect: fromRect, storeAsRecentlyUsed: true)
+                            applyReaction(value.toUpdate(), fromRect, false)
                         }
                     }
                 }, addLarge: isTags ? nil : { value, fromRect in
                     guard isTags || canApplyReaction() else { return }
-                    context.reactions.react(message.id, values: ChatHistoryUIHooks.shared.messageNewReactions(message, value.toUpdate(), isTags), fromRect: fromRect, storeAsRecentlyUsed: true, isLarge: true)
+                    applyReaction(value.toUpdate(), fromRect, true)
                 }, radiusLayer: nil, revealReactions: reveal, aboveText: aboveLayout, message: message)
                 
                 

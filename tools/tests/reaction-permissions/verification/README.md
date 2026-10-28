@@ -21,3 +21,9 @@ Before removes only the original eligibility guard from native integration d159d
 The follow-up additionally guards selections from a picker that was opened before the member lost permission, including ordinary/stars, large, and expanded picker callbacks. The runner compiles the actual callback bodies and weak eligibility closure. It passes 31/31 checks; the preceding head 9aba9188 passes 28/31, failing each of the three newly restricted picker callbacks. Three checks execute the actual `reactAction` method for restricted, allowed and subsequently restricted members, covering the common quick-reaction send path. The existing double-click handler in this source replies to the message; the configurable Force Touch reaction path calls this guarded `reactAction` method. No new gesture preference is introduced.
 
 Limits: these captures verify rendered production components with controlled native permission models, not physical context-menu opening or server rejection in a real restricted chat. A suitable live restricted chat remains unavailable. The full native arm64 builds pass; SDK/profile overrides and the diagnostic hook remain outside the feature patch.
+
+## Current picker state
+
+The normal, large and expanded picker callbacks now read the message again through ChatInteraction.getMessages when a reaction is chosen. They compute the outgoing list from that current message, recheck permission after the read and do nothing if the message was deleted. They keep no row reference and weakly capture ChatInteraction.
+
+The current source fixture passes **85/85 checks**, including reactions removed or added after the picker opens and message deletion, for all three callbacks. Historical native captures above are not a new cross-device test of this follow-up.

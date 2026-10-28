@@ -43,6 +43,7 @@ fixture = fixture.replace('__STAR_ACTION__', stars)
 fixture = fixture.replace('__QUICK_ACTION__', body(rows, 'public func reactAction() -> Bool {'))
 apply_guard = next((line.strip() for line in rows.splitlines() if 'let canApplyReaction: () -> Bool =' in line), 'let canApplyReaction: () -> Bool = { true }')
 fixture = fixture.replace('__CAN_APPLY_REACTION__', apply_guard)
+fixture = fixture.replace('__LATEST_REACTION__', body(rows, 'let applyReaction: (UpdateMessageReaction, NSRect?, Bool) -> Void = {'))
 for token, marker in [
     ('__EXPANDED_ACTION__', 'let react: (StickerPackItem, NSRect?, Bool) -> Void = { sticker, fromRect, isLarge in'),
     ('__PICKER_ACTION__', 'list: available, add: { value, checkPrem, fromRect in'),
