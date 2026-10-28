@@ -806,7 +806,12 @@ class MainViewController: TelegramGenericViewController<MainController_View> {
         } else {
             if previousIndex == tabController.count - 1 || isSettings {
                 if isSettings && context.layout != .single {
-                    settingsReturnController = navigation.controller
+                    settingsReturnController = nil
+                    navigation.enumerateControllers { controller, _ in
+                        guard !controller.removeAfterDisapper, controller.stake.keepLeft == 0 else { return false }
+                        self.settingsReturnController = controller
+                        return true
+                    }
                     settingsReturnSidebar = previousIndex.flatMap { index in
                         (0 ..< tabController.count).contains(index) ? tabController.tab(at: index).controller : nil
                     } ?? self.navigation

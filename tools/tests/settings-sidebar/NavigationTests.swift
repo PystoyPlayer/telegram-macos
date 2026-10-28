@@ -1,6 +1,9 @@
 import Foundation
 
+struct Stake { var keepLeft: Int = 0 }
 class ViewController {
+    var removeAfterDisapper = false
+    var stake = Stake()
     func navigationWillChangeController() {}
 }
 class ChatController: ViewController {}
@@ -8,7 +11,10 @@ class PeerInfoController: ViewController {}
 class ChannelAdminsViewController: ViewController {}
 class EmptyChatViewController: ViewController {}
 class AccountViewController: ViewController {}
-class InputDataController: ViewController { var identifier = "" }
+class InputDataController: ViewController {
+ var identifier = ""
+ override init() { super.init(); removeAfterDisapper = true }
+}
 class GeneralSettingsViewController: ViewController {
     init(_ context: Context) {}
 }
@@ -20,7 +26,11 @@ final class Navigation: ViewController {
     var controller: ViewController { stack.last! }
     init(_ controller: ViewController) { stack = [controller] }
     func push(_ controller: ViewController, _ animated: Bool = true, clearStack: Bool = false) {
+        let previous = self.controller
         if clearStack { stack = [stack[0]] }
+        if previous.removeAfterDisapper || previous.stake.keepLeft > 0 {
+            stack.removeAll { $0 === previous }
+        }
         stack.append(controller)
         listener?.navigationWillChangeController()
     }
@@ -186,6 +196,17 @@ do {
     main.enterSettings()
     main.context.bindings.root.back()
     check(main.tabController.current === main.navigation, "fallback clears stale Settings return state")
+}
+for transientKind in ["input", "keepLeft"] {
+ let main = MainController()
+ let root = main.context.bindings.root.controller
+ let transient: ViewController = transientKind == "input" ? InputDataController() : ViewController()
+ if transientKind == "keepLeft" { transient.stake.keepLeft = 1 }
+ main.context.bindings.root.push(transient)
+ main.enterSettings()
+ check(!main.context.bindings.root.stack.contains { $0 === transient }, "Settings push removes transient \(transientKind) detail")
+ main.context.bindings.root.back()
+ check(main.context.bindings.root.controller === root && main.tabController.current === main.navigation, "Back restores surviving detail and Chats after \(transientKind) removal")
 }
 print("\(checks - failures)/\(checks) behavior checks passed")
 exit(failures == 0 ? 0 : 1)
