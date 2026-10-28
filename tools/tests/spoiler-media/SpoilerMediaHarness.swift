@@ -11,7 +11,7 @@ private final class SpoilerEvidenceButton: NSButton {
     var invoke: (() -> Void)?
     @objc func run() { invoke?() }
 }
-private final class SpoilerEvidence {
+private final class SpoilerEvidence: NSObject, NSWindowDelegate {
     let context: any AccountContextProtocol
     let window: Window
     let status: NSTextField
@@ -20,16 +20,19 @@ private final class SpoilerEvidence {
     init(source: ChatInteraction) {
         context = source.interactionContext
         window = Window(contentRect: NSMakeRect(0, 0, 820, 420), styleMask: [.titled, .closable], backing: .buffered, defer: false)
-        window.title = "Media spoiler — neutral local album"
+        window.isReleasedWhenClosed = false
+        window.title = "Media spoiler — isolated preview components"
         let host = View(frame: NSMakeRect(0, 0, 820, 420))
         host.backgroundColor = theme.colors.chatBackground
         window.contentView = host
         status = NSTextField(labelWithString: "Hidden local checkerboard photos · no chat contents")
         status.frame = NSMakeRect(20, 15, 780, 25)
         status.textColor = theme.colors.text
+        super.init()
+        window.delegate = self
         host.addSubview(status)
         let button = SpoilerEvidenceButton(frame: NSMakeRect(20, 48, 250, 30))
-        button.title = "Reveal test album"
+        button.title = "Reveal test previews"
         button.bezelStyle = .rounded
         button.target = button
         button.action = #selector(SpoilerEvidenceButton.run)
@@ -50,6 +53,11 @@ private final class SpoilerEvidence {
         }
         window.center()
         window.makeKeyAndOrderFront(nil)
+    }
+    func windowWillClose(_ notification: Notification) {
+        if spoilerEvidence === self {
+            spoilerEvidence = nil
+        }
     }
     static func checker(size: Int) -> Data {
         let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: size, pixelsHigh: size, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: size*4, bitsPerPixel: 32)!
@@ -97,7 +105,7 @@ private final class SpoilerEvidence {
             checks.append(["name": "tile \(i+1) sharp after reveal", "pass": variance > 0.1, "pixelVariance": variance])
         }
         let passed = checks.filter { $0["pass"] as? Bool == true }.count
-        status.stringValue = "\(passed)/\(checks.count) checks passed · Revealed album without opening the gallery"
+        status.stringValue = "\(passed)/\(checks.count) checks passed · Revealed preview components"
         let file = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("spoiler-media.json")
         if let data = try? JSONSerialization.data(withJSONObject: checks, options: [.prettyPrinted, .sortedKeys]) { try? data.write(to: file, options: .atomic) }
     }
@@ -109,6 +117,10 @@ func codexInstallSpoilerEvidence(source: ChatInteraction, parent: NSView) {
     button.bezelStyle = .rounded
     button.target = button
     button.action = #selector(SpoilerEvidenceButton.run)
-    button.invoke = { spoilerEvidence = SpoilerEvidence(source: source) }
+    button.invoke = { [weak source] in
+        guard let source else { return }
+        spoilerEvidence?.window.close()
+        spoilerEvidence = SpoilerEvidence(source: source)
+    }
     parent.addSubview(button)
 }
