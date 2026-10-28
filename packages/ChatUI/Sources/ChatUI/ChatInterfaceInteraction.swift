@@ -642,7 +642,10 @@ public final class ChatInteraction : InterfaceObserver  {
             return selectedRange.lowerBound ..< selectedRange.lowerBound
         }
         
-        if selectedRange.lowerBound - 1 >= 0 && chatTextAttributes(from: text).isEmpty {
+        if selectedRange.lowerBound - 1 >= 0 && chatTextAttributes(from: text).allSatisfy({ attribute in
+            if case .animated = attribute { return true }
+            return false
+        }) {
             let attributes = inputText.attributes(at: selectedRange.lowerBound - 1, effectiveRange: nil)
                 .filter { (key, value) in
                     if value is TextInputTextCustomEmojiAttribute {

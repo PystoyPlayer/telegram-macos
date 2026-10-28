@@ -1,6 +1,14 @@
-PASS: legacy editor keeps its existing fenced representation
-PASS: fenced edit text has no overlapping code run that blocks markdown parsing
-PASS: ordinary attributed state preserves structured code
-PASS: paste keeps its own code language
-PASS: paste does not inherit preceding quote
-PASS: plain typing retains surrounding formatting
+PASS: legacy editor retains fenced representation
+PASS: legacy fences have no code run blocking markdown parse
+PASS: ordinary state preserves structured code
+PASS: rich paste preserves its language
+PASS: rich paste does not inherit surrounding quote
+PASS: plain typing inherits surrounding quote
+PASS: typed custom emoji inherits surrounding spoiler
+PASS: typed custom emoji retains its own metadata in spoiler
+PASS: typed custom emoji inherits surrounding bold
+PASS: typed custom emoji retains its own metadata in bold
+PASS: typed custom emoji inherits surrounding quote
+PASS: typed custom emoji retains its own metadata in quote
+PASS: rich emoji paste keeps its own quote instead of acquiring surrounding spoiler
+13/13 formatting checks passed; production parser and insertion block
