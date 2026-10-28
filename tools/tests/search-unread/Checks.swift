@@ -9,16 +9,22 @@ func map<A, B, E>(_ f: @escaping (A) -> B) -> (Signal<A, E>) -> Signal<B, E> { {
 func deliverOnMainQueue<A, E>(_ signal: Signal<A, E>) -> Signal<A, E> { signal }
 struct PeerId: Equatable { let namespace: Int; let id: Int }
 enum Namespaces { enum Peer { static let SecretChat = 3 } }
-final class Peer { let id: PeerId; var isForumOrMonoForum: Bool; init(_ id: PeerId, forum: Bool = false) { self.id=id; isForumOrMonoForum=forum } }
+class Peer { let id: PeerId; var isForumOrMonoForum: Bool; init(_ id: PeerId, forum: Bool = false) { self.id=id; isForumOrMonoForum=forum } }
+struct ChannelFlags: OptionSet { let rawValue: Int; static let displayForumAsTabs = ChannelFlags(rawValue: 1) }
+class TelegramChannel: Peer { var flags: ChannelFlags = [] }
+struct KnownBool { var knownValue: Bool? }
+struct CachedChannelData { var viewForumAsMessages = KnownBool() }
+struct CachedItem { let id: PeerId }
 struct EnginePeer { let peer: Peer; func _asPeer() -> Peer { peer } }
 struct ReadState { var count=0; var marked=false; var isUnread: Bool { count>0 || marked } }
 enum Group { case root, archive }
 struct ReadItem { let id: PeerId }
 struct GroupItem { let id: PeerId }
 struct PeerItem { let id: PeerId }
-enum TelegramEngine { enum EngineData { enum Item { enum Messages { typealias PeerReadCounters = ReadItem; typealias ChatListGroup = GroupItem }; enum Peer { typealias Peer = PeerItem } } } }
+enum TelegramEngine { enum EngineData { enum Item { enum Messages { typealias PeerReadCounters = ReadItem; typealias ChatListGroup = GroupItem }; enum Peer { typealias Peer = PeerItem; typealias CachedData = CachedItem } } } }
 final class DataEngine {
-    var state=ReadState(); var group: Group? = .root; var peer: EnginePeer?; var requests: [PeerId]=[]
+    var cached: Any?; var state=ReadState(); var group: Group? = .root; var peer: EnginePeer?; var requests: [PeerId]=[]
+    func get(_ read: ReadItem, _ group: GroupItem, _ peer: PeerItem, _ cached: CachedItem) -> Signal<(ReadState, Group?, EnginePeer?, Any?), NoError> { requests += [read.id,group.id,peer.id,cached.id]; return .single((state,self.group,self.peer,self.cached)) }
     func get(_ read: ReadItem, _ group: GroupItem, _ peer: PeerItem) -> Signal<(ReadState, Group?, EnginePeer?), NoError> { requests += [read.id,group.id,peer.id]; return .single((state,self.group,self.peer)) }
 }
 final class Peers { var removed: [PeerId]=[]; func removeRecentPeer(peerId: PeerId) -> Signal<Int, NoError> { removed.append(peerId); return .single(0) } }
@@ -75,5 +81,14 @@ check("Saved Messages has read action",Popular(context,.savedMessages(peer)).men
 check("articles do not acquire chat read action",Popular(context,.articles(2)).menuItems().value.isEmpty)
 context.engine.data.state=ReadState(marked:true)
 check("reopened top peer uses live manual unread mark",Popular(context,.peer(peer,nil,false)).menuItems().value.first?.title == "Read")
+peer.isForumOrMonoForum = true
+context.engine.data.state = ReadState()
+context.engine.data.cached = CachedChannelData(viewForumAsMessages: KnownBool(knownValue: true))
+check("forum displayed as messages retains Mark as Unread", searchPeerReadMenuItem(context: context, peerId: id).value?.title == "Unread")
+context.engine.data.cached = nil
+let tabsForum = TelegramChannel(id, forum: true)
+tabsForum.flags = [.displayForumAsTabs]
+context.engine.data.peer = EnginePeer(peer: tabsForum)
+check("forum displayed as tabs retains Mark as Unread", searchPeerReadMenuItem(context: context, peerId: id).value?.title == "Unread")
 print("\(count-failures)/\(count) search unread checks passed")
 exit(failures==0 ? 0:1)

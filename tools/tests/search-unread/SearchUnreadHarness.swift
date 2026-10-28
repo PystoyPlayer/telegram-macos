@@ -18,6 +18,8 @@ private final class SearchReadEvidence {
     let status: NSTextField
     var peer: Peer?
     var request = MetaDisposable()
+    let previewRequest = MetaDisposable()
+    var isRunning = false
     var checks: [[String: Any]] = []
     var original = false
     init(context: any AccountContextProtocol) {
@@ -43,7 +45,7 @@ private final class SearchReadEvidence {
             }
             host.addSubview(button)
         }
-        request.set((context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.peerId)) |> deliverOnMainQueue).start(next: { [weak self] peer in self?.peer = peer?._asPeer() }))
+        previewRequest.set((context.engine.data.get(TelegramEngine.EngineData.Item.Peer.Peer(id: context.peerId)) |> deliverOnMainQueue).start(next: { [weak self] peer in self?.peer = peer?._asPeer() }))
         window.center()
         window.makeKeyAndOrderFront(nil)
     }
@@ -54,7 +56,8 @@ private final class SearchReadEvidence {
         return peerContextMenuItems(peer: peer, pinnedItems: [], arguments: arguments, isRecent: true)
     }
     func show(top: Bool, button: NSButton) {
-        request.set((menu(top: top) |> deliverOnMainQueue).start(next: { [weak self] items in
+        guard !isRunning else { return }
+        previewRequest.set((menu(top: top) |> deliverOnMainQueue).start(next: { [weak self] items in
             guard let self, let host = self.window.contentView else { return }
             host.subviews.filter { $0 is NSPopUpButton }.forEach { $0.removeFromSuperview() }
             let popup = NSPopUpButton(frame: NSMakeRect(300, 90, 310, 35), pullsDown: true)
@@ -68,10 +71,14 @@ private final class SearchReadEvidence {
     }
     func record(_ name: String, _ pass: Bool) { checks.append(["name": name, "pass": pass]) }
     func run() {
+        guard !isRunning else { return }
+        isRunning = true
+        previewRequest.set(nil)
+        window.contentView?.subviews.filter { $0 is NSPopUpButton }.forEach { $0.removeFromSuperview() }
         checks.removeAll()
         request.set((context.engine.data.get(TelegramEngine.EngineData.Item.Messages.PeerReadCounters(id: context.peerId)) |> deliverOnMainQueue).start(next: { [weak self] state in
             guard let self else { return }
-            guard state.count == 0 else { self.status.stringValue = "Skipped: Saved Messages has unread incoming messages"; return }
+            guard state.count == 0 else { self.isRunning = false; self.status.stringValue = "Skipped: Saved Messages has unread incoming messages"; return }
             self.original = state.markedUnread
             self.phase(unread: !self.original, completion: { self.phase(unread: self.original, completion: { self.finish() }) })
         }))
@@ -94,8 +101,9 @@ private final class SearchReadEvidence {
         }))
     }
     func finish() {
+        isRunning = false
         let passed = checks.filter { $0["pass"] as? Bool == true }.count
-        status.stringValue = "\(passed)/\(checks.count) checks passed · Original unread flag restored"
+        status.stringValue = "\(passed)/\(checks.count) checks passed" + (passed == checks.count ? " · Original unread flag restored" : " · Verification failed; inspect unread flag")
         let file = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("search-unread.json")
         if let data = try? JSONSerialization.data(withJSONObject: checks, options: [.prettyPrinted, .sortedKeys]) { try? data.write(to: file, options: .atomic) }
     }
@@ -106,6 +114,12 @@ func codexInstallSearchReadEvidence(context: any AccountContextProtocol, parent:
     button.bezelStyle = .rounded
     button.target = button
     button.action = #selector(SearchReadButton.run)
-    button.invoke = { searchReadEvidence = SearchReadEvidence(context: context) }
+    button.invoke = {
+        if let evidence = searchReadEvidence {
+            evidence.window.makeKeyAndOrderFront(nil)
+        } else {
+            searchReadEvidence = SearchReadEvidence(context: context)
+        }
+    }
     parent.addSubview(button)
 }

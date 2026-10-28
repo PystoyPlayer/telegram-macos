@@ -13,10 +13,12 @@ func searchPeerReadMenuItem(context: any AccountContextProtocol, peerId: PeerId)
     return context.engine.data.get(
         TelegramEngine.EngineData.Item.Messages.PeerReadCounters(id: peerId),
         TelegramEngine.EngineData.Item.Messages.ChatListGroup(id: peerId),
-        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId)
-    ) |> deliverOnMainQueue |> map { state, group, peer -> ContextMenuItem? in
+        TelegramEngine.EngineData.Item.Peer.Peer(id: peerId),
+        TelegramEngine.EngineData.Item.Peer.CachedData(id: peerId)
+    ) |> deliverOnMainQueue |> map { state, group, peer, cachedData -> ContextMenuItem? in
         guard group != nil, let peer else { return nil }
-        if !state.isUnread && peer._asPeer().isForumOrMonoForum {
+        let displaysAsMessages = (peer._asPeer() as? TelegramChannel)?.flags.contains(.displayForumAsTabs) == true || (cachedData as? CachedChannelData)?.viewForumAsMessages.knownValue == true
+        if !state.isUnread && peer._asPeer().isForumOrMonoForum && !displaysAsMessages {
             return nil
         }
         if state.isUnread {

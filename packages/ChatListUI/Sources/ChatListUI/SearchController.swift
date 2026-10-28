@@ -338,7 +338,7 @@ fileprivate enum ChatListSearchEntry: Comparable, Identifiable {
 }
 
 
-private func peerContextMenuItems(peer: Peer, pinnedItems:[PinnedItemId], arguments: SearchControllerArguments, isRecent: Bool, chatPeerId: PeerId? = nil) -> Signal<[ContextMenuItem], NoError> {
+private func peerContextMenuItems(peer: Peer, pinnedItems:[PinnedItemId], arguments: SearchControllerArguments, isRecent: Bool) -> Signal<[ContextMenuItem], NoError> {
     var items:[ContextMenuItem] = []
     
     let togglePin:(Peer) -> Void = { peer in
@@ -384,7 +384,7 @@ private func peerContextMenuItems(peer: Peer, pinnedItems:[PinnedItemId], argume
     
     let peerId = peer.id
     
-    return combineLatest(searchPeerReadMenuItem(context: arguments.context, peerId: chatPeerId ?? peerId), chatListFilterPreferences(engine: arguments.context.engine)) |> take(1) |> deliverOnMainQueue |> map { readItem, filters -> [ContextMenuItem] in
+    return combineLatest(searchPeerReadMenuItem(context: arguments.context, peerId: peerId), chatListFilterPreferences(engine: arguments.context.engine)) |> take(1) |> deliverOnMainQueue |> map { readItem, filters -> [ContextMenuItem] in
         var items = items
         if let readItem {
             items.append(readItem)
@@ -525,7 +525,7 @@ fileprivate func prepareEntries(from:[AppearanceWrapperEntry<ChatListSearchEntry
             return RecentPeerRowItem(initialSize, peer: peer, account: arguments.context.account, context: arguments.context, stableId: entry.stableId, titleStyle: ControlStyle(font: .medium(.text), foregroundColor: secretChat != nil ? theme.colors.accent : theme.colors.text, highlightColor:.white), borderType: [.Right], drawCustomSeparator: drawBorder, isLookSavedMessage: true, drawLastSeparator: true, canRemoveFromRecent: false, controlAction: {
                 arguments.setPeerAsTag(peer)
             }, contextMenuItems: {
-                return peerContextMenuItems(peer: peer, pinnedItems: pinnedItems, arguments: arguments, isRecent: false, chatPeerId: secretChat?.peerId)
+                return peerContextMenuItems(peer: peer, pinnedItems: pinnedItems, arguments: arguments, isRecent: false)
             }, unreadBadge: badge, canAddAsTag: canAddAsTag, storyStats: storyStats, openStory: arguments.openStory, customAction: customAction, monoforumPeer: chatOrMonoforum)
         case let .topic(item, _, _, _, _):
             return SearchTopicRowItem(initialSize, stableId: entry.stableId, item: item, context: arguments.context)
@@ -556,7 +556,7 @@ fileprivate func prepareEntries(from:[AppearanceWrapperEntry<ChatListSearchEntry
                     arguments.removeRecentPeerId(peer.id)
                 }
             }, contextMenuItems: {
-                return peerContextMenuItems(peer: peer, pinnedItems: pinnedItems, arguments: arguments, isRecent: true, chatPeerId: secretChat?.peerId)
+                return peerContextMenuItems(peer: peer, pinnedItems: pinnedItems, arguments: arguments, isRecent: true)
             }, unreadBadge: badge, storyStats: storyStats, openStory: arguments.openStory, customAction: customAction, isGrossingApp: isGrossingApp, isRecentApp: isRecentApp, monoforumPeer: chatOrMonoforum)
         case let .savedMessages(peer):
             return RecentPeerRowItem(initialSize, peer: peer, account: arguments.context.account, context: arguments.context, stableId: entry.stableId, titleStyle: ControlStyle(font: .medium(.text), foregroundColor: theme.colors.text, highlightColor:.white), borderType: [.Right], drawCustomSeparator: true, isLookSavedMessage: true, contextMenuItems: {

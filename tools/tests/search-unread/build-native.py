@@ -1,7 +1,8 @@
 import argparse,subprocess
 from pathlib import Path
+from isolated_native import isolated_source_root
 p=argparse.ArgumentParser();p.add_argument('--source-root',type=Path,default=Path(__file__).resolve().parents[3]);p.add_argument('--derived-data',type=Path,required=True);p.add_argument('--baseline');args=p.parse_args()
-r=args.source_root.resolve();base=r/'packages/ChatListUI/Sources/ChatListUI';paths=[base/x for x in ['SearchController.swift','PopularPeersRowItem.swift','PeersListController.swift']];saved={x:x.read_bytes() for x in paths};helper=base/'SearchUnreadHarness.swift';assert not helper.exists()
+r=isolated_source_root(args.source_root);base=r/'packages/ChatListUI/Sources/ChatListUI';paths=[base/x for x in ['SearchController.swift','PopularPeersRowItem.swift','PeersListController.swift']];saved={x:x.read_bytes() for x in paths};helper=base/'SearchUnreadHarness.swift';assert not helper.exists()
 try:
  if args.baseline:
   for x in paths[:2]:x.write_bytes(subprocess.check_output(['git','show',args.baseline+':'+str(x.relative_to(r))],cwd=r))
