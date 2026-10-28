@@ -12,9 +12,10 @@ private final class SearchReadButton: NSButton {
     var invoke: (() -> Void)?
     @objc func run() { invoke?() }
 }
-private final class SearchReadEvidence: NSObject, NSWindowDelegate {
+private final class SearchReadEvidence {
     weak var context: (any AccountContextProtocol)?
     var operationContext: (any AccountContextProtocol)?
+    var closeObserver: NSObjectProtocol?
     let window: Window
     let status: NSTextField
     var peer: Peer?
@@ -34,8 +35,9 @@ private final class SearchReadEvidence: NSObject, NSWindowDelegate {
         status = NSTextField(labelWithString: "Production search menus · no chat list or messages")
         status.textColor = theme.colors.text
         status.frame = NSMakeRect(20, 20, 610, 30)
-        super.init()
-        window.delegate = self
+        closeObserver = NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: .main) { [weak self] notification in
+            self?.windowWillClose(notification)
+        }
         host.addSubview(status)
         for (i, title) in ["Show result menu", "Show top-peer menu", "Check unread toggle"].enumerated() {
             let button = SearchReadButton(frame: NSMakeRect(20, 75+CGFloat(i)*65, 250, 35))
@@ -60,6 +62,7 @@ private final class SearchReadEvidence: NSObject, NSWindowDelegate {
         }
     }
     deinit {
+        if let closeObserver { NotificationCenter.default.removeObserver(closeObserver) }
         request.dispose()
         previewRequest.dispose()
     }
