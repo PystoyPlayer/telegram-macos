@@ -12,8 +12,9 @@ private final class SearchReadButton: NSButton {
     var invoke: (() -> Void)?
     @objc func run() { invoke?() }
 }
-private final class SearchReadEvidence {
-    let context: any AccountContextProtocol
+private final class SearchReadEvidence: NSObject, NSWindowDelegate {
+    weak var context: (any AccountContextProtocol)?
+    var operationContext: (any AccountContextProtocol)?
     let window: Window
     let status: NSTextField
     var peer: Peer?
@@ -33,6 +34,8 @@ private final class SearchReadEvidence {
         status = NSTextField(labelWithString: "Production search menus · no chat list or messages")
         status.textColor = theme.colors.text
         status.frame = NSMakeRect(20, 20, 610, 30)
+        super.init()
+        window.delegate = self
         host.addSubview(status)
         for (i, title) in ["Show result menu", "Show top-peer menu", "Check unread toggle"].enumerated() {
             let button = SearchReadButton(frame: NSMakeRect(20, 75+CGFloat(i)*65, 250, 35))
@@ -50,14 +53,24 @@ private final class SearchReadEvidence {
         window.center()
         window.makeKeyAndOrderFront(nil)
     }
+    func windowWillClose(_ notification: Notification) {
+        previewRequest.set(nil)
+        if searchReadEvidence === self {
+            searchReadEvidence = nil
+        }
+    }
+    deinit {
+        request.dispose()
+        previewRequest.dispose()
+    }
     func menu(top: Bool) -> Signal<[ContextMenuItem], NoError> {
-        guard let peer else { return .single([]) }
+        guard let context = operationContext ?? context, context.isCurrent || isRunning, let peer else { return .single([]) }
         if top { return PopularPeerItem(type: .peer(peer, nil, false), context: context, action: { _ in }).menuItems(in: .zero) }
         let arguments = SearchControllerArguments(context: context, target: .common(.root), removeRecentPeerId: { _ in }, clearRecent: {}, openTopPeer: { _ in }, setPeerAsTag: { _ in }, openStory: { _ in }, openStorySearch: { _ in }, toggleMessageSourceValue: { _ in }, removeAd: { _, _ in }, approveGlobalSearch: { _, _ in })
         return peerContextMenuItems(peer: peer, pinnedItems: [], arguments: arguments, isRecent: true)
     }
     func show(top: Bool, button: NSButton) {
-        guard !isRunning else { return }
+        guard !isRunning, context?.isCurrent == true else { return }
         previewRequest.set((menu(top: top) |> deliverOnMainQueue).start(next: { [weak self] items in
             guard let self, let host = self.window.contentView else { return }
             host.subviews.filter { $0 is NSPopUpButton }.forEach { $0.removeFromSuperview() }
@@ -72,19 +85,21 @@ private final class SearchReadEvidence {
     }
     func record(_ name: String, _ pass: Bool) { checks.append(["name": name, "pass": pass]) }
     func run() {
-        guard !isRunning else { return }
+        guard !isRunning, let context, context.isCurrent else { return }
         isRunning = true
+        operationContext = context
         previewRequest.set(nil)
         window.contentView?.subviews.filter { $0 is NSPopUpButton }.forEach { $0.removeFromSuperview() }
         checks.removeAll()
         request.set((context.engine.data.get(TelegramEngine.EngineData.Item.Messages.PeerReadCounters(id: context.peerId)) |> deliverOnMainQueue).start(next: { [weak self] state in
             guard let self else { return }
-            guard state.count == 0 else { self.isRunning = false; self.status.stringValue = "Skipped: Saved Messages has unread incoming messages"; return }
+            guard state.count == 0 else { self.isRunning = false; self.operationContext = nil; self.status.stringValue = "Skipped: Saved Messages has unread incoming messages"; return }
             self.original = state.markedUnread
             self.phase(unread: !self.original, completion: { self.phase(unread: self.original, completion: { self.finish() }) })
         }))
     }
     func phase(unread: Bool, completion: @escaping () -> Void) {
+        guard let context = operationContext else { return }
         let expected = unread ? strings().chatListContextMaskAsUnread : strings().chatListContextMaskAsRead
         let signal = combineLatest(menu(top: false), menu(top: true)) |> deliverOnMainQueue
         request.set(signal.start(next: { [weak self] list, top in
@@ -94,7 +109,7 @@ private final class SearchReadEvidence {
             self.record("top-peer menu offers \(expected)", top.contains(where: { $0.title == expected }))
             action?.handler?()
             DispatchQueue.main.asyncAfter(deadline: .now()+0.4) {
-                self.request.set((self.context.engine.data.get(TelegramEngine.EngineData.Item.Messages.PeerReadCounters(id: self.context.peerId)) |> deliverOnMainQueue).start(next: { state in
+                self.request.set((context.engine.data.get(TelegramEngine.EngineData.Item.Messages.PeerReadCounters(id: context.peerId)) |> deliverOnMainQueue).start(next: { state in
                     self.record("Saved Messages unread flag is \(unread)", state.markedUnread == unread)
                     completion()
                 }))
@@ -103,6 +118,8 @@ private final class SearchReadEvidence {
     }
     func finish() {
         isRunning = false
+        request.set(nil)
+        operationContext = nil
         let passed = checks.filter { $0["pass"] as? Bool == true }.count
         status.stringValue = "\(passed)/\(checks.count) checks passed" + (passed == checks.count ? " · Original unread flag restored" : " · Verification failed; inspect unread flag")
         let file = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("search-unread.json")
@@ -110,15 +127,20 @@ private final class SearchReadEvidence {
     }
 }
 func codexInstallSearchReadEvidence(context: any AccountContextProtocol, parent: NSView) {
+    if let evidence = searchReadEvidence, evidence.context !== context {
+        evidence.window.close()
+    }
     let button = SearchReadButton(frame: NSMakeRect(20, 210, 260, 30))
     button.title = "Search unread validation"
     button.bezelStyle = .rounded
     button.target = button
     button.action = #selector(SearchReadButton.run)
-    button.invoke = {
-        if let evidence = searchReadEvidence {
+    button.invoke = { [weak context] in
+        guard let context, context.isCurrent else { return }
+        if let evidence = searchReadEvidence, evidence.context === context {
             evidence.window.makeKeyAndOrderFront(nil)
         } else {
+            searchReadEvidence?.window.close()
             searchReadEvidence = SearchReadEvidence(context: context)
         }
     }
