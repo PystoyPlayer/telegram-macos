@@ -31,6 +31,7 @@ private final class BoostReactionEvidence {
     var pickerContent: NSView?
 
     init(source: ChatInteraction) {
+        try? FileManager.default.createDirectory(at: boostReactionEvidenceRoot, withIntermediateDirectories: true)
         self.source = source
         let rect = NSMakeRect(0, 0, 820, 560)
         self.window = Window(contentRect: rect, styleMask: [.titled, .closable], backing: .buffered, defer: false)

@@ -21,3 +21,5 @@ A temporary hook in ChatController.viewDidAppear installed the diagnostic launch
 - A further complete build without the diagnostic hook succeeded, and the isolated test app was repackaged from that clean build.
 
 The matching 820×560 pt native windows are explicitly labeled as controlled models. This is rendered production-component verification, not a physical context-menu/gesture test against a live boosted/restricted server group. Only this macOS version and Debug configuration were available. The user's exact live group rights were not read. Temporary hooks and launcher buttons are not part of the shipped code.
+
+The review follow-up gives this harness distinct BoostReactionEvidence symbols and an environment-based output directory, which it creates before recording. It can coexist with RenderedPickerHarness and PickerLifetimeHarness. All three are diagnostic sources under tools and require explicit temporary installation; they are not shipping package members. The latest eligibility/lifetime regression is the 76-check executable source fixture. Historical native captures are not a rerun of that follow-up.
