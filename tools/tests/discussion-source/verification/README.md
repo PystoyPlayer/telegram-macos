@@ -18,3 +18,7 @@ Both images retain the same public source post, so the destination change can be
 Run `python3 tools/tests/discussion-source/run.py`. **23/23** checks pass versus **17/23** on origin/master; see before-checks.txt. Both actual legacy and modern glass header action bodies and the source selector are extracted. Cases cover resolved-source priority, fallback, source-post focus, unknown sources, ordinary profiles and forum topics. Navigation collaborators are stubs; the actual native Back stack is checked above.
 
 Only the modern glass header was clicked in the full client. Legacy behavior is covered by source checks; another macOS version was unavailable. Integration-only build/profile overrides, other pending changes and temporary launchers are excluded from this PR.
+
+## Review follow-up
+
+Both title implementations now use one source-navigation action. If the source channel's history controller is already in the navigation stack, the action pops to it and focuses the original post instead of pushing a duplicate channel. Opening comments from another channel retains the previous openInfo route. The executable fixture now records real stack truncation and focus calls for both headers: 28/28 checks pass, versus 18/28 on immutable upstream e1883098. The vacuous no-root-mutation check is removed. Baseline loading handles both missing working-tree files and git-show failures. The existing public-channel captures show the cross-channel scenario; same-source reuse is covered by controller-level checks, not those historical images.

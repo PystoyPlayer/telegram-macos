@@ -11,7 +11,7 @@ def read(path):
     return subprocess.check_output(['git', 'show', args.revision + ':' + path], cwd=root, text=True) if args.revision else (root / path).read_text()
 try:
     source = read('packages/ChatUI/Sources/ChatUI/ChatDiscussionSource.swift')
-except subprocess.CalledProcessError:
+except (subprocess.CalledProcessError, FileNotFoundError):
     source = 'func chatDiscussionSourceMessageId(mode: ChatMode, location: ChatLocation) -> MessageId? { nil }' 
 source = '\n'.join(line for line in source.splitlines() if not line.startswith('import '))
 fixture = Path(__file__).with_name('SourceTests.swift').read_text()

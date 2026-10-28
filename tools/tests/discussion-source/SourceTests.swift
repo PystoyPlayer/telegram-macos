@@ -11,7 +11,15 @@ enum ChatMode: Equatable {
     var isSavedMessagesThread: Bool { if case .thread(.savedMessages) = self { return true }; return false }
 }
 let repliesPeerId = PeerId(99)
-final class Navigation { var pushes = 0; func push(_ value: Int) { pushes += 1 } }
+final class Navigation {
+    var pushes = 0
+    var controllers: [Controller] = []
+    func push(_ value: Int) { pushes += 1 }
+    func enumerateControllers(_ body: (Controller, Int) -> Bool) {
+        for index in controllers.indices.reversed() { if body(controllers[index], index) { break } }
+    }
+    func to(index: Int) { controllers = Array(controllers.prefix(index + 1)) }
+}
 final class Bindings { let navigation = Navigation(); func rootNavigation() -> Navigation { navigation } }
 final class Context { let peerId = PeerId(1); let bindings = Bindings() }
 struct Presentation { var reportMode: Int?; var isTopicMode = false }
@@ -23,7 +31,13 @@ struct Hook {
 struct ThreadInfo { init(message: Thread, isChannelPost: Bool, isMonoforumPost: Bool, isEmpty: Bool, contextHolder: Int) {} }
 enum Message { static let newTopicThreadId: Int64 = -1 }
 final class Modal { func close() {} }
-final class Controller { var modal: Modal? }
+class Controller { var modal: Modal? }
+final class ChatController: Controller {
+    let chatInteraction: ChatInteraction
+    init(_ interaction: ChatInteraction) { chatInteraction = interaction }
+}
+struct FocusTarget { let messageId: MessageId; let string: String? }
+enum ScrollState { case CenterEmpty }
 let navigationController: Controller? = nil
 let chatLocationContextHolder = 0
 let context = Context()
@@ -35,6 +49,8 @@ final class ChatInteraction {
     var peerId: PeerId
     var presentation = Presentation()
     var calls: [(PeerId, Bool, MessageId?)] = []
+    var focused: [MessageId] = []
+    func focusMessageId(_ from: MessageId?, _ target: FocusTarget, _ state: ScrollState) { focused.append(target.messageId) }
     init(_ mode: ChatMode, _ location: ChatLocation, _ peerId: PeerId) { self.mode = mode; self.chatLocation = location; self.peerId = peerId }
     func openInfo(_ peer: PeerId, _ toChat: Bool, _ post: MessageId?, _ action: Int?) { calls.append((peer, toChat, post)) }
     func openInfoObserved(_ peer: PeerId, _ toChat: Bool, _ post: MessageId?, _ action: Int?) { openInfo(peer, toChat, post, action) }
@@ -99,6 +115,17 @@ let topic = ChatInteraction(.thread(.topic(origin: comment)), thread, group)
 topic.presentation.isTopicMode = true
 click(topic)
 check("forum topic retains profile action", topic.calls.first?.0 == group && topic.calls.first?.1 == false)
-check("no root navigation mutation", linked.interactionContext.bindings.navigation.pushes == 0)
+for legacy in [false, true] {
+    let current = ChatInteraction(.thread(.comments(origin: post)), thread, group)
+    let original = ChatInteraction(.history, .peer(channel), channel)
+    let navigation = current.interactionContext.bindings.navigation
+    let originalController = ChatController(original)
+    navigation.controllers = [originalController, ChatController(current)]
+    if legacy { clickLegacy(current) } else { clickModern(current) }
+    check("same-source channel is reused", navigation.controllers.count == 1 && navigation.controllers.first === originalController)
+    check("reuse focuses the original post", original.focused == [post])
+    check("reuse never requests a duplicate channel push", current.calls.isEmpty)
+}
+
 print("\(checked - failed)/\(checked) discussion navigation checks passed")
 exit(failed == 0 ? 0 : 1)
