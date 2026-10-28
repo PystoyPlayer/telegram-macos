@@ -5,7 +5,9 @@ root=Path(__file__).resolve().parents[3]
 source=(root/'packages/ChatUI/Sources/ChatUI/SoundEffects.swift').read_text()
 source=source.replace('#if SHARE\nimport TelegramThemeShare\n#else\nimport TelegramTheme\n#endif','')
 if '--baseline' in __import__('sys').argv:
-    source=subprocess.check_output(['git','show','origin/master:packages/ChatUI/Sources/ChatUI/SoundEffects.swift'],cwd=root,text=True).replace('#if SHARE\nimport TelegramThemeShare\n#else\nimport TelegramTheme\n#endif','')
+    source=subprocess.check_output(['git','show','e18830989542a063dd66c5bdc4dbe6a70cbbd175:packages/ChatUI/Sources/ChatUI/SoundEffects.swift'],cwd=root,text=True).replace('#if SHARE\nimport TelegramThemeShare\n#else\nimport TelegramTheme\n#endif','')
+if 'func playSoundEffectBeep()' not in source:
+    source += '\nfunc playSoundEffectBeep() { NSSound.beep() }\n'
 fixture=(Path(__file__).parent/'SoundTests.swift').read_text()
 with tempfile.TemporaryDirectory(prefix='muted-sounds-') as scratch:
     path=Path(scratch)/'main.swift'

@@ -859,7 +859,7 @@ public final class ChatPollItemView : ChatRowView {
         shakeContentView()
         
         if FastSettings.inAppSounds {
-            NSSound.beep()
+            playSoundEffectBeep()
         }
         self.contentNode.showSolution()
     }

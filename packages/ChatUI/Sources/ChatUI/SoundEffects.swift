@@ -80,3 +80,8 @@ public func playSoundEffect(_ sound: SoundEffect) {
     }()
     afterSentSound?.play()
 }
+
+public func playSoundEffectBeep() {
+    guard soundEffectOutputIdentifier() != nil else { return }
+    NSSound.beep()
+}

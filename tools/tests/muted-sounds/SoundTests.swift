@@ -1,4 +1,5 @@
 final class NSSound {
+    static func beep() { played += 1 }
     static var created = 0
     static var played = 0
     static var lastOutput: String?
@@ -70,4 +71,8 @@ check("manual device changes are read on the next sound", NSSound.lastOutput == 
 mutes[0] = 1; let prior = NSSound.created; playSoundEffect(.sent)
 check("muting after playback prevents the next allocation", NSSound.created == prior)
 print("\(checks - failures)/\(checks) checks passed")
+reset(); mutes[0] = 1; playSoundEffectBeep()
+check("incorrect-answer system beep respects mute", NSSound.played == 0)
+reset(); playSoundEffectBeep()
+check("audible incorrect answer retains the system beep", NSSound.played == 1)
 exit(failures == 0 ? 0 : 1)
