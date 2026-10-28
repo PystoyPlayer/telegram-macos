@@ -6,6 +6,7 @@ import tempfile
 root = Path(__file__).resolve().parents[3]
 parser = argparse.ArgumentParser()
 parser.add_argument('--source-root', type=Path, default=root)
+parser.add_argument('--revision')
 args = parser.parse_args()
 
 def body(source, marker):
@@ -17,8 +18,12 @@ def body(source, marker):
         end += 1
     return source[start:end - 1]
 
-rows = (args.source_root / 'packages/ChatUI/Sources/ChatUI/ChatRowItem.swift').read_text()
-chips = (args.source_root / 'packages/ChatUI/Sources/ChatUI/ChatReactionsView.swift').read_text()
+def source(name):
+    path = 'packages/ChatUI/Sources/ChatUI/' + name + '.swift'
+    return subprocess.check_output(['git', 'show', args.revision + ':' + path], cwd=args.source_root, text=True) if args.revision else (args.source_root / path).read_text()
+
+rows = source('ChatRowItem')
+chips = source('ChatReactionsView')
 fixture = Path(__file__).with_name('ReactionPermissionTests.swift').read_text()
 fixture = fixture.replace('__MESSAGE_ELIGIBILITY__', body(rows, 'private var reactionMessageIsEligible: Bool {') if 'private var reactionMessageIsEligible: Bool {' in rows else body(rows, 'public var canReact: Bool {'))
 fixture = fixture.replace('__APPLICATION_PERMISSION__', body(rows, 'private var reactionApplicationPermission: () -> Bool {') if 'private var reactionApplicationPermission: () -> Bool {' in rows else 'return reactionPermission')
@@ -43,7 +48,7 @@ fixture = fixture.replace('__STAR_ACTION__', stars)
 fixture = fixture.replace('__QUICK_ACTION__', body(rows, 'public func reactAction() -> Bool {'))
 apply_guard = next((line.strip() for line in rows.splitlines() if 'let canApplyReaction: () -> Bool =' in line), 'let canApplyReaction: () -> Bool = { true }')
 fixture = fixture.replace('__CAN_APPLY_REACTION__', apply_guard)
-fixture = fixture.replace('__LATEST_REACTION__', body(rows, 'let applyReaction: (UpdateMessageReaction, NSRect?, Bool) -> Void = {'))
+fixture = fixture.replace('__LATEST_REACTION__', body(rows, 'let applyReaction: (UpdateMessageReaction, NSRect?, Bool) -> Void = {') if 'let applyReaction: (UpdateMessageReaction, NSRect?, Bool) -> Void = {' in rows else '_, _, _ in return')
 for token, marker in [
     ('__EXPANDED_ACTION__', 'let react: (StickerPackItem, NSRect?, Bool) -> Void = { sticker, fromRect, isLarge in'),
     ('__PICKER_ACTION__', 'list: available, add: { value, checkPrem, fromRect in'),

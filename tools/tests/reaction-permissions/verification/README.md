@@ -26,4 +26,4 @@ Limits: these captures verify rendered production components with controlled nat
 
 The normal, large and expanded picker callbacks now read the message again through ChatInteraction.getMessages when a reaction is chosen. They compute the outgoing list from that current message, recheck permission after the read and do nothing if the message was deleted. They keep no row reference and weakly capture ChatInteraction.
 
-The current source fixture passes **85/85 checks**, including reactions removed or added after the picker opens and message deletion, for all three callbacks. Historical native captures above are not a new cross-device test of this follow-up.
+The current source fixture passes **85/85 checks**, including reactions removed or added after the picker opens and message deletion, for all three callbacks. The same current fixture against immutable 388f4472 compiles and passes 76/85, exposing all nine stale-picker/deleted-message failures (picker-state-before.txt). Reproduce with `python3 tools/tests/reaction-permissions/run.py --revision 388f4472`. Historical native captures above are not a new cross-device test of this follow-up.
