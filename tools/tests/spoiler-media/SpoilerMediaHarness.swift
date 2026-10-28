@@ -11,8 +11,9 @@ private final class SpoilerEvidenceButton: NSButton {
     var invoke: (() -> Void)?
     @objc func run() { invoke?() }
 }
-private final class SpoilerEvidence: NSObject, NSWindowDelegate {
+private final class SpoilerEvidence {
     let context: any AccountContextProtocol
+    var closeObserver: NSObjectProtocol?
     let window: Window
     let status: NSTextField
     var tiles: [(ChatInteractiveContentView, TelegramMediaImage, Message)] = []
@@ -28,8 +29,9 @@ private final class SpoilerEvidence: NSObject, NSWindowDelegate {
         status = NSTextField(labelWithString: "Hidden local checkerboard photos · no chat contents")
         status.frame = NSMakeRect(20, 15, 780, 25)
         status.textColor = theme.colors.text
-        super.init()
-        window.delegate = self
+        closeObserver = NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: .main) { [weak self] notification in
+            self?.windowWillClose(notification)
+        }
         host.addSubview(status)
         let button = SpoilerEvidenceButton(frame: NSMakeRect(20, 48, 250, 30))
         button.title = "Reveal test previews"
@@ -53,6 +55,9 @@ private final class SpoilerEvidence: NSObject, NSWindowDelegate {
         }
         window.center()
         window.makeKeyAndOrderFront(nil)
+    }
+    deinit {
+        if let closeObserver { NotificationCenter.default.removeObserver(closeObserver) }
     }
     func windowWillClose(_ notification: Notification) {
         if spoilerEvidence === self {
