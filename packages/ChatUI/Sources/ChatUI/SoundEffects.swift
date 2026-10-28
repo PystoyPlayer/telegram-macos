@@ -32,7 +32,7 @@ public enum SoundEffect {
 }
 
 
-private func soundEffectOutputIdentifier(_ outputSelector: AudioObjectPropertySelector = kAudioHardwarePropertyDefaultOutputDevice) -> String? {
+private func soundEffectOutputIsAudible(_ outputSelector: AudioObjectPropertySelector = kAudioHardwarePropertyDefaultOutputDevice) -> Bool {
     func property<Value>(_ device: AudioObjectID, _ selector: AudioObjectPropertySelector, _ scope: AudioObjectPropertyScope, _ element: AudioObjectPropertyElement, _ initial: Value) -> Value? {
         var address = AudioObjectPropertyAddress(mSelector: selector, mScope: scope, mElement: element)
         var value = initial
@@ -44,11 +44,11 @@ private func soundEffectOutputIdentifier(_ outputSelector: AudioObjectPropertySe
         return value
     }
 
-    guard let device = property(AudioObjectID(kAudioObjectSystemObject), outputSelector, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain, AudioDeviceID(0)), device != kAudioObjectUnknown else { return nil }
+    guard let device = property(AudioObjectID(kAudioObjectSystemObject), outputSelector, kAudioObjectPropertyScopeGlobal, kAudioObjectPropertyElementMain, AudioDeviceID(0)), device != kAudioObjectUnknown else { return false }
     let scope = kAudioDevicePropertyScopeOutput
     let main = kAudioObjectPropertyElementMain
-    if property(device, kAudioDevicePropertyMute, scope, main, UInt32(0)) == 1 { return nil }
-    if property(device, kAudioDevicePropertyVolumeScalar, scope, main, Float32(1)) == 0 { return nil }
+    if property(device, kAudioDevicePropertyMute, scope, main, UInt32(0)) == 1 { return false }
+    if property(device, kAudioDevicePropertyVolumeScalar, scope, main, Float32(1)) == 0 { return false }
 
     var channels: [UInt32] = [0, 0]
     var address = AudioObjectPropertyAddress(mSelector: kAudioDevicePropertyPreferredChannelsForStereo, mScope: scope, mElement: main)
@@ -58,30 +58,29 @@ private func soundEffectOutputIdentifier(_ outputSelector: AudioObjectPropertySe
     }
     if status == noErr, channels.allSatisfy({ $0 != main }), channels.allSatisfy({ channel in
         property(device, kAudioDevicePropertyMute, scope, channel, UInt32(0)) == 1 || property(device, kAudioDevicePropertyVolumeScalar, scope, channel, Float32(1)) == 0
-    }) { return nil }
+    }) { return false }
 
-    guard let identifier = property(device, kAudioDevicePropertyDeviceUID, kAudioObjectPropertyScopeGlobal, main, Optional<CFString>.none) ?? nil else { return nil }
-    return identifier as String
+    return true
 }
 
 public func playSoundEffect(_ sound: SoundEffect) {
-    guard let outputIdentifier = soundEffectOutputIdentifier() else { return }
+    guard soundEffectOutputIsAudible() else { return }
     let afterSentSound:NSSound? = {
         
         let p = Bundle.main.path(forResource: sound.name, ofType: sound.ext)
         var sound:NSSound?
         if let p = p {
             sound = NSSound(contentsOfFile: p, byReference: true)
-            sound?.playbackDeviceIdentifier = outputIdentifier
             sound?.volume = 0.1
         }
         
         return sound
     }()
+    guard soundEffectOutputIsAudible() else { return }
     afterSentSound?.play()
 }
 
 public func playSoundEffectBeep() {
-    guard soundEffectOutputIdentifier(kAudioHardwarePropertyDefaultSystemOutputDevice) != nil else { return }
+    guard soundEffectOutputIsAudible(kAudioHardwarePropertyDefaultSystemOutputDevice) else { return }
     NSSound.beep()
 }

@@ -14,7 +14,7 @@ with tempfile.TemporaryDirectory(prefix='muted-sounds-') as scratch:
     if '--native' in __import__('sys').argv:
         fakeSound=fixture[:fixture.index('var device:')]
         native='''\nfor _ in 0..<10 { playSoundEffect(.sent) }
-let suppressed = soundEffectOutputIdentifier() == nil
+let suppressed = !soundEffectOutputIsAudible()
 print("Real Core Audio gate suppresses playback: \(suppressed)")
 print("NSSound allocations: \(NSSound.created); play calls: \(NSSound.played)")
 exit(suppressed && NSSound.created == 0 && NSSound.played == 0 ? 0 : 1)

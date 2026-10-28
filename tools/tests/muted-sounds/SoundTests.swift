@@ -2,11 +2,14 @@ final class NSSound {
     static func beep() { played += 1 }
     static var created = 0
     static var played = 0
+    static var createdHook: (() -> Void)?
+    static var currentOutput: () -> String? = { nil }
+    static var lastPinnedOutput: String?
     static var lastOutput: String?
     var playbackDeviceIdentifier: String?
     var volume: Float = 1
-    init?(contentsOfFile: String, byReference: Bool) { Self.created += 1 }
-    @discardableResult func play() -> Bool { Self.played += 1; Self.lastOutput = playbackDeviceIdentifier; return true }
+    init?(contentsOfFile: String, byReference: Bool) { Self.created += 1; Self.createdHook?() }
+    @discardableResult func play() -> Bool { Self.played += 1; Self.lastPinnedOutput = playbackDeviceIdentifier; Self.lastOutput = playbackDeviceIdentifier ?? Self.currentOutput(); return true }
 }
 final class Bundle {
     static let main = Bundle()
@@ -46,7 +49,7 @@ var failures = 0
 var checks = 0
 func reset() {
     device = 7; systemDevice = 9; systemMutes = [:]; systemVolumes = [:]; uid = "speakers"; mutes = [:]; volumes = [:]; channels = [1, 2]
-    NSSound.created = 0; NSSound.played = 0; NSSound.lastOutput = nil
+    NSSound.created = 0; NSSound.played = 0; NSSound.lastOutput = nil; NSSound.lastPinnedOutput = nil; NSSound.createdHook = nil; NSSound.currentOutput = { uid }
 }
 func check(_ name: String, _ condition: Bool) {
     checks += 1
@@ -64,12 +67,13 @@ reset(); volumes = [1: 0, 2: 0]; suppressed("zero volume on both channels")
 reset(); mutes[1] = 1; volumes[2] = 0; suppressed("mixed mute and zero volume remains silent")
 reset(); device = nil; suppressed("missing default output does not fall back to another device")
 reset(); device = 0; suppressed("unknown device is not activated")
-reset(); uid = nil; suppressed("unresolvable output does not use an implicit device")
+reset(); uid = nil; playSoundEffect(.sent)
+check("an unreadable device UID does not block an audible default output",NSSound.played == 1)
 reset(); volumes = [1: 0, 2: 0.5]; playSoundEffect(.sent)
 check("one audible channel still plays", NSSound.created == 1 && NSSound.played == 1)
 reset(); channels = nil; playSoundEffect(.sent)
 check("fixed-volume output without channel controls remains supported", NSSound.played == 1)
-check("sound is explicitly bound to selected output", NSSound.lastOutput == "speakers")
+check("sound retains default-output routing without pinning a UID", NSSound.lastPinnedOutput == nil)
 uid = "wired-headphones"; playSoundEffect(.sent)
 check("manual device changes are read on the next sound", NSSound.lastOutput == "wired-headphones")
 mutes[0] = 1; let prior = NSSound.created; playSoundEffect(.sent)
@@ -82,5 +86,11 @@ reset(); mutes[0] = 1; playSoundEffectBeep()
 check("muted ordinary output does not mute a separate audible alert device", NSSound.played == 1)
 reset(); systemMutes[0] = 1; playSoundEffect(.sent); playSoundEffectBeep()
 check("muted alert device blocks beep while ordinary output stays audible", NSSound.created == 1 && NSSound.played == 1)
+reset(); NSSound.createdHook = { uid = "new-default" }; playSoundEffect(.sent)
+check("switching output before play follows the new default", NSSound.lastOutput == "new-default" && NSSound.lastPinnedOutput == nil)
+reset(); NSSound.createdHook = { device = nil; uid = nil }; playSoundEffect(.sent)
+check("disconnecting the output before playback suppresses the sound", NSSound.played == 0)
+reset(); NSSound.createdHook = { mutes[0] = 1 }; playSoundEffect(.sent)
+check("muting the new output before playback is rechecked", NSSound.played == 0)
 print("\(checks - failures)/\(checks) checks passed")
 exit(failures == 0 ? 0 : 1)
