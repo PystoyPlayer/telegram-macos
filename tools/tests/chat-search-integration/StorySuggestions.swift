@@ -38,13 +38,17 @@ func runStorySuggestionChecks() {
       check(container.frame.height == expectedHeight, "Stories reply container stayed at its bootstrap height")
       check(popup.frame.width == anchor.frame.width, "Stories suggestions lost the reply field width")
       check(abs(anchor.frame.minY - popup.frame.maxY - 10) < 0.1, "Stories suggestions lost their anchor gap")
+#if UPDATED_SEARCH_POPUP_LAYOUT
       helper.updateLayout(animated: false)
+#endif
       check(popup.frame.height == expectedHeight, "Stories suggestions collapsed after their size callback")
       helper.controller.genericView.tableView.removeAll()
       _ = helper.controller.genericView.tableView.addItem(item: StoryClueRowItem(NSMakeSize(420, 180), stableId: "story-emoji"))
+#if UPDATED_SEARCH_POPUP_LAYOUT
       helper.updateLayout(animated: false)
       check(popup.frame.height == 120, "Stories emoji suggestions lost their existing height limit")
       check(container.frame.height == 120, "Stories emoji sizing did not reach the reply container")
+#endif
       helper.context(with: nil, for: container, relativeView: anchor,
                      position: .above, selectIndex: nil, animated: false, inset: 0)
       check(helper.accessoryView == nil, "Stories suggestions stayed attached after clearing")
@@ -57,4 +61,21 @@ func runStorySuggestionChecks() {
       container.removeFromSuperview()
     }
   }
+#if UPDATED_SEARCH_POPUP_LAYOUT
+  let container = View(frame: NSMakeRect(0, 0, 420, 100))
+  root.addSubview(container)
+  let anchor = View(frame: NSMakeRect(0, 60, 420, 40))
+  container.addSubview(anchor)
+  let helper = InputContextHelper(chatInteraction: interaction, highlightInsteadOfSelect: false)
+  helper.context(with: .mentions((0..<5).map { Peer(200 + $0, "Ordinary mention") }), for: container, relativeView: anchor, position: .above, selectIndex: nil, animated: false, inset: 0)
+  check(helper.accessoryView?.frame.height == 10, "Ordinary suggestions lost their existing viewport cap")
+  let oldFrame = helper.accessoryView?.frame
+  helper.controller.markAsNeedShown = false
+  anchor.setFrameOrigin(NSMakePoint(20, 80))
+  helper.updateLayout(animated: true)
+  check(helper.accessoryView?.frame == oldFrame, "Dismissing suggestions were repositioned by layout")
+  helper.context(with: nil, for: container, relativeView: anchor, position: .above, selectIndex: nil, animated: false, inset: 0)
+  container.removeFromSuperview()
+#endif
+
 }

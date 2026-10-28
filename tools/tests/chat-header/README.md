@@ -1,27 +1,5 @@
-# Focused chat-header checks
+# Header layout verification
 
-Run on macOS with Xcode and the pinned `telegram-ios` checkout available:
+Run `python3 tools/tests/chat-header/run.py --dependency-root /path/to/full/checkout --scratch-path /tmp/header-validation` on macOS. The runner compiles the actual inline-layout XCTest cases and extracted header, translation-menu and control methods against native TGUIKit and Translate, with controlled account/strings collaborators.
 
-```
-python3 tools/tests/chat-header/run.py
-```
-
-To reuse compiler outputs between runs:
-
-```
-python3 tools/tests/chat-header/run.py --scratch-path /tmp/telegram-chat-header-build
-```
-
-The runner copies the production `ChatHeaderInlineLayout.swift` and its six XCTest tests unchanged into a temporary package. It also compiles the actual translation-menu functions and extracts the production header eligibility, accessory geometry, placement, history-inset, search-layout and typing-activity methods into controlled fixtures; the Reopen Topic control is compiled unchanged with controlled account and localization collaborators. Extraction fails when the expected source sections are missing.
-
-The integration executable builds and links the real TGUIKit and Translate packages, including SwiftSignalKit, ObjcUtils, ColorPalette and KeyboardKey. It uses real `ContextMenu`, `ContextMenuItem`, `SearchView`, `ImageButton`, `View` and layout transitions, and loads the five images needed by TGUIKit's default theme from the app's assets. Search checks cover both optional buttons, six widths, keyboard focus, query retention, bounds and hit testing.
-
-Chat presentation, account actions, localization and animated menu images use test doubles. The tests exercise translation availability, selection/toggle actions, language and tone menus, paywall handling, weak captures, pinned/search placement, auxiliary-row fallbacks, scroll insets and typing reflow. They do not compile the entire ChatUI target, link Telegram, run server-backed search/translation or validate Liquid Glass rendering. WebRTC, Rust engines and generated native media libraries are not required.
-
-## Client captures
-
-The previous illustrative component comparisons were removed. Before/After evidence is captured from the actual Telegram client and documented with the search-flow validation record. Channel descriptions are not part of this change.
-
-The plain-SearchView checks above do not validate the complete chat-search flow. Use `tools/tests/chat-search-integration/run.py` for the actual ChatSearchHeader/ChatSearchView state machine, result-popup geometry, sender filtering and cancellation. Neither suite substitutes for testing the built Telegram client with an account. Search now falls back to its full row sooner than a pinned header when the remaining inline slot would leave too little space for the query.
-
-Single-action utility headers share the same inline eligibility and narrow fallback checks. The real Reopen Topic control is exercised with localized and long labels, 36/40-point heights, bounds, accessibility and its original callback. The harness does not reopen a server topic.
+Only search without tags, pinned messages and Reopen Topic compact inline. Explanatory and request banners and stacked controls remain separate. The fixtures check narrow fallback, natural slot heights, insets, typing-status reflow, menu actions and Reopen Topic control label/callback behavior. See chat-search-integration/VALIDATION.md and current output for exact limits. Screenshots under screenshots are historical actual-client crops with neutral/public context; component assertions do not replace a current authenticated-client pass.

@@ -1,4 +1,0 @@
-FAIL: Header glass host collapsed while search text was fading
-FAIL: Header native glass host clipped the outgoing row
-FAIL: Header glass content clipped the outgoing row
-FAIL: Header glass host shrank before the fade finished

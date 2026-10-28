@@ -15,7 +15,7 @@ final class HeaderSlotFixture: View, ChatHeaderProtocol {
 final class HeaderLayoutFixture {
   let currentView = View(frame: NSMakeRect(12, 62, 976, 40))
   var hasLayout = false
-  struct SlotState { var canDisplayInline = true }
+  struct SlotState { var canDisplayInline = true; var primaryHeight: CGFloat = 36 }
   var _headerState = SlotState()
   __SLOT_FIELDS__
 

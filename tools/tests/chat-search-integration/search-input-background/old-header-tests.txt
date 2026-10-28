@@ -1,1 +1,0 @@
-FAIL: Header search input background disappeared before the native glass exit completed

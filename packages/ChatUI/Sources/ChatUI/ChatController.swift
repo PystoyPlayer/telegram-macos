@@ -1354,10 +1354,25 @@ public class ChatControllerView : View, ChatInputDelegate {
         } else {
             value = .none
         }
+        var translate: ChatPresentationInterfaceState.TranslateState?
+        if interfaceState.peer?.restrictionText(interfaceState.contentSettings) == nil {
+            if let translateState = interfaceState.translateState, translateState.canTranslate {
+                if case .search = value {
+                    translate = nil
+                } else {
+                    translate = translateState
+                }
+            } else {
+                translate = nil
+            }
+        } else {
+            translate = nil
+        }
+
         let botAd: Message? = (interfaceState.historyCount ?? 0) >= 2 ? interfaceState.adMessage : nil
         
              
-        let state: ChatHeaderState = .init(main: value, voiceChat: voiceChat, botManager: interfaceState.chatMode == .preview ? nil : interfaceState.connectedBot, botAd: botAd.flatMap { .init(message: $0, chatInteraction: chatInteraction) }, monoforumHorizontal: interfaceState.monoforumState == .horizontal ? monoforumHorizontalData : nil)
+        let state: ChatHeaderState = .init(main: value, voiceChat: voiceChat, translate: translate, botManager: interfaceState.chatMode == .preview ? nil : interfaceState.connectedBot, botAd: botAd.flatMap { .init(message: $0, chatInteraction: chatInteraction) }, monoforumHorizontal: interfaceState.monoforumState == .horizontal ? monoforumHorizontalData : nil)
 
         state.measure(frame.width - (interfaceState.monoforumState == .vertical ? 92 : 0) - 24)
 
