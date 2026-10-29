@@ -11,7 +11,7 @@ Both runs start in the public Pavel Durov channel (@durov). A temporary launcher
 3. Before: Discussion remains open; Back returns to Pavel Durov. [Before, after clicking the title](before-public.png).
 4. After: Telegram Info English opens at the original post. Back returns to Discussion; the next Back returns to Pavel Durov. [After, after clicking the title](after-public.png).
 
-Both images retain the same public source post, so the destination change can be checked against the post thumbnail and heading. They are exact crops of native captures, not mockups. The same crop (1540x1000, x620/y0 in a 3024x1770 native capture) excludes the entire private sidebar, account controls, comment text and diagnostic launchers. The Discussion root post is centered while the channel history post is left-aligned; this is the actual client layout. No full-window capture is included in this branch. No messages/reactions were sent, channels joined or server settings changed.
+Both images retain the same public source post, so the destination change can be checked against the post thumbnail and heading. They are exact crops of native captures, not mockups. The same crop (1400x1000, x760/y0 in a 3024x1770 native capture) excludes the entire private sidebar, account controls, comment text, the partially visible commenter avatars, and diagnostic launchers. The Discussion root post is centered while the channel history post is left-aligned; this is the actual client layout. No full-window capture is included in this branch. No messages/reactions were sent, channels joined or server settings changed.
 
 ## Current source checks
 
