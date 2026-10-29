@@ -12,4 +12,6 @@ FAIL: recording requests navigation confirmation
 FAIL: confirmed recording exit reuses channel
 FAIL: recording requests navigation confirmation
 FAIL: confirmed recording exit reuses channel
-24/38 discussion navigation checks passed
+FAIL: title reuse resumes once navigation unlocks
+FAIL: title reuse resumes once navigation unlocks
+28/44 discussion navigation checks passed

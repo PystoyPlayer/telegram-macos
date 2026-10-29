@@ -1,1 +1,1 @@
-38/38 discussion navigation checks passed
+44/44 discussion navigation checks passed

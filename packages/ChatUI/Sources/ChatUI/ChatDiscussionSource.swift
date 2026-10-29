@@ -19,6 +19,7 @@ func chatDiscussionSourceMessageId(mode: ChatMode, location: ChatLocation) -> Me
 
 func openChatDiscussionSource(_ source: MessageId, interaction: ChatInteraction) {
     let navigation = interaction.interactionContext.bindings.rootNavigation()
+    guard !navigation.isLocked else { return }
     var existing: ViewController?
     navigation.enumerateControllers { controller, _ in
         guard let chat = controller as? any ChatControllerKind,
@@ -31,7 +32,7 @@ func openChatDiscussionSource(_ source: MessageId, interaction: ChatInteraction)
         let current = navigation.controller
         current.ableToNextController(existing, { [weak navigation, weak existing, weak current] _, allowed in
             guard allowed, let navigation, let existing, let current,
-                  navigation.controller === current else { return }
+                  !navigation.isLocked, navigation.controller === current else { return }
             var targetIndex: Int?
             navigation.enumerateControllers { controller, index in
                 guard controller === existing else { return false }

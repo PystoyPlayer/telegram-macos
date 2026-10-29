@@ -12,6 +12,7 @@ enum ChatMode: Equatable {
 }
 let repliesPeerId = PeerId(99)
 final class Navigation {
+    var isLocked = false
     var pushes = 0
     var controllers: [Controller] = []
     var controller: Controller { controllers.last! }
@@ -164,6 +165,24 @@ for legacy in [false, true] {
  navigation.controllers.append(replacement)
  recording.answer(true)
  check("stale confirmation cannot navigate another active page", navigation.controllers.last === replacement && original.focused.isEmpty)
+}
+for legacy in [false,true] {
+ let current=ChatInteraction(.thread(.comments(origin:post)),thread,group)
+ let original=ChatInteraction(.history,.peer(channel),channel)
+ let navigation=current.interactionContext.bindings.navigation
+ let target=ChatController(original), recording=ChatController(current)
+ recording.recording=true
+ navigation.controllers=[target,recording]; navigation.isLocked=true
+ if legacy { clickLegacy(current) } else { clickModern(current) }
+ check("locked transition ignores title activation",recording.pending == nil && navigation.controllers.count == 2 && original.focused.isEmpty)
+ navigation.isLocked=false
+ if legacy { clickLegacy(current) } else { clickModern(current) }
+ navigation.isLocked=true; recording.answer(true)
+ check("confirmation during a transition cannot truncate its stack",navigation.controllers.count == 2 && original.focused.isEmpty)
+ navigation.isLocked=false
+ if legacy { clickLegacy(current) } else { clickModern(current) }
+ recording.answer(true)
+ check("title reuse resumes once navigation unlocks",navigation.controllers.count == 1 && original.focused == [post])
 }
 print("\(checked - failed)/\(checked) discussion navigation checks passed")
 exit(failed == 0 ? 0 : 1)

@@ -15,8 +15,10 @@ Both images retain the same public source post, so the destination change can be
 
 ## Current source checks
 
-Run `python3 tools/tests/discussion-source/run.py`. **38/38** checks pass. The immutable e18830989542a063dd66c5bdc4dbe6a70cbbd175 baseline passes **24/38**, exposing 14 failures; the committed before/after logs match this fixture. Both actual legacy and modern title action bodies and the source selector are extracted. Cases cover resolved-source priority, fallback, source-post focus, unknown sources, ordinary profiles, forum topics and reusing the existing source controller without a duplicate push.
+Run `python3 tools/tests/discussion-source/run.py`. **44/44** checks pass. The immutable e18830989542a063dd66c5bdc4dbe6a70cbbd175 baseline passes **28/44**, exposing 16 failures; the committed before/after logs match this fixture. Both actual legacy and modern title action bodies and the source selector are extracted. Cases cover resolved-source priority, fallback, source-post focus, unknown sources, ordinary profiles, forum topics and reusing the existing source controller without a duplicate push.
 
 Source-controller reuse now goes through the active controller's `ableToNextController` guard before truncating the stack. Cancel or a pending recording confirmation leaves the stack and source focus unchanged. Confirmation reuses the channel; a confirmation for a page that is no longer active is ignored. Collaborators model the asynchronous guard and actual stack/focus changes. This does not claim a new physical VoiceOver/microphone run; historical public-channel screenshots above cover the cross-channel flow.
 
 Only the modern glass header was clicked in the historical full-client comparison. Another macOS version was unavailable. Build/profile overrides and diagnostic launchers are excluded from shipping target membership.
+
+The title action also checks navigation.isLocked both before opening/reusing a source and after any asynchronous recording confirmation. Six additional cases cover both headers during a transition, a lock acquired while confirmation is open and successful reuse after unlocking. The superseded 28-case review log pair is removed; before-checks.txt and after-checks.txt are the only current logs.
