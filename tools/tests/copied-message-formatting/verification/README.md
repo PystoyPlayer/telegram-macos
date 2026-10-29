@@ -15,7 +15,7 @@ Boundaries: this exercises the production clipboard writer and codec followed by
 
 ## Current review checks
 
-`python3 tools/tests/copied-message-formatting/review-tests.py` compiles the actual production parser, legacy conversion and inheritance block. **20/20 checks pass** on the branch merged with upstream 6591a1b2. The PeerId fixture supports the current nested ID API. Cases cover legacy fenced edits, rich-paste isolation, typed custom emoji and avatar-menu mentions inside bold/spoiler/quote text, retaining the inserted target metadata and excluding preceding mention/link/date/emoji metadata from inheritance.
+`python3 tools/tests/copied-message-formatting/review-tests.py` compiles the actual production parser, `textInputState()` mapping, markdown conversion, legacy conversion and inheritance block. **29/29 checks pass**. The previous identity stub for state conversion has been removed. The PeerId fixture supports the current nested ID API. Cases additionally cover syntax-highlighted code as one entity, code-key mapping, typed enclosing fences around pasted/edited structured code, literal fences inside an existing block, and adjacent blocks with different languages. Cases cover legacy fenced edits, rich-paste isolation, typed custom emoji and avatar-menu mentions inside bold/spoiler/quote text, retaining the inserted target metadata and excluding preceding mention/link/date/emoji metadata from inheritance.
 
 The font refresh preserves code metadata and monospace. The shared copy callback affects all input fields; structured `.pre` state also reaches draft restore, editing and fact-check input. The retained 60-check native comparison predates these follow-ups.
 

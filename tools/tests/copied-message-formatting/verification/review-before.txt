@@ -1,0 +1,30 @@
+PASS: legacy editor retains fenced representation
+PASS: legacy fences have no code run blocking markdown parse
+PASS: ordinary state preserves structured code
+PASS: rich paste preserves its language
+PASS: rich paste does not inherit surrounding quote
+PASS: plain typing inherits surrounding quote
+PASS: typed custom emoji inherits surrounding spoiler
+PASS: typed custom emoji retains its own metadata in spoiler
+PASS: typed custom emoji inherits surrounding bold
+PASS: typed custom emoji retains its own metadata in bold
+PASS: typed custom emoji inherits surrounding quote
+PASS: typed custom emoji retains its own metadata in quote
+PASS: typed mention inherits surrounding spoiler
+PASS: typed mention retains target in spoiler
+PASS: typed mention inherits surrounding bold
+PASS: typed mention retains target in bold
+PASS: typed mention inherits surrounding quote
+PASS: typed mention retains target in quote
+PASS: plain insertion inherits style without preceding mention/link/date/emoji metadata
+PASS: rich emoji paste keeps its own quote instead of acquiring surrounding spoiler
+FAIL: syntax colors keep one code entity
+FAIL: code block retains its full range and language
+PASS: production pre-to-code mapping retains language
+FAIL: typed fences convert around pasted or edited structured code
+PASS: outer fences consume enclosed code metadata exactly once
+FAIL: typed fences convert around pasted or edited structured code
+PASS: outer fences consume enclosed code metadata exactly once
+PASS: fences already inside a structured block stay literal
+PASS: adjacent code blocks with different languages remain distinct
+25/29 formatting checks passed; production parser, state mapping, markdown conversion and insertion block

@@ -318,8 +318,6 @@ public func chatTextAttributes(from attributedText: NSAttributedString) -> [Chat
                 parsedAttributes.append(.bold(range))
             } else if key == TextInputAttributes.italic {
                 parsedAttributes.append(.italic(range))
-            } else if key == TextInputAttributes.code {
-                parsedAttributes.append(.pre(range, value as? String))
             } else if key == TextInputAttributes.monospace {
                 parsedAttributes.append(.code(range))
             } else if key == TextInputAttributes.textMention, let value = value as? ChatTextInputTextMentionAttribute {
@@ -340,6 +338,11 @@ public func chatTextAttributes(from attributedText: NSAttributedString) -> [Chat
             } else if key == TextInputAttributes.formattedDate, let value = value as? TextInputTextDateAttribute {
                 parsedAttributes.append(.date(range, value.date))
             }
+        }
+    })
+    attributedText.enumerateAttribute(TextInputAttributes.code, in: NSRange(location: 0, length: attributedText.length), options: [], using: { value, range, _ in
+        if let language = value as? String {
+            parsedAttributes.append(.pre(range.location ..< NSMaxRange(range), language))
         }
     })
     attributedText.enumerateAttribute(TextInputAttributes.quote, in: NSRange(location: 0, length: attributedText.length), options: [], using: { value, range, _ in
@@ -603,6 +606,7 @@ public final class ChatTextInputState: Codable, Equatable {
         var attributes:[ChatTextInputAttribute] = []
 
         var offsetRanges:[NSRange] = []
+        var enclosedCodeAttributes: Set<Int> = []
         if let regex = markdownRegex {
 
             var skipIndexes:Set<Int> = Set()
@@ -610,12 +614,22 @@ public final class ChatTextInputState: Codable, Equatable {
                 var index: Int = 0
                 let matches = regex.matches(in: subText.string, range: NSMakeRange(0, subText.string.length))
                 for match in matches {
-                    for attr in localAttributes {
+                    var enclosed: Set<Int> = []
+                    for (attributeIndex, attr) in localAttributes.enumerated() {
                         let range = match.range
                         let attrRange = NSMakeRange(attr.range.lowerBound, attr.range.upperBound - attr.range.lowerBound)
                         if attrRange.intersection(range) != nil {
-                            skipIndexes.insert(index)
+                            let body = match.range(at: 3)
+                            let closing = match.range(at: 4)
+                            if case .pre = attr, body.location != NSNotFound, attrRange.location >= body.location, NSMaxRange(attrRange) <= NSMaxRange(closing) {
+                                enclosed.insert(attributeIndex)
+                            } else {
+                                skipIndexes.insert(index)
+                            }
                         }
+                    }
+                    if !skipIndexes.contains(index) {
+                        enclosedCodeAttributes.formUnion(enclosed)
                     }
                     index += 1
                 }
@@ -712,7 +726,10 @@ public final class ChatTextInputState: Codable, Equatable {
             appliedText = newText.joined()
         }
 
-        for attr in localAttributes {
+        for (attributeIndex, attr) in localAttributes.enumerated() {
+            if enclosedCodeAttributes.contains(attributeIndex) {
+                continue
+            }
             var newRange = NSMakeRange(attr.range.lowerBound, (attr.range.upperBound - attr.range.lowerBound))
             for offsetRange in offsetRanges {
                 if offsetRange.location < newRange.location {
