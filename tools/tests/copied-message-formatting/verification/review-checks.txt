@@ -27,4 +27,6 @@ PASS: typed fences convert around pasted or edited structured code
 PASS: outer fences consume enclosed code metadata exactly once
 PASS: fences already inside a structured block stay literal
 PASS: adjacent code blocks with different languages remain distinct
-29/29 formatting checks passed; production parser, state mapping, markdown conversion and insertion block
+PASS: rendered block selection yields Pre without overlapping inline Code for translation
+PASS: ordinary inline monospace retains Code for translation
+31/31 formatting checks passed; production parser, state mapping, markdown conversion and insertion block

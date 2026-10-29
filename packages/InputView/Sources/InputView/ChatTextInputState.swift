@@ -318,7 +318,7 @@ public func chatTextAttributes(from attributedText: NSAttributedString) -> [Chat
                 parsedAttributes.append(.bold(range))
             } else if key == TextInputAttributes.italic {
                 parsedAttributes.append(.italic(range))
-            } else if key == TextInputAttributes.monospace {
+            } else if key == TextInputAttributes.monospace, attributes[TextInputAttributes.code] == nil {
                 parsedAttributes.append(.code(range))
             } else if key == TextInputAttributes.textMention, let value = value as? ChatTextInputTextMentionAttribute {
                 parsedAttributes.append(.uid(range, value.peerId.id._internalGetInt64Value()))
