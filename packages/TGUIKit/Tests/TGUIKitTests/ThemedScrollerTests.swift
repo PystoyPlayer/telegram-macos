@@ -46,4 +46,38 @@ final class ThemedScrollerTests: XCTestCase {
         }
     }
 
+    func testHighContrastUsesLightInkOnAlwaysDarkSurfacesInLightTheme() throws {
+        let original = PresentationTheme.current
+        defer { updateTheme(original) }
+        updateTheme(PresentationTheme(colors: whitePalette, search: original.search, inputTheme: original.inputTheme))
+        for background in [NSColor.black, NSColor.black.withAlphaComponent(0.6)] {
+            let panel = View(frame: NSRect(x: 0, y: 0, width: 320, height: 400))
+            panel.backgroundColor = background
+            let scroll = ScrollView(frame: panel.bounds)
+            scroll.drawsBackground = false
+            scroll.hasVerticalScroller = true
+            panel.addSubview(scroll)
+            let scroller = try XCTUnwrap(scroll.verticalScroller as? ThemedScroller)
+            let color = try XCTUnwrap(scroller.knobColor(expanded: false, highContrast: true).usingColorSpace(.sRGB))
+            XCTAssertEqual(color.redComponent, 1, accuracy: 0.001)
+            XCTAssertEqual(color.alphaComponent, 1)
+        }
+    }
+
+    func testHighContrastUsesDarkInkOnLightSurfacesInDarkTheme() throws {
+        let original = PresentationTheme.current
+        defer { updateTheme(original) }
+        updateTheme(PresentationTheme(colors: nightAccentPalette, search: original.search, inputTheme: original.inputTheme))
+        let panel = View(frame: NSRect(x: 0, y: 0, width: 320, height: 400))
+        panel.backgroundColor = .white
+        let scroll = ScrollView(frame: panel.bounds)
+        scroll.drawsBackground = false
+        scroll.hasVerticalScroller = true
+        panel.addSubview(scroll)
+        let scroller = try XCTUnwrap(scroll.verticalScroller as? ThemedScroller)
+        let color = try XCTUnwrap(scroller.knobColor(expanded: true, highContrast: true).usingColorSpace(.sRGB))
+        XCTAssertEqual(color.redComponent, 0, accuracy: 0.001)
+        XCTAssertEqual(color.alphaComponent, 1)
+    }
+
 }
