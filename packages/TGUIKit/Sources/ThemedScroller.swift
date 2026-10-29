@@ -61,9 +61,6 @@ final class ThemedScroller: NSScroller {
         return (max(first, second) + 0.05) / (min(first, second) + 0.05)
     }
 
-    override func drawKnobSlot(in slotRect: NSRect, highlight flag: Bool) {
-        super.drawKnobSlot(in: slotRect, highlight: flag)
-    }
 }
 
 public extension NSScrollView {

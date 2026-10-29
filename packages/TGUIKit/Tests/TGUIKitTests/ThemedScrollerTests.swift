@@ -27,7 +27,8 @@ final class ThemedScrollerTests: XCTestCase {
         let view = HorizontalScrollView(frame: NSRect(x: 0, y: 0, width: 320, height: 400))
         XCTAssertFalse(view.hasVerticalScroller)
     }
-    func testHighContrastFollowsTelegramPaletteWithOppositeSystemAppearance() {
+    func testHighContrastFollowsTelegramPaletteWithOppositeSystemAppearance() throws {
+        guard #available(macOS 11.0, *) else { throw XCTSkip("Drawing appearance scopes require macOS 11") }
         let original = PresentationTheme.current
         defer { updateTheme(original) }
         let scroller = ThemedScroller(frame: NSRect(x: 0, y: 0, width: 16, height: 200))
