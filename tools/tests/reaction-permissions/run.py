@@ -27,6 +27,8 @@ chips = source('ChatReactionsView')
 fixture = Path(__file__).with_name('ReactionPermissionTests.swift').read_text()
 fixture = fixture.replace('__MESSAGE_ELIGIBILITY__', body(rows, 'private var reactionMessageIsEligible: Bool {') if 'private var reactionMessageIsEligible: Bool {' in rows else body(rows, 'public var canReact: Bool {'))
 fixture = fixture.replace('__APPLICATION_PERMISSION__', body(rows, 'private var reactionApplicationPermission: () -> Bool {') if 'private var reactionApplicationPermission: () -> Bool {' in rows else 'return reactionPermission')
+fixture = fixture.replace('__MESSAGE_ACTION__', body(rows, 'private var reactionMessageAction: (@escaping (Message) -> Void) -> Void {') if 'private var reactionMessageAction:' in rows else 'return { action in if let message = self.firstMessage { action(message) } }')
+fixture = fixture.replace('__PAID_ACTION__', body(rows, 'let applyStarsReaction: (NSRect?) -> Void = {') if 'let applyStarsReaction:' in rows else 'fromRect in context.reactions.sendStarsReaction(message.id, count: 1, fromRect: fromRect)')
 fixture = fixture.replace('__CAN_REACT__', body(rows, 'public var canReact: Bool {'))
 permission = body(rows, 'private var canSendReactions: Bool {') if 'private var canSendReactions: Bool {' in rows else 'guard let peer = reactionPermissionPeer else { return false }; return canSendReactionsToPeer(EnginePeer(peer))'
 fixture = fixture.replace('__CAN_SEND_REACTIONS__', permission)

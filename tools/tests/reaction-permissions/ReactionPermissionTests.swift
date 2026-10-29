@@ -2,13 +2,16 @@ import Foundation
 infix operator |> : AdditionPrecedence
 func |> <T,U>(value:T, transform:(T)->U)->U { transform(value) }
 struct Signal<T> {
- let value: T
+ let provider: ()->T
+ var value:T { provider() }
+ init(value:T) { provider={ value } }
+ init(provider:@escaping ()->T) { self.provider=provider }
  func startStandalone(next: (T)->Void) { next(value) }
 }
 func take<T>(_ count:Int) -> (Signal<T>)->Signal<T> { { $0 } }
 func deliverOnMainQueue<T>(_ signal:Signal<T>)->Signal<T> { signal }
 
-struct Namespace: Equatable { let rawValue: Int }
+struct Namespace: Hashable { let rawValue: Int }
 enum Namespaces {
     enum Message { static let Cloud = Namespace(rawValue: 0) }
     enum Peer { static let SecretChat = Namespace(rawValue: 1) }
@@ -24,9 +27,11 @@ struct Peer {
 }
 struct EnginePeer { let peer: Peer; init(_ peer: Peer) { self.peer = peer } }
 func canSendReactionsToPeer(_ peer: EnginePeer, ignoreDefault: Bool = false) -> Bool { !peer.peer.personalBan && (peer.peer.allowsReactions || ignoreDefault) }
-struct MessageId { let peerId: PeerId; var namespace = Namespaces.Message.Cloud }
+struct MessageId: Hashable { let peerId: PeerId; var namespace = Namespaces.Message.Cloud }
 struct MessageFlags: OptionSet {
     let rawValue: Int
+    static let Unsent = MessageFlags(rawValue: 2)
+    static let Failed = MessageFlags(rawValue: 4)
     static let ReactionsArePossible = MessageFlags(rawValue: 1)
     func contains(_ flag: MessageFlags) -> Bool { rawValue & flag.rawValue != 0 }
 }
@@ -50,6 +55,11 @@ final class Interaction {
     var latestMessage: Message?
     func getMessages(_ ids: [MessageId], _ album: Bool) -> Signal<[Message]> { Signal(value: latestMessage.map { [$0] } ?? []) }
     var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation(); init(peer: Peer?) { self.peer = peer } }
+final class PendingUpdateMessageManager { var media: [MessageId: Int] = [:]; var updatingMessageMedia: Signal<[MessageId:Int]> { Signal(provider:{ self.media }) } }
+struct Account { let pendingUpdateMessageManager=PendingUpdateMessageManager() }
+func combineLatest<A,B>(_ a:Signal<A>,_ b:Signal<B>)->Signal<(A,B)> { Signal(provider:{ (a.value,b.value) }) }
+typealias ChatRowItem=Row
+typealias NSRect=CGRect
 struct Available { var enabledValues: [Reaction] = [.builtin] }
 struct AdditionalData { var reactions: Available? = Available() }
 struct Entry { var isFakeMessage = false; var additionalData = AdditionalData() }
@@ -77,10 +87,14 @@ final class Row {
     }
     var reactionMessageIsEligible: Bool { __MESSAGE_ELIGIBILITY__ }
     var reactionApplicationPermission: () -> Bool { __APPLICATION_PERMISSION__ }
+    static func isUnsupported(_ message:Message?) -> Bool { false }
+    var reactionMessageAction: (@escaping (Message)->Void)->Void { __MESSAGE_ACTION__ }
     var canReact: Bool { __CAN_REACT__ }
     func pickerActions(message: Message, context: Context, isTags: Bool) -> [(Reaction) -> Void] {
         let chatInteraction = self.chatInteraction
         let messageId = message.id
+        let reactionMessageAction = self.reactionMessageAction
+        let applyStarsReaction: (CGRect?)->Void = { __PAID_ACTION__ }
         __CAN_APPLY_REACTION__
         let applyReaction: (UpdateMessageReaction, CGRect?, Bool) -> Void = { __LATEST_REACTION__ }
 
@@ -99,6 +113,7 @@ final class Row {
     func openStars(message: Message, context: Context) {
         let reactionPermission = self.reactionPermission
         let canApplyReaction = self.reactionApplicationPermission
+        let reactionMessageAction = self.reactionMessageAction
         let action = {__STAR_CAPTURE__ __STAR_ACTION__ }
         action()
     }
@@ -110,7 +125,7 @@ enum Reaction: Equatable {
 typealias FixtureReaction = Reaction
 enum MessageReaction { typealias Reaction = FixtureReaction }
 struct Source { var file: Int? }
-struct Context { let peerId: PeerId; let window = 0; let reactions = Engine(); var isPremium = true; var isFrozen = false }
+struct Context { let account=Account(); let peerId: PeerId; let window = 0; let reactions = Engine(); var isPremium = true; var isFrozen = false }
 struct EngineMessage {
     let message: Message
     init(_ message: Message) { self.message = message }
@@ -379,6 +394,30 @@ for index in 0..<3 {
  interaction.latestMessage = nil
  action(.builtin)
  expect(output.reactions.calls == count, "picker \(index) ignores a deleted message")
+}
+for status in ["deleted", "unsent", "failed", "media", "ephemeral", "secret", "valid"] {
+ let interaction=Interaction(peer:allowed)
+ let item=Row(firstMessage:message,chatInteraction:interaction)
+ let output=Context(peerId:PeerId(value:1))
+ let action=item.pickerActions(message:message,context:output,isTags:false)[0]
+ let retainedStarAction=item.reactionMessageAction
+ switch status {
+ case "deleted": interaction.latestMessage=nil
+ case "unsent": interaction.latestMessage?.flags.insert(.Unsent)
+ case "failed": interaction.latestMessage?.flags.insert(.Failed)
+ case "media": item.context.account.pendingUpdateMessageManager.media[message.id]=1
+ case "ephemeral": interaction.latestMessage?.activeEphemeralReplacementMessage=1
+ case "secret": interaction.latestMessage?.containsSecretMedia=true
+ default: break
+ }
+ action(.stars)
+ expect(output.reactions.calls == (status == "valid" ? 1:0), "paid picker revalidates current message: \(status)")
+ let before=starPickers
+ item.openStars(message:message,context:output)
+ expect(starPickers == before + (status == "valid" ? 1:0), "existing star chip revalidates current message: \(status)")
+ var invoked=false
+ retainedStarAction { _ in invoked=true }
+ expect(invoked == (status == "valid"), "unchanged retained star chip observes latest state: \(status)")
 }
 print("\(checks - failures)/\(checks) reaction permission checks passed")
 exit(failures == 0 ? 0 : 1)

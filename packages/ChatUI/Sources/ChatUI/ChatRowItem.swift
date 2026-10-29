@@ -1064,6 +1064,33 @@ public class ChatRowItem: TableRowItem {
         return { messageIsEligible && permission() }
     }
 
+    private var reactionMessageAction: (@escaping (Message) -> Void) -> Void {
+        let chatInteraction = self.chatInteraction
+        let canApplyReaction = reactionApplicationPermission
+        let updatingMedia = context.account.pendingUpdateMessageManager.updatingMessageMedia
+        guard let messageId = firstMessage?.id else { return { _ in } }
+        return { [weak chatInteraction] action in
+            guard let chatInteraction, canApplyReaction() else { return }
+            _ = (combineLatest(chatInteraction.getMessages([messageId], false), updatingMedia)
+            |> take(1)
+            |> deliverOnMainQueue).startStandalone(next: { messages, updatingMedia in
+                guard let current = messages.first,
+                      canApplyReaction(), updatingMedia[messageId] == nil,
+                      !current.flags.contains(.Unsent), !current.flags.contains(.Failed),
+                      current.activeEphemeralReplacementMessage == nil,
+                      current.adAttribute == nil, !current.containsSecretMedia,
+                      !ChatRowItem.isUnsupported(current) else { return }
+                if current.extendedMedia is TelegramMediaAction, !current.flags.contains(.ReactionsArePossible) {
+                    return
+                }
+                if let media = current.extendedMedia as? TelegramMediaStory, media.isMention {
+                    return
+                }
+                action(current)
+            })
+        }
+    }
+
     public var canReact: Bool {
         return reactionMessageIsEligible && canSendReactions
     }
@@ -1827,7 +1854,7 @@ public class ChatRowItem: TableRowItem {
             let context = self.context
             let chatInteraction = self.chatInteraction
             let reactionPermission = self.reactionPermission
-            let canApplyReaction = self.reactionApplicationPermission
+            let reactionMessageAction = self.reactionMessageAction
             if let reactions = reactions, !reactions.reactions.isEmpty, let available = context.reactions.available {
                 let layout = ChatReactionsLayout(context: chatInteraction.interactionContext, message: message, available: available, peerAllowed: chatInteraction.presentation.allowedReactions, savedMessageTags: entry.additionalData.savedMessageTags, engine: chatInteraction.interactionContext.reactions, theme: presentation, renderType: renderType, currentTag: currentTag, isIncoming: isIncoming, isOutOfBounds: isBubbleFullFilled && (self.captionLayouts.isEmpty || invertMedia) && (commentsBubbleData == nil || !invertMedia), hasWallpaper: presentation.hasWallpaper, stateOverlayTextColor: isStateOverlayLayout ? stateOverlayTextColor : (!hasBubble ? presentation.colors.grayText : presentation.chat.grayText(isIncoming, entry.renderType == .bubble)), canSendReactions: reactionPermission, openInfo: { peerId in
                     ChatHistoryUIHooks.shared.pushReactionPeerInfoObserved(context.bindings.rootNavigation(), context, peerId, message.id)
@@ -1840,8 +1867,9 @@ public class ChatRowItem: TableRowItem {
                         chatInteraction?.setLocationTag(.customTag(ReactionsMessageAttribute.messageTag(reaction: reaction), nil))
                     }
                 }, starReact: {
-                    guard canApplyReaction() else { return }
-                    showModal(with: Star_ReactionsController(context: context, source: .message(.init(message))), for: context.window)
+                    reactionMessageAction { current in
+                        showModal(with: Star_ReactionsController(context: context, source: .message(.init(current))), for: context.window)
+                    }
                 })
                 
                 _reactionsLayout = layout
@@ -4065,6 +4093,12 @@ public class ChatRowItem: TableRowItem {
 
             let canApplyReaction: () -> Bool = reactionApplicationPermission
             let messageId = message.id
+            let reactionMessageAction = self.reactionMessageAction
+            let applyStarsReaction: (NSRect?) -> Void = { fromRect in
+                reactionMessageAction { current in
+                    context.reactions.sendStarsReaction(current.id, count: 1, fromRect: fromRect)
+                }
+            }
             let applyReaction: (UpdateMessageReaction, NSRect?, Bool) -> Void = { [weak chatInteraction] value, fromRect, isLarge in
                 guard let chatInteraction, isTags || canApplyReaction() else { return }
                 _ = (chatInteraction.getMessages([messageId], false)
@@ -4323,7 +4357,7 @@ public class ChatRowItem: TableRowItem {
                         openSavedTagsPremium()
                     } else {
                         if value == .stars {
-                            context.reactions.sendStarsReaction(message.id, count: 1, fromRect: fromRect)
+                            applyStarsReaction(fromRect)
                         } else {
                             applyReaction(value.toUpdate(), fromRect, false)
                         }
