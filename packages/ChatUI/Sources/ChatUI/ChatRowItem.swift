@@ -1091,6 +1091,10 @@ public class ChatRowItem: TableRowItem {
         }
     }
 
+    private var isReactionRestricted: Bool {
+        return !canSendReactions && reactionMessageIsEligible
+    }
+
     public var canReact: Bool {
         return reactionMessageIsEligible && canSendReactions
     }
@@ -1870,6 +1874,8 @@ public class ChatRowItem: TableRowItem {
                     reactionMessageAction { current in
                         showModal(with: Star_ReactionsController(context: context, source: .message(.init(current))), for: context.window)
                     }
+                }, reactionsDisabled: { [weak chatInteraction] in
+                    chatInteraction?.showAnimatedToaster(.banned, "You cannot send reactions in this chat.")
                 })
                 
                 _reactionsLayout = layout
@@ -3865,8 +3871,6 @@ public class ChatRowItem: TableRowItem {
     public func reactAction() -> Bool {
         if canReact {
             
-            
-            
             let context = self.context
             let value = ChatHistoryUIHooks.shared.reactionSettings(context).quickReaction
             let message = self.message
@@ -3917,6 +3921,8 @@ public class ChatRowItem: TableRowItem {
                     context.reactions.react(messageId, values: ChatHistoryUIHooks.shared.messageNewReactions(message, reaction.toUpdate(), context.peerId == message.id.peerId))
                 }
             }
+        } else if isReactionRestricted {
+            chatInteraction.showAnimatedToaster(.banned, "You cannot send reactions in this chat.") //TODOLANG Chat.SendReactionRestricted
         }
         return false
     }

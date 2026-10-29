@@ -51,7 +51,9 @@ struct Message {
 enum PeerAllowedReactions { case all, limited([Reaction]), empty }
 struct CachedChannelData { var boostsToUnrestrict: Int32?; var appliedBoosts: Int32? }
 struct Presentation { var allowedReactions: PeerAllowedReactions? = .all; var cachedData: Any? }
+enum Toaster { case banned }
 final class Interaction {
+    func showAnimatedToaster(_ type:Toaster,_ text:String) {}
     var latestMessage: Message?
     func getMessages(_ ids: [MessageId], _ album: Bool) -> Signal<[Message]> { Signal(value: latestMessage.map { [$0] } ?? []) }
     var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation(); init(peer: Peer?) { self.peer = peer } }
@@ -89,6 +91,7 @@ final class Row {
     var reactionApplicationPermission: () -> Bool { __APPLICATION_PERMISSION__ }
     static func isUnsupported(_ message:Message?) -> Bool { false }
     var reactionMessageAction: (@escaping (Message)->Void)->Void { __MESSAGE_ACTION__ }
+    var isReactionRestricted: Bool { !canSendReactions && reactionMessageIsEligible }
     var canReact: Bool { __CAN_REACT__ }
     func pickerActions(message: Message, context: Context, isTags: Bool) -> [(Reaction) -> Void] {
         let chatInteraction = self.chatInteraction
@@ -152,6 +155,7 @@ struct ChatHistoryUIHooks {
     func messageNewReactions(_ message: Message, _ update: UpdateMessageReaction, _ tags: Bool) -> [Int] { message.selectedReactions + [1] }
 }
 func tap(message: Message, context: Context, mode: Mode, engine: Engine, value: Reaction = .builtin, isFilterTag: Bool = false, reactionPeer: (() -> Peer?)? = nil, canSend: (() -> Bool)? = nil, tagAction: (Reaction) -> Void = { _ in }) {
+    let reactionsDisabled: ()->Void = {}
     let source = Source()
     let reactionPeer = reactionPeer ?? { message.peers[message.id.peerId] }
     let canSendReactions = canSend ?? { reactionPeer().map { canSendReactionsToPeer(EnginePeer($0)) } ?? false }
