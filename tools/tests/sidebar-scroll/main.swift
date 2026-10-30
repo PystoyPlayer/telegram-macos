@@ -33,7 +33,7 @@ final class RowView: TableRowView {
     }
     override func layout() { super.layout(); title.frame.origin = NSMakePoint(20, 22) }
 }
-enum Scenario: String, CaseIterable { case chats, search, settings, calls, forms }
+enum Scenario: String, CaseIterable { case chats, search, settings, calls, forms, emoji, stickers, gifs }
 func configure(_ table: TableView, scenario: Scenario, bottom: CGFloat, top: CGFloat) {
     table.contentInsets.bottom = bottom
     let tableView = table
@@ -53,6 +53,7 @@ func configure(_ table: TableView, scenario: Scenario, bottom: CGFloat, top: CGF
     case .forms:
         let contentInsets = table.contentInsets
         __FORMS_INSETS__
+__PICKER_CASES__
     }
 }
 func scroll(_ table: TableView, progress: CGFloat) {
@@ -121,7 +122,7 @@ if Bundle.main.bundleIdentifier == "local.codex.telegram.SidebarScrollValidation
     func check(_ ok: Bool, _ message: String) { checks += 1; if !ok { failures += 1; print("FAIL: \(message)") } }
     for scenario in Scenario.allCases {
         for height: CGFloat in [400, 800] {
-            for bottom: CGFloat in [0, 56, 80] {
+            for bottom: CGFloat in ([Scenario.emoji, .stickers, .gifs].contains(scenario) ? [56] : [0, 56, 80]) {
                 for top: CGFloat in scenario == .chats ? [0, 90] : [0] {
                     for count in [2, 40] {
                         let table = TableView(frame: scenario != .chats ? NSMakeRect(0, 0, 320, height) : .zero, drawBorder: true)

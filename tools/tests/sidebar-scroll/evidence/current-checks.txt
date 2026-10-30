@@ -1,0 +1,1056 @@
+Building for debugging...
+[Constructing description]
+[Planning deferred tasks]
+[1 / 105]
+[46 / 104]
+[49 / 107] Strings
+[50 / 153] KeyboardKey
+[51 / 251]
+[54 / 251]
+[58 / 251]
+[63 / 253]
+[69 / 253]
+[74 / 253]
+[78 / 253]
+[83 / 253]
+[84 / 253]
+[85 / 253]
+[89 / 253]
+[95 / 253]
+[99 / 253]
+[102 / 253]
+[105 / 253]
+[109 / 253]
+[110 / 253]
+[115 / 253]
+[118 / 253]
+[124 / 253]
+[127 / 253]
+[133 / 253] SwiftSignalKit
+[135 / 253]
+[138 / 253] SwiftSignalKit
+[147 / 253]
+[150 / 253]
+[154 / 253]
+[159 / 253]
+[160 / 253]
+[163 / 253]
+[167 / 253]
+[169 / 253] Strings
+[186 / 253]
+[193 / 253]
+[194 / 253]
+[196 / 253]
+[200 / 253]
+[200 / 253] SwiftSignalKit
+[203 / 253] SwiftSignalKit
+[205 / 253] ObjcUtils
+In file included from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1:
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:8:49: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+    8 | @property (nonatomic, strong,readonly) NSString *fullname;
+      |                                                 ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:8:49: note: insert '_Nullable' if the pointer may be null
+    8 | @property (nonatomic, strong,readonly) NSString *fullname;
+      |                                                 ^
+      |                                                   _Nullable 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:8:49: note: insert '_Nonnull' if the pointer should never be null
+    8 | @property (nonatomic, strong,readonly) NSString *fullname;
+      |                                                 ^
+      |                                                   _Nonnull 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:26:23: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   26 | +(NSArray<NSNumber *> *)bufferList:(CMSampleBufferRef)sampleBuffer;
+      |                       ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:26:23: note: insert '_Nullable' if the pointer may be null
+   26 | +(NSArray<NSNumber *> *)bufferList:(CMSampleBufferRef)sampleBuffer;
+      |                       ^
+      |                        _Nullable
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:26:23: note: insert '_Nonnull' if the pointer should never be null
+   26 | +(NSArray<NSNumber *> *)bufferList:(CMSampleBufferRef)sampleBuffer;
+      |                       ^
+      |                        _Nonnull
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:26:37: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   26 | +(NSArray<NSNumber *> *)bufferList:(CMSampleBufferRef)sampleBuffer;
+      |                                     ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:26:37: note: insert '_Nullable' if the pointer may be null
+   26 | +(NSArray<NSNumber *> *)bufferList:(CMSampleBufferRef)sampleBuffer;
+      |                                     ^                
+      |                                                       _Nullable 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:26:37: note: insert '_Nonnull' if the pointer should never be null
+   26 | +(NSArray<NSNumber *> *)bufferList:(CMSampleBufferRef)sampleBuffer;
+      |                                     ^                
+      |                                                       _Nonnull 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:37:151: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   37 | + (NSString * __nullable)_youtubeVideoIdFromText:(NSString * __nullable)text originalUrl:(NSString * __nullable)originalUrl startTime:(NSTimeInterval *)startTime;
+      |                                                                                                                                                       ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:37:151: note: insert '_Nullable' if the pointer may be null
+   37 | + (NSString * __nullable)_youtubeVideoIdFromText:(NSString * __nullable)text originalUrl:(NSString * __nullable)originalUrl startTime:(NSTimeInterval *)startTime;
+      |                                                                                                                                                       ^
+      |                                                                                                                                                        _Nullable
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:37:151: note: insert '_Nonnull' if the pointer should never be null
+   37 | + (NSString * __nullable)_youtubeVideoIdFromText:(NSString * __nullable)text originalUrl:(NSString * __nullable)originalUrl startTime:(NSTimeInterval *)startTime;
+      |                                                                                                                                                       ^
+      |                                                                                                                                                        _Nonnull
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:38:29: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+      |                             ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:38:29: note: insert '_Nullable' if the pointer may be null
+   38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+      |                             ^
+      |                              _Nullable
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:38:29: note: insert '_Nonnull' if the pointer should never be null
+   38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+      |                             ^
+      |                              _Nonnull
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:38:56: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+      |                                                        ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:38:56: note: insert '_Nullable' if the pointer may be null
+   38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+      |                                                        ^
+      |                                                         _Nullable
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:38:56: note: insert '_Nonnull' if the pointer should never be null
+   38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+      |                                                        ^
+      |                                                         _Nonnull
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:64:60: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   64 | NSArray<NSString *> *  __nonnull cut_long_message(NSString *message, int max_length);
+      |                                                            ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:64:60: note: insert '_Nullable' if the pointer may be null
+   64 | NSArray<NSString *> *  __nonnull cut_long_message(NSString *message, int max_length);
+      |                                                            ^
+      |                                                              _Nullable 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:64:60: note: insert '_Nonnull' if the pointer should never be null
+   64 | NSArray<NSString *> *  __nonnull cut_long_message(NSString *message, int max_length);
+      |                                                            ^
+      |                                                              _Nonnull 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:66:71: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   66 | NSDictionary<NSString *, NSString *> * __nonnull audioTags(AVURLAsset *asset);
+      |                                                                       ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:66:71: note: insert '_Nullable' if the pointer may be null
+   66 | NSDictionary<NSString *, NSString *> * __nonnull audioTags(AVURLAsset *asset);
+      |                                                                       ^
+      |                                                                         _Nullable 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:66:71: note: insert '_Nonnull' if the pointer should never be null
+   66 | NSDictionary<NSString *, NSString *> * __nonnull audioTags(AVURLAsset *asset);
+      |                                                                       ^
+      |                                                                         _Nonnull 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:67:46: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+      |                                              ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:67:46: note: insert '_Nullable' if the pointer may be null
+   67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+      |                                              ^
+      |                                                _Nullable 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:67:46: note: insert '_Nonnull' if the pointer should never be null
+   67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+      |                                              ^
+      |                                                _Nonnull 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:67:60: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+      |                                                            ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:67:60: note: insert '_Nullable' if the pointer may be null
+   67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+      |                                                            ^
+      |                                                              _Nullable 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:67:60: note: insert '_Nonnull' if the pointer should never be null
+   67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+      |                                                            ^
+      |                                                              _Nonnull 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:73:32: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   73 | BOOL isEnterAccessObjc(NSEvent *theEvent, BOOL byCmdEnter);
+      |                                ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:73:32: note: insert '_Nullable' if the pointer may be null
+   73 | BOOL isEnterAccessObjc(NSEvent *theEvent, BOOL byCmdEnter);
+      |                                ^
+      |                                  _Nullable 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:73:32: note: insert '_Nonnull' if the pointer should never be null
+   73 | BOOL isEnterAccessObjc(NSEvent *theEvent, BOOL byCmdEnter);
+      |                                ^
+      |                                  _Nonnull 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:74:31: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   74 | BOOL isEnterEventObjc(NSEvent *theEvent);
+      |                               ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:74:31: note: insert '_Nullable' if the pointer may be null
+   74 | BOOL isEnterEventObjc(NSEvent *theEvent);
+      |                               ^
+      |                                 _Nullable 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:74:31: note: insert '_Nonnull' if the pointer should never be null
+   74 | BOOL isEnterEventObjc(NSEvent *theEvent);
+      |                               ^
+      |                                 _Nonnull 
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:86:32: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+      |                                ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:86:32: note: insert '_Nullable' if the pointer may be null
+   86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+      |                                ^
+      |                                           _Nullable
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:86:32: note: insert '_Nonnull' if the pointer should never be null
+   86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+      |                                ^
+      |                                           _Nonnull
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:86:1: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+      | ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:86:1: note: insert '_Nullable' if the pointer may be null
+   86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+      | ^
+      |            _Nullable
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:86:1: note: insert '_Nonnull' if the pointer should never be null
+   86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+      | ^
+      |            _Nonnull
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:88:49: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified) [-Wnullability-completeness]
+   88 | CMTimebaseRef _Nullable createTimebaseWithClock(CMClockRef clock);
+      |                                                 ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:88:49: note: insert '_Nullable' if the pointer may be null
+   88 | CMTimebaseRef _Nullable createTimebaseWithClock(CMClockRef clock);
+      |                                                 ^
+      |                                                            _Nullable
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:88:49: note: insert '_Nonnull' if the pointer should never be null
+   88 | CMTimebaseRef _Nullable createTimebaseWithClock(CMClockRef clock);
+      |                                                 ^
+      |                                                            _Nonnull
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:56:18: warning: implicit conversion loses integer precision: 'NSUInteger' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+   56 |     int length = string.length;
+      |         ~~~~~~   ^~~~~~~~~~~~~
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:679:5: warning: 'CC_MD5' is deprecated: first deprecated in macOS 10.15 - This function is cryptographically broken and should not be used in security contexts. Clients should migrate to SHA256 (or stronger). [-Wdeprecated-declarations]
+  679 |     CC_MD5( cStr, (int) strlen(cStr), digest ); // This is the md5 call
+      |     ^
+In module 'CommonCrypto' imported from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:2:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/usr/include/CommonCrypto/CommonDigest.h:142:23: note: 'CC_MD5' has been explicitly marked deprecated here
+  142 | extern unsigned char *CC_MD5(const void *data, CC_LONG len, unsigned char *md)
+      |                       ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:821:13: warning: 'CC_MD5' is deprecated: first deprecated in macOS 10.15 - This function is cryptographically broken and should not be used in security contexts. Clients should migrate to SHA256 (or stronger). [-Wdeprecated-declarations]
+  821 |             CC_MD5(buf, (unsigned) strlen(buf), digest);
+      |             ^
+In module 'CommonCrypto' imported from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:2:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/usr/include/CommonCrypto/CommonDigest.h:142:23: note: 'CC_MD5' has been explicitly marked deprecated here
+  142 | extern unsigned char *CC_MD5(const void *data, CC_LONG len, unsigned char *md)
+      |                       ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1278:38: warning: 'kIOMasterPortDefault' is deprecated: first deprecated in macOS 12.0 [-Wdeprecated-declarations]
+ 1278 |     if (IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching("IOHIDSystem"), &iter) == KERN_SUCCESS) {
+      |                                      ^~~~~~~~~~~~~~~~~~~~
+      |                                      kIOMainPortDefault
+In module 'Foundation' imported from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:1:
+In module 'CoreGraphics' imported from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSGeometry.h:14:
+In module 'IOKit' imported from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CGDisplayConfiguration.h:12:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/IOKit.framework/Headers/IOKitLib.h:133:19: note: 'kIOMasterPortDefault' has been explicitly marked deprecated here
+  133 | const mach_port_t kIOMasterPortDefault
+      |                   ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1375:54: warning: 'NSDeviceIndependentModifierFlagsMask' is deprecated: first deprecated in macOS 10.12 [-Wdeprecated-declarations]
+ 1375 |         NSUInteger flags = (theEvent.modifierFlags & NSDeviceIndependentModifierFlagsMask);
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                      NSEventModifierFlagDeviceIndependentFlagsMask
+In module 'AppKit' imported from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:2:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSEvent.h:189:35: note: 'NSDeviceIndependentModifierFlagsMask' has been explicitly marked deprecated here
+  189 | static const NSEventModifierFlags NSDeviceIndependentModifierFlagsMask    API_DEPRECATED_WITH_REPLACEMENT("NSEventModifierFlagDeviceIndependentFlagsMask", macos(10.0,10.12)) = NSEventModifierFlagDeviceIndependentFlagsMask;
+      |                                   ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1376:107: warning: 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12 [-Wdeprecated-declarations]
+ 1376 |         return !byCmdEnter ? flags == 0 || flags == 65536 || flags == 2097152 : (theEvent.modifierFlags & NSCommandKeyMask) > 0;
+      |                                                                                                           ^~~~~~~~~~~~~~~~
+      |                                                                                                           NSEventModifierFlagCommand
+In module 'AppKit' imported from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:2:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/System/Library/Frameworks/AppKit.framework/Headers/NSEvent.h:185:35: note: 'NSCommandKeyMask' has been explicitly marked deprecated here
+  185 | static const NSEventModifierFlags NSCommandKeyMask            API_DEPRECATED_WITH_REPLACEMENT("NSEventModifierFlagCommand", macos(10.0,10.12)) = NSEventModifierFlagCommand;
+      |                                   ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1391:5: warning: 'CC_MD5' is deprecated: first deprecated in macOS 10.15 - This function is cryptographically broken and should not be used in security contexts. Clients should migrate to SHA256 (or stronger). [-Wdeprecated-declarations]
+ 1391 |     CC_MD5(buf, (CC_LONG)strlen(buf), digest);
+      |     ^
+In module 'CommonCrypto' imported from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:2:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/usr/include/CommonCrypto/CommonDigest.h:142:23: note: 'CC_MD5' has been explicitly marked deprecated here
+  142 | extern unsigned char *CC_MD5(const void *data, CC_LONG len, unsigned char *md)
+      |                       ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1409:5: warning: 'CC_MD5' is deprecated: first deprecated in macOS 10.15 - This function is cryptographically broken and should not be used in security contexts. Clients should migrate to SHA256 (or stronger). [-Wdeprecated-declarations]
+ 1409 |     CC_MD5(buf, (CC_LONG)strlen(buf), digest);
+      |     ^
+In module 'CommonCrypto' imported from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:2:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.2.sdk/usr/include/CommonCrypto/CommonDigest.h:142:23: note: 'CC_MD5' has been explicitly marked deprecated here
+  142 | extern unsigned char *CC_MD5(const void *data, CC_LONG len, unsigned char *md)
+      |                       ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1432:72: warning: passing 'const void *' to parameter of type 'TISInputSourceRef' (aka 'struct __TISInputSource *') discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+ 1432 |         NSArray* list = (__bridge NSArray *)(TISGetInputSourceProperty(CFArrayGetValueAtIndex(inputSourcesList, i), kTISPropertyInputSourceLanguages));
+      |                                                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In module 'Carbon' imported from /Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:4:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Frameworks/HIToolbox.framework/Headers/TextInputSources.h:720:23: note: passing argument to parameter 'inputSource' here
+  720 |   TISInputSourceRef   inputSource,
+      |                       ^
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1780:21: warning: capturing 'walk' strongly in this block is likely to lead to a retain cycle [-Warc-retain-cycles]
+ 1780 |                     walk(sub);
+      |                     ^~~~
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.m:1773:28: note: block will be retained by the captured object
+ 1773 |             void (^__block walk)(NSView *) = ^(NSView *view) {
+      |             ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+25 warnings generated.
+[206 / 253] SwiftSignalKit
+[209 / 253] SwiftSignalKit-product
+[210 / 253] SwiftSignalKit-product
+[212 / 253] SwiftSignalKit
+[214 / 253] Strings
+[215 / 253] Strings
+[217 / 253] KeyboardKey
+[223 / 254] Colors
+[229 / 256] Colors
+[232 / 257]
+[234 / 260] ColorPalette
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:32:21: warning: 'scanLocation' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+ 30 |         let scanner = Scanner(string: hexString.prefix(7))
+ 31 |         if hexString.hasPrefix("#") {
+ 32 |             scanner.scanLocation = 1
+    |                     `- warning: 'scanLocation' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+ 33 |         }
+ 34 |         var num: UInt32 = 0
+
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:42:20: warning: 'scanHexInt32' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+ 40 |             }
+ 41 |         }
+ 42 |         if scanner.scanHexInt32(&num), hexString.length >= 7 && hexString.length <= 9 {
+    |                    `- warning: 'scanHexInt32' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+ 43 |             if hexString.length == 9 {
+ 44 |                 let scanner = Scanner(string: hexString)
+
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:45:25: warning: 'scanLocation' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+ 43 |             if hexString.length == 9 {
+ 44 |                 let scanner = Scanner(string: hexString)
+ 45 |                 scanner.scanLocation = 7
+    |                         `- warning: 'scanLocation' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+ 46 |                 var intAlpha: UInt32 = 0
+ 47 |                 scanner.scanHexInt32(&intAlpha)
+
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:47:25: warning: 'scanHexInt32' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+ 45 |                 scanner.scanLocation = 7
+ 46 |                 var intAlpha: UInt32 = 0
+ 47 |                 scanner.scanHexInt32(&intAlpha)
+    |                         `- warning: 'scanHexInt32' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+ 48 |                 alpha = CGFloat(intAlpha) / 255
+ 49 |             }
+
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:75:26: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+ 73 |         
+ 74 |         
+ 75 |         let color = self.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+    |                          `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+ 76 | 
+ 77 |         
+
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:127:26: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+125 |         
+126 |         
+127 |         let color = self.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+    |                          `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+128 | 
+129 |         
+
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:338:26: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+336 |         var alpha       : CGFloat = 0
+337 |         
+338 |         let color = self.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+    |                          `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+339 |         color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+340 |         return NSColor( hue: hue,
+
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:435:26: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+433 |     var argb: UInt32 {
+434 |         
+435 |         let color = self.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+    |                          `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+436 |         var red: CGFloat = 0.0
+437 |         var green: CGFloat = 0.0
+
+/Users/pystoyplayer/dev/telegram-macos/packages/Colors/Sources/Colors/Colors.swift:447:26: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+445 |     var rgb: UInt32 {
+446 |         
+447 |         let color = self.usingColorSpaceName(NSColorSpaceName.deviceRGB)
+    |                          `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+448 |         if let color = color {
+449 |             let red: CGFloat = color.redComponent
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[234 / 260] Colors
+[236 / 260] ColorPalette
+/Users/pystoyplayer/dev/telegram-macos/packages/ColorPalette/Sources/ColorPalette/ColorPalette.swift:2444:43: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2442 |     }
+2443 |     private var controlAccentColor: NSColor {
+2444 |         return NSColor.controlAccentColor.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+     |                                           `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2445 |     }
+2446 |     private var selectedTextBackgroundColor: NSColor {
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ColorPalette/Sources/ColorPalette/ColorPalette.swift:2544:30: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2542 |     }
+2543 |     override var chatReplyTextDisabledBubble_outgoing: NSColor {
+2544 |         return NSColor.white.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+     |                              `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2545 |     }
+2546 |     override var groupPeerNameRed: NSColor {
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ColorPalette/Sources/ColorPalette/ColorPalette.swift:2547:34: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2545 |     }
+2546 |     override var groupPeerNameRed: NSColor {
+2547 |         return NSColor.systemRed.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+     |                                  `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2548 |     }
+2549 |     override var groupPeerNameBlue: NSColor {
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ColorPalette/Sources/ColorPalette/ColorPalette.swift:2550:35: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2548 |     }
+2549 |     override var groupPeerNameBlue: NSColor {
+2550 |         return NSColor.systemBlue.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+     |                                   `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2551 |     }
+2552 |     override var groupPeerNameGreen: NSColor {
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ColorPalette/Sources/ColorPalette/ColorPalette.swift:2553:36: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2551 |     }
+2552 |     override var groupPeerNameGreen: NSColor {
+2553 |         return NSColor.systemGreen.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+     |                                    `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2554 |     }
+2555 |     override var groupPeerNameOrange: NSColor {
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ColorPalette/Sources/ColorPalette/ColorPalette.swift:2556:37: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2554 |     }
+2555 |     override var groupPeerNameOrange: NSColor {
+2556 |         return NSColor.systemOrange.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+     |                                     `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2557 |     }
+2558 |     override var bubbleBackground_outgoing: [NSColor] {
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ColorPalette/Sources/ColorPalette/ColorPalette.swift:2574:30: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2572 |     }
+2573 |     override var linkBubble_outgoing: NSColor {
+2574 |         return NSColor.white.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+     |                              `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+2575 |     }
+2576 |     override var selectTextBubble_incoming: NSColor {
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[244 / 261]
+[246 / 261] TGUIKit
+[250 / 289]
+[253 / 289]
+[254 / 289]
+[256 / 289]
+[257 / 289]
+[260 / 289]
+[261 / 289]
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:8:49: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+ 6 | 
+ 7 | @interface OpenWithObject : NSObject
+ 8 | @property (nonatomic, strong,readonly) NSString *fullname;
+   |                                                 |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                                 |- note: insert '_Nullable' if the pointer may be null
+   |                                                 `- note: insert '_Nonnull' if the pointer should never be null
+ 9 | @property (nonatomic, strong,readonly) NSURL *app;
+10 | @property (nonatomic, strong,readonly) NSImage *icon;
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:26:23: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+24 | +(void)printViews:(NSView *__nonnull)containerView;
+25 | +(NSString * __nonnull)stringForEmojiHashOfData:(NSData *__nonnull)data count:(NSInteger)count positionExtractor:(int32_t (^__nonnull)(uint8_t *__nonnull, int32_t, int32_t))positionExtractor;
+26 | +(NSArray<NSNumber *> *)bufferList:(CMSampleBufferRef)sampleBuffer;
+   |                       |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                       |- note: insert '_Nullable' if the pointer may be null
+   |                       `- note: insert '_Nonnull' if the pointer should never be null
+27 | +(NSString * __nonnull)callEmojies:(NSData *__nonnull)keySha256;
+28 | +(NSString * __nonnull)randomCallsEmoji;
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:26:37: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+24 | +(void)printViews:(NSView *__nonnull)containerView;
+25 | +(NSString * __nonnull)stringForEmojiHashOfData:(NSData *__nonnull)data count:(NSInteger)count positionExtractor:(int32_t (^__nonnull)(uint8_t *__nonnull, int32_t, int32_t))positionExtractor;
+26 | +(NSArray<NSNumber *> *)bufferList:(CMSampleBufferRef)sampleBuffer;
+   |                                     |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                     |- note: insert '_Nullable' if the pointer may be null
+   |                                     `- note: insert '_Nonnull' if the pointer should never be null
+27 | +(NSString * __nonnull)callEmojies:(NSData *__nonnull)keySha256;
+28 | +(NSString * __nonnull)randomCallsEmoji;
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:37:151: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+35 | +(NSArray<NSString *> * __nonnull)notificationTones:(NSString * __nonnull)def;
+36 | +(NSString * __nullable)youtubeIdentifier:(NSString * __nonnull)url;;
+37 | + (NSString * __nullable)_youtubeVideoIdFromText:(NSString * __nullable)text originalUrl:(NSString * __nullable)originalUrl startTime:(NSTimeInterval *)startTime;
+   |                                                                                                                                                       |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                                                                                                                                       |- note: insert '_Nullable' if the pointer may be null
+   |                                                                                                                                                       `- note: insert '_Nonnull' if the pointer should never be null
+38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+39 | 
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:38:29: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+36 | +(NSString * __nullable)youtubeIdentifier:(NSString * __nonnull)url;;
+37 | + (NSString * __nullable)_youtubeVideoIdFromText:(NSString * __nullable)text originalUrl:(NSString * __nullable)originalUrl startTime:(NSTimeInterval *)startTime;
+38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+   |                             |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                             |- note: insert '_Nullable' if the pointer may be null
+   |                             `- note: insert '_Nonnull' if the pointer should never be null
+39 | 
+40 |     
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:38:56: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+36 | +(NSString * __nullable)youtubeIdentifier:(NSString * __nonnull)url;;
+37 | + (NSString * __nullable)_youtubeVideoIdFromText:(NSString * __nullable)text originalUrl:(NSString * __nullable)originalUrl startTime:(NSTimeInterval *)startTime;
+38 | +(NSArray<OpenWithObject *> *)appsForFileUrl:(NSString *)fileUrl;
+   |                                                        |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                                        |- note: insert '_Nullable' if the pointer may be null
+   |                                                        `- note: insert '_Nonnull' if the pointer should never be null
+39 | 
+40 |     
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:64:60: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+62 | //@end
+63 | 
+64 | NSArray<NSString *> *  __nonnull cut_long_message(NSString *message, int max_length);
+   |                                                            |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                                            |- note: insert '_Nullable' if the pointer may be null
+   |                                                            `- note: insert '_Nonnull' if the pointer should never be null
+65 | int64_t SystemIdleTime(void);
+66 | NSDictionary<NSString *, NSString *> * __nonnull audioTags(AVURLAsset *asset);
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:66:71: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+64 | NSArray<NSString *> *  __nonnull cut_long_message(NSString *message, int max_length);
+65 | int64_t SystemIdleTime(void);
+66 | NSDictionary<NSString *, NSString *> * __nonnull audioTags(AVURLAsset *asset);
+   |                                                                       |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                                                       |- note: insert '_Nullable' if the pointer may be null
+   |                                                                       `- note: insert '_Nonnull' if the pointer should never be null
+67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+68 | 
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:67:46: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+65 | int64_t SystemIdleTime(void);
+66 | NSDictionary<NSString *, NSString *> * __nonnull audioTags(AVURLAsset *asset);
+67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+   |                                              |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                              |- note: insert '_Nullable' if the pointer may be null
+   |                                              `- note: insert '_Nonnull' if the pointer should never be null
+68 | 
+69 | @interface NSData (TG)
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:67:60: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+65 | int64_t SystemIdleTime(void);
+66 | NSDictionary<NSString *, NSString *> * __nonnull audioTags(AVURLAsset *asset);
+67 | NSImage *  __nonnull TGIdenticonImage(NSData *data, NSData *additionalData, CGSize size);
+   |                                                            |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                                            |- note: insert '_Nullable' if the pointer may be null
+   |                                                            `- note: insert '_Nonnull' if the pointer should never be null
+68 | 
+69 | @interface NSData (TG)
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:73:32: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+71 | @end
+72 | 
+73 | BOOL isEnterAccessObjc(NSEvent *theEvent, BOOL byCmdEnter);
+   |                                |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                |- note: insert '_Nullable' if the pointer may be null
+   |                                `- note: insert '_Nonnull' if the pointer should never be null
+74 | BOOL isEnterEventObjc(NSEvent *theEvent);
+75 | 
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:74:31: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+72 | 
+73 | BOOL isEnterAccessObjc(NSEvent *theEvent, BOOL byCmdEnter);
+74 | BOOL isEnterEventObjc(NSEvent *theEvent);
+   |                               |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                               |- note: insert '_Nullable' if the pointer may be null
+   |                               `- note: insert '_Nonnull' if the pointer should never be null
+75 | 
+76 | int colorIndexForGroupId(int64_t groupId);
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:86:32: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+84 | double mappingRange(double x, double in_min, double in_max, double out_min, double out_max);
+85 | 
+86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+   |                                |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                |- note: insert '_Nullable' if the pointer may be null
+   |                                `- note: insert '_Nonnull' if the pointer should never be null
+87 | CMTimebaseRef _Nullable createTimebase(void);
+88 | CMTimebaseRef _Nullable createTimebaseWithClock(CMClockRef clock);
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:86:1: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+84 | double mappingRange(double x, double in_min, double in_max, double out_min, double out_max);
+85 | 
+86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+   | |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   | |- note: insert '_Nullable' if the pointer may be null
+   | `- note: insert '_Nonnull' if the pointer should never be null
+87 | CMTimebaseRef _Nullable createTimebase(void);
+88 | CMTimebaseRef _Nullable createTimebaseWithClock(CMClockRef clock);
+
+<module-includes>:1:9: note: in file included from <module-includes>:1:
+1 | #import "/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h"
+  |         `- note: in file included from <module-includes>:1:
+2 | 
+
+15 warnings generated.
+/Users/pystoyplayer/dev/telegram-macos/packages/ObjcUtils/Sources/ObjcUtils/ObjcUtils.h:88:49: warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+86 | CGImageRef TGBlurredAlphaImage(CGImageRef source, CGSize size, CGFloat scale);
+87 | CMTimebaseRef _Nullable createTimebase(void);
+88 | CMTimebaseRef _Nullable createTimebaseWithClock(CMClockRef clock);
+   |                                                 |- warning: pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+   |                                                 |- note: insert '_Nullable' if the pointer may be null
+   |                                                 `- note: insert '_Nonnull' if the pointer should never be null
+89 | 
+90 | BOOL setWindowCaptureExclusion(NSWindow * _Nonnull window, CGRect rect, BOOL exclude);
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/TransactionHandler.swift:5:23: warning: 'OSSpinLock' was deprecated in macOS 10.12: Use os_unfair_lock() from <os/lock.h> instead [#DeprecatedDeclaration]
+ 3 | public class TransactionHandler: NSObject {
+ 4 | 
+ 5 |     private var lock: OSSpinLock = 0
+   |                       `- warning: 'OSSpinLock' was deprecated in macOS 10.12: Use os_unfair_lock() from <os/lock.h> instead [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     private var handler:(() ->Void)?
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[265 / 289] TGUIKit
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/View.swift:396:9: warning: 'acceptsTouchEvents' was deprecated in macOS 10.12.2: Use allowedTouchTypes instead [#DeprecatedDeclaration]
+394 |     
+395 |     private func initialize() {
+396 |         acceptsTouchEvents = true
+    |         `- warning: 'acceptsTouchEvents' was deprecated in macOS 10.12.2: Use allowedTouchTypes instead [#DeprecatedDeclaration]
+397 |         self.wantsLayer = true
+398 |         //let layer = SimpleLayer()
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/Window.swift:654:213: warning: 'graphicsContext' was deprecated in macOS 10.14: Add instances of NSView to display content in a window. [#DeprecatedDeclaration]
+ 652 | 
+ 653 |     public func sendKeyEvent(_ key: KeyboardKey, modifierFlags: NSEvent.ModifierFlags) {
+ 654 |         guard let event = NSEvent.keyEvent(with: .keyDown, location: mouseLocationOutsideOfEventStream, modifierFlags: modifierFlags, timestamp: Date().timeIntervalSince1970, windowNumber: windowNumber, context: graphicsContext, characters: "", charactersIgnoringModifiers: "", isARepeat: false, keyCode: key.rawValue) else {return}
+     |                                                                                                                                                                                                                     `- warning: 'graphicsContext' was deprecated in macOS 10.14: Add instances of NSView to display content in a window. [#DeprecatedDeclaration]
+ 655 |         
+ 656 |         sendEvent(event)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/WindowSaver.swift:31:42: warning: 'unarchiveObject(with:)' was deprecated in macOS 10.14: Use +unarchivedObjectOfClass:fromData:error: instead [#DeprecatedDeclaration]
+29 |         var archiver: WindowSaver?
+30 |         if let data = data as? Data {
+31 |             archiver = NSKeyedUnarchiver.unarchiveObject(with: data) as? WindowSaver
+   |                                          `- warning: 'unarchiveObject(with:)' was deprecated in macOS 10.14: Use +unarchivedObjectOfClass:fromData:error: instead [#DeprecatedDeclaration]
+32 |         }
+33 |         if archiver == nil {
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/WindowSaver.swift:45:44: warning: 'archivedData(withRootObject:)' was deprecated in macOS 10.14: Use +archivedDataWithRootObject:requiringSecureCoding:error: instead [#DeprecatedDeclaration]
+43 |             if let strongSelf = self {
+44 |                 let user = UserDefaults.standard
+45 |                 let data = NSKeyedArchiver.archivedData(withRootObject: strongSelf)
+   |                                            `- warning: 'archivedData(withRootObject:)' was deprecated in macOS 10.14: Use +archivedDataWithRootObject:requiringSecureCoding:error: instead [#DeprecatedDeclaration]
+46 |                 user.set(data, forKey: "window_saver_".appending(strongSelf.requiredName))
+47 |                 user.synchronize()
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/SliderView.swift:106:9: warning: 'acceptsTouchEvents' was deprecated in macOS 10.12.2: Use allowedTouchTypes instead [#DeprecatedDeclaration]
+104 |     
+105 |     @objc fileprivate func _prepareView() {
+106 |         acceptsTouchEvents = true
+    |         `- warning: 'acceptsTouchEvents' was deprecated in macOS 10.12.2: Use allowedTouchTypes instead [#DeprecatedDeclaration]
+107 |         addSubview(contentView)
+108 |         
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[267 / 289] TGUIKit
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/TextView.swift:3386:21: warning: result of call to 'addToolTip(_:owner:userData:)' is unused [#NoUsage]
+3384 |                 removeAllToolTips()
+3385 |                 for rect in layout.toolTipRects {
+3386 |                     addToolTip(rect, owner: self, userData: nil)
+     |                     `- warning: result of call to 'addToolTip(_:owner:userData:)' is unused [#NoUsage]
+3387 |                 }
+3388 |                 installedToolTipRects = layout.toolTipRects
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/TransactionHandler.swift:5:23: warning: 'OSSpinLock' was deprecated in macOS 10.12: Use os_unfair_lock() from <os/lock.h> instead [#DeprecatedDeclaration]
+ 3 | public class TransactionHandler: NSObject {
+ 4 | 
+ 5 |     private var lock: OSSpinLock = 0
+   |                       `- warning: 'OSSpinLock' was deprecated in macOS 10.12: Use os_unfair_lock() from <os/lock.h> instead [#DeprecatedDeclaration]
+ 6 | 
+ 7 |     private var handler:(() ->Void)?
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[273 / 289] TGUIKit
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/InternalFinder.swift:9:60: warning: 'kIOMasterPortDefault' was deprecated in macOS 12.0: renamed to 'kIOMainPortDefault' [#DeprecatedDeclaration]
+  7 | 
+  8 |     fileprivate func open() {
+  9 |         self.serviceInternal = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("AppleSmartBattery"))
+    |                                                            |- warning: 'kIOMasterPortDefault' was deprecated in macOS 12.0: renamed to 'kIOMainPortDefault' [#DeprecatedDeclaration]
+    |                                                            `- note: use 'kIOMainPortDefault' instead
+ 10 |     }
+ 11 | 
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[274 / 289] TGUIKit-product
+[275 / 289] TGUIKit
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/ProgressModal.swift:15:55: warning: 'dark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+ 13 |         self.autoresizesSubviews = false
+ 14 |         self.addSubview(self.progressView)
+ 15 |         self.material = presentation.colors.isDark ? .dark : .light
+    |                                                       `- warning: 'dark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+ 16 |         self.blendingMode = .withinWindow
+ 17 |         self.state = .active
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/ProgressModal.swift:15:63: warning: 'light' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+ 13 |         self.autoresizesSubviews = false
+ 14 |         self.addSubview(self.progressView)
+ 15 |         self.material = presentation.colors.isDark ? .dark : .light
+    |                                                               `- warning: 'light' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+ 16 |         self.blendingMode = .withinWindow
+ 17 |         self.state = .active
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/ProgressModal.swift:112:55: warning: 'dark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+110 |         self.autoresizingMask = []
+111 |         self.autoresizesSubviews = false
+112 |         self.material = presentation.colors.isDark ? .dark : .light
+    |                                                       `- warning: 'dark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+113 |         self.blendingMode = .withinWindow
+114 |     }
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/ProgressModal.swift:112:63: warning: 'light' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+110 |         self.autoresizingMask = []
+111 |         self.autoresizesSubviews = false
+112 |         self.material = presentation.colors.isDark ? .dark : .light
+    |                                                               `- warning: 'light' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+113 |         self.blendingMode = .withinWindow
+114 |     }
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/ProgressModal.swift:285:28: warning: 'ultraDark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+283 |         } else {
+284 |             let ve = NSVisualEffectView(frame: NSZeroRect)
+285 |             ve.material = .ultraDark
+    |                            `- warning: 'ultraDark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+286 |             ve.blendingMode = .withinWindow
+287 |             ve.state = .active
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[276 / 289] TGUIKit-product
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/TGColor.swift:256:26: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+254 |         var alpha       : CGFloat = 0
+255 |         
+256 |         let color = self.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+    |                          `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+257 |         color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+258 |         return NSColor( hue: hue,
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/TGColor.swift:353:26: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+351 |     var argb: UInt32 {
+352 |         
+353 |         let color = self.usingColorSpaceName(NSColorSpaceName.deviceRGB)!
+    |                          `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+354 |         var red: CGFloat = 0.0
+355 |         var green: CGFloat = 0.0
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/TGColor.swift:365:26: warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+363 |     var rgb: UInt32 {
+364 |         
+365 |         let color = self.usingColorSpaceName(NSColorSpaceName.deviceRGB)
+    |                          `- warning: 'usingColorSpaceName' was deprecated in macOS 10.14: Use -colorUsingType: or -colorUsingColorSpace: instead [#DeprecatedDeclaration]
+366 |         if let color = color {
+367 |             let red: CGFloat = color.redComponent
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/TableRowItem.swift:233:22: warning: conditional downcast from 'TableRowView?' to 'TableRowView' does nothing
+231 |             return true
+232 |         }
+233 |         return (view as? TableRowView)?.accessibilityPressPrimaryControl() ?? false
+    |                      `- warning: conditional downcast from 'TableRowView?' to 'TableRowView' does nothing
+234 |     }
+235 | 
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[278 / 289] TGUIKit
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:556:20: warning: 'scanCharacters(from:into:)' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+554 |     
+555 |     while !scanner.isAtEnd {
+556 |         if scanner.scanCharacters(from: CharacterSet.letters, into: &command) {
+    |                    `- warning: 'scanCharacters(from:into:)' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+557 |             let commandString = command! as String
+558 |             
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:563:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+561 |                 // Move to command
+562 |                 var x: Double = 0, y: Double = 0
+563 |                 scanner.scanDouble(&x)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+564 |                 scanner.scanDouble(&y)
+565 |                 currentPoint = CGPoint(x: x, y: y)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:564:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+562 |                 var x: Double = 0, y: Double = 0
+563 |                 scanner.scanDouble(&x)
+564 |                 scanner.scanDouble(&y)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+565 |                 currentPoint = CGPoint(x: x, y: y)
+566 |                 startPoint = currentPoint
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:572:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+570 |                 // Cubic Bezier curve command
+571 |                 var control1X: Double = 0, control1Y: Double = 0, control2X: Double = 0, control2Y: Double = 0, endPointX: Double = 0, endPointY: Double = 0
+572 |                 scanner.scanDouble(&control1X)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+573 |                 scanner.scanDouble(&control1Y)
+574 |                 scanner.scanDouble(&control2X)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:573:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+571 |                 var control1X: Double = 0, control1Y: Double = 0, control2X: Double = 0, control2Y: Double = 0, endPointX: Double = 0, endPointY: Double = 0
+572 |                 scanner.scanDouble(&control1X)
+573 |                 scanner.scanDouble(&control1Y)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+574 |                 scanner.scanDouble(&control2X)
+575 |                 scanner.scanDouble(&control2Y)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:574:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+572 |                 scanner.scanDouble(&control1X)
+573 |                 scanner.scanDouble(&control1Y)
+574 |                 scanner.scanDouble(&control2X)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+575 |                 scanner.scanDouble(&control2Y)
+576 |                 scanner.scanDouble(&endPointX)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:575:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+573 |                 scanner.scanDouble(&control1Y)
+574 |                 scanner.scanDouble(&control2X)
+575 |                 scanner.scanDouble(&control2Y)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+576 |                 scanner.scanDouble(&endPointX)
+577 |                 scanner.scanDouble(&endPointY)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:576:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+574 |                 scanner.scanDouble(&control2X)
+575 |                 scanner.scanDouble(&control2Y)
+576 |                 scanner.scanDouble(&endPointX)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+577 |                 scanner.scanDouble(&endPointY)
+578 |                 path.addCurve(to: CGPoint(x: endPointX, y: endPointY),
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:577:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+575 |                 scanner.scanDouble(&control2Y)
+576 |                 scanner.scanDouble(&endPointX)
+577 |                 scanner.scanDouble(&endPointY)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+578 |                 path.addCurve(to: CGPoint(x: endPointX, y: endPointY),
+579 |                               control1: CGPoint(x: control1X, y: control1Y),
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:586:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+584 |                 // Horizontal line command
+585 |                 var x: Double = 0
+586 |                 scanner.scanDouble(&x)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+587 |                 currentPoint = CGPoint(x: x, y: currentPoint.y)
+588 |                 path.addLine(to: currentPoint)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:593:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+591 |                 // Vertical line command
+592 |                 var y: Double = 0
+593 |                 scanner.scanDouble(&y)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+594 |                 currentPoint = CGPoint(x: currentPoint.x, y: y)
+595 |                 path.addLine(to: currentPoint)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:600:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+598 |                 // Line to command
+599 |                 var x: Double = 0, y: Double = 0
+600 |                 scanner.scanDouble(&x)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+601 |                 scanner.scanDouble(&y)
+602 |                 currentPoint = CGPoint(x: x, y: y)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/DrawingContext.swift:601:25: warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+599 |                 var x: Double = 0, y: Double = 0
+600 |                 scanner.scanDouble(&x)
+601 |                 scanner.scanDouble(&y)
+    |                         `- warning: 'scanDouble' was deprecated in macOS 10.15 [#DeprecatedDeclaration]
+602 |                 currentPoint = CGPoint(x: x, y: y)
+603 |                 path.addLine(to: currentPoint)
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/Extensions.swift:264:44: warning: 'kUTTypeURL' was deprecated in macOS 12.0: Use UTTypeURL or UTType.url (swift) instead. [#DeprecatedDeclaration]
+ 262 | public extension NSPasteboard.PasteboardType {
+ 263 |     static var kUrl:NSPasteboard.PasteboardType {
+ 264 |         return NSPasteboard.PasteboardType(kUTTypeURL as String)
+     |                                            `- warning: 'kUTTypeURL' was deprecated in macOS 12.0: Use UTTypeURL or UTType.url (swift) instead. [#DeprecatedDeclaration]
+ 265 |     }
+ 266 |     static var kInApp:NSPasteboard.PasteboardType {
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/Extensions.swift:283:44: warning: 'kUTTypeFileURL' was deprecated in macOS 12.0: Use UTTypeFileURL or UTType.fileURL (swift) instead. [#DeprecatedDeclaration]
+ 281 |     }
+ 282 |     static var kFileUrl: NSPasteboard.PasteboardType {
+ 283 |         return NSPasteboard.PasteboardType(kUTTypeFileURL as String)
+     |                                            `- warning: 'kUTTypeFileURL' was deprecated in macOS 12.0: Use UTTypeFileURL or UTType.fileURL (swift) instead. [#DeprecatedDeclaration]
+ 284 |     }
+ 285 | }
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/Extensions.swift:1843:13: warning: switch must be exhaustive
+1841 | 
+1842 |         for i in 0..<self.elementCount {
+1843 |             switch self.element(at: i, associatedPoints: &points) {
+     |             |- warning: switch must be exhaustive
+     |             |- note: add missing case: '.cubicCurveTo'
+     |             |- note: add missing case: '.quadraticCurveTo'
+     |             `- note: add missing cases
+1844 |             case .moveTo:
+1845 |                 path.move(to: points[0])
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/FireTimerControl.swift:130:35: warning: will never be executed
+121 |         
+122 |         let contentState: ContentState
+123 |         if isTimer {
+    |            `- note: condition always evaluates to true
+124 |             var fraction: CGFloat = 1.0
+125 |             fraction = CGFloat(fractionalTimeout) / CGFloat(params.timeout)
+    :
+128 |             self.updateValue?(fraction)
+129 |         } else {
+130 |             contentState = .clock(color)
+    |                                   `- warning: will never be executed
+131 |         }
+132 |         
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[279 / 289] TGUIKit
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/CGImageData.swift:16:77: warning: 'kUTTypeJPEG' was deprecated in macOS 12.0: Use UTTypeJPEG or UTType.jpeg (swift) instead. [#DeprecatedDeclaration]
+14 |     var jpegData: Data? {
+15 |         guard let mutableData = CFDataCreateMutable(nil, 0),
+16 |             let destination = CGImageDestinationCreateWithData(mutableData, kUTTypeJPEG, 1, nil) else { return nil }
+   |                                                                             `- warning: 'kUTTypeJPEG' was deprecated in macOS 12.0: Use UTTypeJPEG or UTType.jpeg (swift) instead. [#DeprecatedDeclaration]
+17 |         CGImageDestinationAddImage(destination, self, nil)
+18 |         guard CGImageDestinationFinalize(destination) else { return nil }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[280 / 289] TGUIKit
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/Modal.swift:1101:48: warning: 'ultraDark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+1099 |         if controller.isVisualEffectBackground {
+1100 |             self.visualEffectView = NSVisualEffectView(frame: NSZeroRect)
+1101 |             self.visualEffectView!.material = .ultraDark
+     |                                                `- warning: 'ultraDark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+1102 |             self.visualEffectView!.blendingMode = .withinWindow
+1103 |             self.visualEffectView!.state = .active
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/NavigationBarView.swift:223:65: warning: variable 'pCenter_from' was written to, but never read
+221 |             pRight.updateLocalizationAndTheme(theme: presentation)
+222 |             
+223 |             var pLeft_from:CGFloat = 0,pRight_from:CGFloat = 0, pCenter_from:CGFloat = 0, pLeft_to:CGFloat = 0, pRight_to:CGFloat = 0, pCenter_to:CGFloat = 0
+    |                                                                 `- warning: variable 'pCenter_from' was written to, but never read
+224 |             var nLeft_from:CGFloat = 0, nRight_from:CGFloat = 0, nCenter_from:CGFloat = 0, nLeft_to:CGFloat = 0, nRight_to:CGFloat = 0, nCenter_to:CGFloat = 0
+225 |             
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/NavigationBarView.swift:223:136: warning: variable 'pCenter_to' was written to, but never read
+221 |             pRight.updateLocalizationAndTheme(theme: presentation)
+222 |             
+223 |             var pLeft_from:CGFloat = 0,pRight_from:CGFloat = 0, pCenter_from:CGFloat = 0, pLeft_to:CGFloat = 0, pRight_to:CGFloat = 0, pCenter_to:CGFloat = 0
+    |                                                                                                                                        `- warning: variable 'pCenter_to' was written to, but never read
+224 |             var nLeft_from:CGFloat = 0, nRight_from:CGFloat = 0, nCenter_from:CGFloat = 0, nLeft_to:CGFloat = 0, nRight_to:CGFloat = 0, nCenter_to:CGFloat = 0
+225 |             
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/NavigationViewController.swift:1640:25: warning: variable '_new' was written to, but never read
+1638 |                     let animationStyle = new.animationStyle
+1639 |                     let activeInsetLeft = self.controller.insets.left
+1640 |                     var _new:ViewController? = new
+     |                         `- warning: variable '_new' was written to, but never read
+1641 |                     let newContainer = self.containerOf(new)
+1642 |                     let activeContainer = self.containerOf(self.controller)
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[280 / 289] SidebarScrollValidation-product
+[283 / 290]
+[285 / 293] SidebarScrollValidation-product
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/AppMenuController.swift:225:36: warning: 'dark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+ 223 |         self.setFrameSize(max, min(tableView.listHeight, min(maxHeight ?? appearMode.max, screen.visibleFrame.height - 200)))
+ 224 |         if presentation.colors.isDark {
+ 225 |             visualView.material = .dark
+     |                                    `- warning: 'dark' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+ 226 |         } else {
+ 227 |             visualView.material = .light
+
+/Users/pystoyplayer/dev/telegram-message-validation/sidebar-scroll/scrollbar-dependencies/TGUIKit/Sources/AppMenuController.swift:227:36: warning: 'light' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+ 225 |             visualView.material = .dark
+ 226 |         } else {
+ 227 |             visualView.material = .light
+     |                                    `- warning: 'light' was deprecated in macOS 10.14: Use a semantic material instead.  To force the appearance of a view hierarchy, set the `appearance` property to an appropriate NSAppearance value. [#DeprecatedDeclaration]
+ 228 |         }
+ 229 |         effectiveSize = max
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[285 / 293] TGUIKit
+[287 / 293] SidebarScrollValidation-product
+/private/var/folders/fw/0x94vxh52ql8bn42gqdmbkfr0000gn/T/telegram-sidebar-scroll-p80j_8wn/Sources/main.swift:42:9: warning: initialization of immutable value 'contentBottomInset' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 40 |     let genericView = table
+ 41 |     let insets = NSEdgeInsets(top: 0, left: 0, bottom: bottom, right: 0)
+ 42 |     let contentBottomInset = bottom
+    |         `- warning: initialization of immutable value 'contentBottomInset' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 43 |     switch scenario {
+ 44 |     case .chats:
+
+/private/var/folders/fw/0x94vxh52ql8bn42gqdmbkfr0000gn/T/telegram-sidebar-scroll-p80j_8wn/Sources/main.swift:55:13: warning: initialization of immutable value 'contentInsets' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 53 |         genericView.tableView.scrollerInsets.bottom = 0
+ 54 |     case .forms:
+ 55 |         let contentInsets = table.contentInsets
+    |             `- warning: initialization of immutable value 'contentInsets' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 56 |         tableView.scrollerInsets.bottom = 0
+ 57 |     case .emoji:
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+[289 / 293] SidebarScrollValidation-product
+[290 / 293] SidebarScrollValidation-product
+[291 / 293] SidebarScrollValidation-product
+Build complete! (32,77 sec)
+Application scrollbars: 530 checks, 0 failures; actual native TableView/NSScroller; source-extracted production inset configuration.

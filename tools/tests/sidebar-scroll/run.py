@@ -34,6 +34,14 @@ forms_insets = next(line.strip() for line in forms.splitlines() if 'tableView.sc
 history = source('packages/ChatUI/Sources/ChatUI/ChatController.swift')
 history_content = next(line.strip() for line in history.splitlines() if 'tableView.contentInsets = .init(top:' in line and 'state.height' not in line)
 history_scroller = next(line.strip() for line in history.splitlines() if 'tableView.scrollerInsets = NSEdgeInsets(bottom: scrollInset)' in line)
+entertainment = source('packages/EntertainmentUI/Sources/EntertainmentUI/EntertainmentViewController.swift')
+assert 'let insets = NSEdgeInsets(bottom: EntertainmentView.tabsAreaHeight)' in entertainment
+picker_bottom = next((line.strip() for line in entertainment.splitlines() if 'table.scrollerInsets.bottom = ' in line), '')
+picker_cases = []
+for case, name in [('emoji', 'EmojiesController'), ('stickers', 'StickersViewController'), ('gifs', 'GifKeyboardController')]:
+    text = source('packages/EntertainmentUI/Sources/EntertainmentUI/' + name + '.swift')
+    line = next(line.strip() for line in text.splitlines() if 'tableView.scrollerInsets = .init(' in line and not line.strip().startswith('//'))
+    picker_cases.append('    case .' + case + ':\n        ' + line + '\n        ' + picker_bottom)
 kit = args.scratch_path.resolve() / 'scrollbar-dependencies/TGUIKit'
 kit.mkdir(parents=True, exist_ok=True)
 for folder in ['Sources', 'Tests']:
@@ -59,7 +67,7 @@ with tempfile.TemporaryDirectory(prefix='telegram-sidebar-scroll-') as tmp:
 import PackageDescription
 let package = Package(name: "SidebarScrollValidation", platforms: [.macOS(.v12)], dependencies: [DEPENDENCIES], targets: [.executableTarget(name: "SidebarScrollValidation", dependencies: ["TGUIKit", "ColorPalette"], path: "Sources")])
 '''.replace('DEPENDENCIES', dependencies))
-    main = (fixtures / 'main.swift').read_text().replace('__CHAT_INSETS__', chat_insets).replace('__SEARCH_INSETS__', search_insets).replace('__SETTINGS_INSETS__', settings_insets).replace('__CALLS_INSETS__', calls_insets).replace('__FORMS_INSETS__', forms_insets).replace('__HISTORY_CONTENT__', history_content).replace('__HISTORY_SCROLLER__', history_scroller).replace('__THEMED_CHECKS__', (fixtures / 'ThemedChecks.swift.txt').read_text() if themed else '')
+    main = (fixtures / 'main.swift').read_text().replace('__CHAT_INSETS__', chat_insets).replace('__SEARCH_INSETS__', search_insets).replace('__SETTINGS_INSETS__', settings_insets).replace('__CALLS_INSETS__', calls_insets).replace('__FORMS_INSETS__', forms_insets).replace('__HISTORY_CONTENT__', history_content).replace('__HISTORY_SCROLLER__', history_scroller).replace('__PICKER_CASES__', '\n'.join(picker_cases)).replace('__THEMED_CHECKS__', (fixtures / 'ThemedChecks.swift.txt').read_text() if themed else '')
     (sources / 'main.swift').write_text(main)
     images = {}
     for name in ['Icon_SearchField', 'Icon_SearchClear', 'Icon_Quote', 'Icon_Quote_Collapse', 'Icon_Quote_Expand']:

@@ -13,7 +13,7 @@ The thumb paints a rounded 3 pt line (5 pt while expanded/tracking or with incre
 | InputData forms/settings subpages | Retained composed content padding; removed its duplicate from scroller insets. |
 | Contacts | Already uses zero additional bottom scroller inset; unchanged. |
 | Chat history | Preserved the top content inset and separate bottom scroller exclusion for the input panel. |
-| Emoji, sticker and GIF pickers | Preserved their 46 pt top / 50 pt bottom scroller insets: these reserve overlay controls and do not duplicate contentInsets. |
+| Emoji, sticker and GIF pickers | In the entertainment host, retained the 46 pt top scroller inset and 56 pt tabs content clearance, and reset the additional bottom scroller inset to zero. Standalone picker configurations are unchanged. |
 
 AppKit combines contentInsets and scrollerInsets while tiling its native scroller. Applying the same footer height twice makes the thumb stop one footer height above the usable list's lower boundary, even at native progress 1.
 
@@ -31,7 +31,7 @@ python3 tools/tests/sidebar-scroll/run.py --revision e537320b28d79cecc1baf716bcb
 
 The baseline intentionally exits nonzero. The suite extracts real inset assignments from Chats, Search, Settings, Calls, InputData and ChatController. Controlled native TableView rows avoid a network/account dependency. It covers short/long lists, 400/800 pt heights, 0/56/80 pt footer heights, chat header insets, zero-size initialization followed by layout, native progress/endpoints/hit testing, and the unflipped chat-history input-panel exclusion. AppKit's 1 pt knob end padding is retained. Candidate-only checks cover common ScrollView installation, repeat configuration, hide/re-enable, horizontal-only views and the plain NSScrollView opt-in.
 
-See [regression output](evidence/regression.txt).
+Current suite: **530 checks, 0 failures**, including all three entertainment-host picker tables at the 56 pt tabs inset. See [current output](evidence/current-checks.txt). The retained [earlier regression output](evidence/regression.txt) predates the picker cases.
 
 ## Native comparison
 
