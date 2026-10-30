@@ -14,5 +14,9 @@ PASS: wallet-create exception keeps its navigation unchanged
 PASS: Back inside a replaced Settings stack does not switch to Chats
 PASS: removed return sidebar falls back to Chats
 PASS: fallback clears stale Settings return state
-16/16 behavior checks passed
+PASS: Settings push removes transient input detail
+PASS: Back restores surviving detail and Chats after input removal
+PASS: Settings push removes transient keepLeft detail
+PASS: Back restores surviving detail and Chats after keepLeft removal
+20/20 behavior checks passed
 PASS: MainViewController registers the root-navigation listener
