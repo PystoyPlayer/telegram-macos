@@ -29,4 +29,17 @@ PASS: fences already inside a structured block stay literal
 PASS: adjacent code blocks with different languages remain distinct
 PASS: rendered block selection yields Pre without overlapping inline Code for translation
 PASS: ordinary inline monospace retains Code for translation
-31/31 formatting checks passed; production parser, state mapping, markdown conversion and insertion block
+PASS: typing inside semantic run retains url
+PASS: emoji inside semantic run retains url
+PASS: semantic run preserves inserted emoji metadata
+PASS: typing past semantic endpoint does not extend url
+PASS: typing inside semantic run retains mention
+PASS: emoji inside semantic run retains mention
+PASS: semantic run preserves inserted emoji metadata
+PASS: typing past semantic endpoint does not extend mention
+PASS: typing inside semantic run retains date
+PASS: emoji inside semantic run retains date
+PASS: semantic run preserves inserted emoji metadata
+PASS: typing past semantic endpoint does not extend date
+PASS: inserted link keeps its own destination
+44/44 formatting checks passed; production parser, state mapping, markdown conversion and insertion block

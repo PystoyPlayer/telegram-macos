@@ -18,15 +18,28 @@ PASS: typed mention inherits surrounding quote
 PASS: typed mention retains target in quote
 PASS: plain insertion inherits style without preceding mention/link/date/emoji metadata
 PASS: rich emoji paste keeps its own quote instead of acquiring surrounding spoiler
-FAIL: syntax colors keep one code entity
-FAIL: code block retains its full range and language
+PASS: syntax colors keep one code entity
+PASS: code block retains its full range and language
 PASS: production pre-to-code mapping retains language
-FAIL: typed fences convert around pasted or edited structured code
+PASS: typed fences convert around pasted or edited structured code
 PASS: outer fences consume enclosed code metadata exactly once
-FAIL: typed fences convert around pasted or edited structured code
+PASS: typed fences convert around pasted or edited structured code
 PASS: outer fences consume enclosed code metadata exactly once
 PASS: fences already inside a structured block stay literal
 PASS: adjacent code blocks with different languages remain distinct
-FAIL: rendered block selection yields Pre without overlapping inline Code for translation
+PASS: rendered block selection yields Pre without overlapping inline Code for translation
 PASS: ordinary inline monospace retains Code for translation
-26/31 formatting checks passed; production parser, state mapping, markdown conversion and insertion block
+FAIL: typing inside semantic run retains url
+FAIL: emoji inside semantic run retains url
+PASS: semantic run preserves inserted emoji metadata
+PASS: typing past semantic endpoint does not extend url
+FAIL: typing inside semantic run retains mention
+FAIL: emoji inside semantic run retains mention
+PASS: semantic run preserves inserted emoji metadata
+PASS: typing past semantic endpoint does not extend mention
+FAIL: typing inside semantic run retains date
+FAIL: emoji inside semantic run retains date
+PASS: semantic run preserves inserted emoji metadata
+PASS: typing past semantic endpoint does not extend date
+PASS: inserted link keeps its own destination
+38/44 formatting checks passed; production parser, state mapping, markdown conversion and insertion block

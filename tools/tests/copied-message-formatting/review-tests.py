@@ -14,7 +14,8 @@ weight = source[source.index('    public var weight:'):source.index('    public 
 extension = source[source.index('public extension ChatTextInputAttribute'):source.index('public func chatTextAttributes(from entities:')].replace('public extension', 'extension')
 start = source.index('public func chatTextAttributes(from attributedText: NSAttributedString)')
 parser = source[start:source.index('\npublic final class ChatTextInputState:', start)].replace('public func', 'func')
-interaction = (root / 'packages/ChatUI/Sources/ChatUI/ChatInterfaceInteraction.swift').read_text()
+interaction_path='packages/ChatUI/Sources/ChatUI/ChatInterfaceInteraction.swift'
+interaction = subprocess.check_output(['git','show',f'{options.revision}:{interaction_path}'],cwd=root,text=True) if options.revision else (root/interaction_path).read_text()
 start = interaction.index('        if selectedRange.lowerBound - 1 >= 0')
 inherit = interaction[start:interaction.index('//        if selectedRange.lowerBound', start)]
 fixture = '''import Cocoa
@@ -46,9 +47,10 @@ class Input {
 __METHOD__
 }
 __PARSER__
-func inherited(_ incoming: NSAttributedString, after inputText: NSAttributedString) -> NSAttributedString {
+func inherited(_ incoming: NSAttributedString, after inputText: NSAttributedString, at offset:Int?=nil) -> NSAttributedString {
  let text=NSMutableAttributedString(attributedString:incoming)
- let selectedRange=inputText.length..<inputText.length
+ let insertion=offset ?? inputText.length
+ let selectedRange=insertion..<insertion
 __INHERIT__
  return text
 }
@@ -110,6 +112,19 @@ let translationAttributes=chatTextAttributes(from:rendered)
 check(translationAttributes.count==1 && translationAttributes.first?.weight==2,"rendered block selection yields Pre without overlapping inline Code for translation")
 let inline=chatTextAttributes(from:NSAttributedString(string:"x",attributes:[TextInputAttributes.monospace:true]))
 check(inline.count==1 && inline.first?.weight==3,"ordinary inline monospace retains Code for translation")
+for (key,value) in [(TextInputAttributes.textUrl,TextInputTextUrlAttribute() as Any),(TextInputAttributes.textMention,ChatTextInputTextMentionAttribute() as Any),(TextInputAttributes.formattedDate,TextInputTextDateAttribute() as Any)] {
+ let surrounding=NSAttributedString(string:"abcd",attributes:[key:value])
+ let emoji=TextInputTextCustomEmojiAttribute()
+ let plain=inherited(NSAttributedString(string:"x"),after:surrounding,at:2)
+ check(plain.attribute(key,at:0,effectiveRange:nil) != nil,"typing inside semantic run retains \\(key.rawValue)")
+ let inserted=inherited(NSAttributedString(string:"⭐",attributes:[TextInputAttributes.customEmoji:emoji]),after:surrounding,at:2)
+ check(inserted.attribute(key,at:0,effectiveRange:nil) != nil,"emoji inside semantic run retains \\(key.rawValue)")
+ check(inserted.attribute(TextInputAttributes.customEmoji,at:0,effectiveRange:nil) as? TextInputTextCustomEmojiAttribute === emoji,"semantic run preserves inserted emoji metadata")
+ check(inherited(NSAttributedString(string:"x"),after:surrounding).attribute(key,at:0,effectiveRange:nil)==nil,"typing past semantic endpoint does not extend \\(key.rawValue)")
+}
+let explicitLink=TextInputTextUrlAttribute(url:"https://other.example")
+let own=inherited(NSAttributedString(string:"new",attributes:[TextInputAttributes.textUrl:explicitLink]),after:NSAttributedString(string:"abcd",attributes:[TextInputAttributes.textUrl:TextInputTextUrlAttribute()]),at:2)
+check(own.attribute(TextInputAttributes.textUrl,at:0,effectiveRange:nil) as? TextInputTextUrlAttribute === explicitLink,"inserted link keeps its own destination")
 print("\\(checks-failures)/\\(checks) formatting checks passed; production parser, state mapping, markdown conversion and insertion block")
 exit(failures==0 ? 0:1)
 '''.replace('__WEIGHT__',weight).replace('__EXTENSION__',extension).replace('__HELPERS__',helpers).replace('__METHOD__',method).replace('__PARSER__',parser).replace('__INHERIT__',inherit)

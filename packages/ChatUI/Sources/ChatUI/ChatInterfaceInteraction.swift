@@ -653,8 +653,12 @@ public final class ChatInteraction : InterfaceObserver  {
             let attributes = inputText.attributes(at: selectedRange.lowerBound - 1, effectiveRange: nil)
                 .filter { (key, value) in
                     switch key {
-                    case TextInputAttributes.customEmoji, TextInputAttributes.embedded, TextInputAttributes.textMention, TextInputAttributes.textUrl, TextInputAttributes.formattedDate:
+                    case TextInputAttributes.customEmoji, TextInputAttributes.embedded:
                         return false
+                    case TextInputAttributes.textMention, TextInputAttributes.textUrl, TextInputAttributes.formattedDate:
+                        var semanticRange = NSRange()
+                        _ = inputText.attribute(key, at: selectedRange.lowerBound - 1, longestEffectiveRange: &semanticRange, in: inputText.range)
+                        return selectedRange.lowerBound > semanticRange.location && selectedRange.lowerBound < NSMaxRange(semanticRange) && selectedRange.upperBound <= NSMaxRange(semanticRange) && (text.length == 0 || text.attribute(key, at: 0, effectiveRange: nil) == nil)
                     default:
                         return true
                     }
