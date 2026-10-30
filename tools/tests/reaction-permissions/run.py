@@ -25,12 +25,16 @@ def source(name):
 rows = source('ChatRowItem')
 chips = source('ChatReactionsView')
 fixture = Path(__file__).with_name('ReactionPermissionTests.swift').read_text()
-fixture = fixture.replace('__MESSAGE_ELIGIBILITY__', body(rows, 'private var reactionMessageIsEligible: Bool {') if 'private var reactionMessageIsEligible: Bool {' in rows else body(rows, 'public var canReact: Bool {'))
+fixture = fixture.replace('__MESSAGE_ELIGIBILITY__', body(rows, 'private var reactionMessageIsEligible: Bool {') if 'private var reactionMessageIsEligible: Bool {' in rows else body(rows, 'private var isReactable: Bool {') if 'private var isReactable: Bool {' in rows else body(rows, 'public var canReact: Bool {'))
 fixture = fixture.replace('__APPLICATION_PERMISSION__', body(rows, 'private var reactionApplicationPermission: () -> Bool {') if 'private var reactionApplicationPermission: () -> Bool {' in rows else 'return reactionPermission')
 fixture = fixture.replace('__MESSAGE_ACTION__', body(rows, 'private var reactionMessageAction: (@escaping (Message) -> Void) -> Void {') if 'private var reactionMessageAction:' in rows else 'return { action in if let message = self.firstMessage { action(message) } }')
 fixture = fixture.replace('__PAID_ACTION__', body(rows, 'let applyStarsReaction: (NSRect?) -> Void = {') if 'let applyStarsReaction:' in rows else 'fromRect in context.reactions.sendStarsReaction(message.id, count: 1, fromRect: fromRect)')
+presentation = source('ChatPresentationInterfaceState')
+fixture = fixture.replace('__PRESENTATION_PERMISSION__', body(presentation, 'public func canSendReactions(to peer: Peer) -> Bool {'))
+fixture = fixture.replace('__BASELINE_ELIGIBILITY__', body(rows, 'private var isReactable: Bool {') if 'private var isReactable: Bool {' in rows else 'return reactionMessageIsEligible')
+fixture = fixture.replace('__BASELINE_PERMISSION__', body(rows, 'private var canSendReactionsHere: Bool {') if 'private var canSendReactionsHere: Bool {' in rows else 'return canSendReactions')
 fixture = fixture.replace('__CAN_REACT__', body(rows, 'public var canReact: Bool {'))
-permission = body(rows, 'private var canSendReactions: Bool {') if 'private var canSendReactions: Bool {' in rows else 'guard let peer = reactionPermissionPeer else { return false }; return canSendReactionsToPeer(EnginePeer(peer))'
+permission = body(rows, 'private var canSendReactions: Bool {') if 'private var canSendReactions: Bool {' in rows else 'return canSendReactionsHere' if 'private var canSendReactionsHere: Bool {' in rows else 'guard let peer = reactionPermissionPeer else { return false }; return canSendReactionsToPeer(EnginePeer(peer))'
 fixture = fixture.replace('__CAN_SEND_REACTIONS__', permission)
 reaction_permission = body(rows, 'private var reactionPermission: () -> Bool {') if 'private var reactionPermission: () -> Bool {' in rows else 'return { [weak self] in self?.canSendReactions == true }'
 fixture = fixture.replace('__REACTION_PERMISSION__', reaction_permission)

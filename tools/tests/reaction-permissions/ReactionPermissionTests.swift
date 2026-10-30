@@ -50,13 +50,13 @@ struct Message {
 }
 enum PeerAllowedReactions { case all, limited([Reaction]), empty }
 struct CachedChannelData { var boostsToUnrestrict: Int32?; var appliedBoosts: Int32? }
-struct Presentation { var allowedReactions: PeerAllowedReactions? = .all; var cachedData: Any? }
+struct Presentation { var allowedReactions: PeerAllowedReactions? = .all; var cachedData: Any?; var peer: Peer?; func canSendReactions(to peer: Peer) -> Bool { __PRESENTATION_PERMISSION__ } }
 enum Toaster { case banned }
 final class Interaction {
     func showAnimatedToaster(_ type:Toaster,_ text:String) {}
     var latestMessage: Message?
     func getMessages(_ ids: [MessageId], _ album: Bool) -> Signal<[Message]> { Signal(value: latestMessage.map { [$0] } ?? []) }
-    var peer: Peer?; var isPeerSavedMessages = false; var presentation = Presentation(); init(peer: Peer?) { self.peer = peer } }
+    var peer: Peer? { didSet { presentation.peer = peer } }; var isPeerSavedMessages = false; var presentation = Presentation(); init(peer: Peer?) { self.peer = peer; presentation.peer = peer } }
 final class PendingUpdateMessageManager { var media: [MessageId: Int] = [:]; var updatingMessageMedia: Signal<[MessageId:Int]> { Signal(provider:{ self.media }) } }
 struct Account { let pendingUpdateMessageManager=PendingUpdateMessageManager() }
 func combineLatest<A,B>(_ a:Signal<A>,_ b:Signal<B>)->Signal<(A,B)> { Signal(provider:{ (a.value,b.value) }) }
@@ -92,6 +92,8 @@ final class Row {
     static func isUnsupported(_ message:Message?) -> Bool { false }
     var reactionMessageAction: (@escaping (Message)->Void)->Void { __MESSAGE_ACTION__ }
     var isReactionRestricted: Bool { !canSendReactions && reactionMessageIsEligible }
+    var isReactable: Bool { __BASELINE_ELIGIBILITY__ }
+    var canSendReactionsHere: Bool { __BASELINE_PERMISSION__ }
     var canReact: Bool { __CAN_REACT__ }
     func pickerActions(message: Message, context: Context, isTags: Bool) -> [(Reaction) -> Void] {
         let chatInteraction = self.chatInteraction

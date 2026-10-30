@@ -1043,14 +1043,7 @@ public class ChatRowItem: TableRowItem {
         return { [weak chatInteraction] in
             guard let chatInteraction else { return false }
             guard let peer = chatInteraction.peer.flatMap({ $0.id == message.id.peerId ? $0 : nil }) ?? message.peers[message.id.peerId] else { return false }
-            var ignoreDefault = false
-            if chatInteraction.peer?.id == peer.id,
-               let cachedData = chatInteraction.presentation.cachedData as? CachedChannelData,
-               let required = cachedData.boostsToUnrestrict, required > 0,
-               let applied = cachedData.appliedBoosts {
-                ignoreDefault = applied >= required
-            }
-            return canSendReactionsToPeer(EnginePeer(peer), ignoreDefault: ignoreDefault)
+            return chatInteraction.presentation.canSendReactions(to: peer)
         }
     }
 
@@ -1875,7 +1868,7 @@ public class ChatRowItem: TableRowItem {
                         showModal(with: Star_ReactionsController(context: context, source: .message(.init(current))), for: context.window)
                     }
                 }, reactionsDisabled: { [weak chatInteraction] in
-                    chatInteraction?.showAnimatedToaster(.banned, "You cannot send reactions in this chat.")
+                    chatInteraction?.showAnimatedToaster(.banned, "You cannot send reactions in this chat.") //TODOLANG Chat.SendReactionRestricted
                 })
                 
                 _reactionsLayout = layout
