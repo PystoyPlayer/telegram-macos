@@ -1,0 +1,7 @@
+FAIL: existing star chip tap revalidates current message: deleted
+FAIL: existing star chip tap revalidates current message: unsent
+FAIL: existing star chip tap revalidates current message: failed
+FAIL: existing star chip tap revalidates current message: media
+FAIL: existing star chip tap revalidates current message: ephemeral
+FAIL: existing star chip tap revalidates current message: secret
+107/113 reaction permission checks passed
