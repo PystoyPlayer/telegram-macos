@@ -1,0 +1,45 @@
+/var/folders/fw/0x94vxh52ql8bn42gqdmbkfr0000gn/T/admin-log-spoiler-y4vgto0j/main.swift:37:9: warning: initialization of immutable value 'new' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 35 | 
+ 36 | private func flags(_ state: State, _ message: Message) -> [Bool] {
+ 37 |     let new = message
+    |         `- warning: initialization of immutable value 'new' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 38 |     let searchQuery = "test"
+ 39 |     let entry = Entry()
+
+/var/folders/fw/0x94vxh52ql8bn42gqdmbkfr0000gn/T/admin-log-spoiler-y4vgto0j/main.swift:52:13: warning: initialization of immutable value 'context' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 50 |     let chatInteraction = Interaction()
+ 51 |     init() {
+ 52 |         let context = self.context
+    |             `- warning: initialization of immutable value 'context' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 53 |         let chatInteraction = self.chatInteraction
+ 54 |         let updateState: (@escaping (State) -> State) -> Void = { [unowned self] f in
+
+/var/folders/fw/0x94vxh52ql8bn42gqdmbkfr0000gn/T/admin-log-spoiler-y4vgto0j/main.swift:53:13: warning: initialization of immutable value 'chatInteraction' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 51 |     init() {
+ 52 |         let context = self.context
+ 53 |         let chatInteraction = self.chatInteraction
+    |             `- warning: initialization of immutable value 'chatInteraction' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 54 |         let updateState: (@escaping (State) -> State) -> Void = { [unowned self] f in
+ 55 |             let next = f(self.state)
+
+/var/folders/fw/0x94vxh52ql8bn42gqdmbkfr0000gn/T/admin-log-spoiler-y4vgto0j/main.swift:54:13: warning: immutable value 'updateState' was never used; consider replacing with '_' or removing it [#NoUsage]
+ 52 |         let context = self.context
+ 53 |         let chatInteraction = self.chatInteraction
+ 54 |         let updateState: (@escaping (State) -> State) -> Void = { [unowned self] f in
+    |             `- warning: immutable value 'updateState' was never used; consider replacing with '_' or removing it [#NoUsage]
+ 55 |             let next = f(self.state)
+ 56 |             if next != self.state { self.emissions += 1 }
+
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+FAIL: row type 0 reveals after callback
+FAIL: row type 1 reveals after callback
+FAIL: row type 2 reveals after callback
+FAIL: row type 3 reveals after callback
+FAIL: callback emits a distinct state
+FAIL: revealed media survives group expansion
+FAIL: repeat reveal is idempotent
+FAIL: sensitive content asks confirmation
+FAIL: confirmed sensitive content reveals
+FAIL: enabled sensitive content reveals without prompt
+FAIL: required age verification is retained
+10/21 checks passed
