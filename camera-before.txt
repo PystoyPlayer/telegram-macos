@@ -1,0 +1,9 @@
+Camera selection: 4/5
+camera-before.swift:11:7: warning: initialization of immutable value 'devices' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+ 9 |  func resolve(_ resolved: String?, _ saved: String?) -> String {
+10 |   let devicesContext=Devices(currentCameraId: resolved)
+11 |   let devices=[Camera(uniqueID: "chosen")]
+   |       `- warning: initialization of immutable value 'devices' was never used; consider replacing with assignment to '_' or removing it [#NoUsage]
+12 |   let data=Data(voiceSettings: Settings(cameraInputDeviceId: saved))
+13 |   self.videoCapturer = OngoingCallVideoCapturer(devicesContext.currentCameraId ?? "")
+

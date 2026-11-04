@@ -1,0 +1,28 @@
+{
+  "beforeStartup": {
+    "coreAudioClientObserved": true,
+    "inputIOObserved": false,
+    "outputIOObserved": false,
+    "sampleRates": [
+      96000
+    ]
+  },
+  "afterStartup": {
+    "coreAudioClientObserved": false,
+    "inputIOObserved": false,
+    "outputIOObserved": false,
+    "sampleRates": [
+      96000
+    ]
+  },
+  "afterDemand": {
+    "coreAudioClientObserved": true,
+    "inputIOObserved": false,
+    "outputIOObserved": false,
+    "sampleRates": [
+      96000
+    ]
+  },
+  "outputTransportDuringCheck": "built-in",
+  "headphoneInterruptionPhysicallyVerified": false
+}

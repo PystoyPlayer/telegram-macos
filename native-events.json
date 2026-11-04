@@ -1,0 +1,30 @@
+[
+  {
+    "devicesInitialized" : false,
+    "event" : "startup"
+  },
+  {
+    "devicesInitialized" : true,
+    "event" : "concurrentAccess",
+    "uniqueInstances" : 1
+  },
+  {
+    "cameras" : 3,
+    "event" : "devicesLoaded",
+    "inputs" : 2,
+    "loading" : false,
+    "outputs" : 1
+  },
+  {
+    "devicesInitialized" : true,
+    "event" : "concurrentAccess",
+    "uniqueInstances" : 1
+  },
+  {
+    "cameras" : 3,
+    "event" : "devicesLoaded",
+    "inputs" : 2,
+    "loading" : false,
+    "outputs" : 1
+  }
+]
