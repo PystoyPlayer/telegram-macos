@@ -24,5 +24,11 @@
     ]
   },
   "outputTransportDuringCheck": "built-in",
-  "headphoneInterruptionPhysicallyVerified": false
+  "physicalAudioMeasuredByAutomation": false,
+  "userVerification": {
+    "date": "2026-11-04",
+    "client": "patched Telegram Message Fixes",
+    "scenario": "relaunch during the same music on the Mac with headphones",
+    "result": "no pause reported"
+  }
 }

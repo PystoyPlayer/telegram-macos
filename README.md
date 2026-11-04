@@ -24,6 +24,6 @@ Use your separately configured isolated Debug checkout/profile, not your primary
 
 ## Limits
 
-The observed output transport was built-in and the sample rate stayed 96000. The reported headphone pause was not physically reproduced or confirmed fixed. Neither a live call nor recording nor Bluetooth headset routing was tested. The demonstrated change is elimination of unnecessary startup device discovery/CoreAudio registration with working first-demand discovery and camera-selection fallback. Native screenshots contain only generic controls and no personal chats.
+The observed output transport was built-in and the sample rate stayed 96000. The reported headphone pause was not captured by the automated observer. After testing the final patched Telegram Message Fixes build by relaunching it during the same music on the Mac with headphones, the user reported no pause. This is user hardware verification, distinct from the instrumented built-in-output run. No live call or recording was tested. The demonstrated change is elimination of unnecessary startup device discovery/CoreAudio registration with working first-demand discovery and camera-selection fallback. Native screenshots contain only generic controls and no personal chats.
 
 Evidence stays outside the production PR.
