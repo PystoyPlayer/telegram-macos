@@ -1,0 +1,36 @@
+name: Corner policy on actual macOS runtimes
+on:
+  push:
+    branches: [codex/pr111-runtime-validation]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  appkit:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-26, xcode-27]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Record actual runtime and compiler
+        run: |
+          mkdir -p results
+          sw_vers > results/runtime.txt
+          xcodebuild -version >> results/runtime.txt
+          swift --version >> results/runtime.txt
+      - name: Verify current production corner policies
+        run: python3 policy_probe.py --source after --output results/after
+      - name: Compare previous fixed-radius policy
+        continue-on-error: true
+        run: python3 policy_probe.py --source before --output results/before
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: corners-${{ matrix.os }}
+          path: results/
+          retention-days: 14
