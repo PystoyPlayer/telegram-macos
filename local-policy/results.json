@@ -1,0 +1,208 @@
+{
+  "checks" : 66,
+  "failures" : [
+
+  ],
+  "os" : "Version 27.0.1 (Build 26A434)",
+  "records" : [
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 20,
+      "folders" : "none",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : true,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 0,
+      "folderRail" : 20,
+      "folders" : "none",
+      "mainBackground" : 0,
+      "mainGlass" : 0,
+      "width" : 560
+    },
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 20,
+      "folders" : "none",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 20,
+      "folders" : "horizontal",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : true,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 0,
+      "folderRail" : 20,
+      "folders" : "horizontal",
+      "mainBackground" : 0,
+      "mainGlass" : 0,
+      "width" : 560
+    },
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 20,
+      "folders" : "horizontal",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 8,
+      "folders" : "vertical",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 8,
+      "folders" : "vertical",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 560
+    },
+    {
+      "appearance" : "NSAppearanceNameAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 8,
+      "folders" : "vertical",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 20,
+      "folders" : "none",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : true,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 0,
+      "folderRail" : 20,
+      "folders" : "none",
+      "mainBackground" : 0,
+      "mainGlass" : 0,
+      "width" : 560
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 20,
+      "folders" : "none",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 20,
+      "folders" : "horizontal",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : true,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 0,
+      "folderRail" : 20,
+      "folders" : "horizontal",
+      "mainBackground" : 0,
+      "mainGlass" : 0,
+      "width" : 560
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 20,
+      "folders" : "horizontal",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 8,
+      "folders" : "vertical",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 8,
+      "folders" : "vertical",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 560
+    },
+    {
+      "appearance" : "NSAppearanceNameDarkAqua",
+      "compact" : false,
+      "entertainmentGlass" : 8,
+      "expectedMain" : 8,
+      "folderRail" : 8,
+      "folders" : "vertical",
+      "mainBackground" : 8,
+      "mainGlass" : 8,
+      "width" : 1100
+    }
+  ],
+  "scope" : "Real AppKit with extracted production corner policy and controlled View\/LiquidGlass dependencies; not the full Telegram client"
+}

@@ -1,0 +1,37 @@
+{
+  "compactWidth" : true,
+  "contentFrame" : "{{0, 0}, {560, 700}}",
+  "contentLayoutRect" : "{{0, 0}, {560, 634}}",
+  "folderMode" : "vertical",
+  "os" : "Version 27.0.1 (Build 26A434)",
+  "styleMask" : 32783,
+  "views" : [
+    {
+      "childRadii" : [
+        16,
+        16,
+        0,
+        20,
+        0
+      ],
+      "class" : "MainController_View",
+      "effectiveTopLeft" : 16,
+      "effectiveTopRight" : 16,
+      "frame" : "{{90, 0}, {454, 684}}"
+    },
+    {
+      "appliedRadius" : 8,
+      "childRadii" : [
+        0,
+        0,
+        0
+      ],
+      "class" : "LeftSidebarView",
+      "effectiveTopLeft" : 8,
+      "effectiveTopRight" : 8,
+      "frame" : "{{8, 8}, {82, 684}}"
+    }
+  ],
+  "windowHeight" : 700,
+  "windowWidth" : 560
+}

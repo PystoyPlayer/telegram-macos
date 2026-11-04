@@ -1,0 +1,48 @@
+{
+  "compactWidth" : false,
+  "contentFrame" : "{{0, 0}, {1190, 800}}",
+  "contentLayoutRect" : "{{0, 0}, {1190, 734}}",
+  "folderMode" : "vertical",
+  "os" : "Version 27.0.1 (Build 26A434)",
+  "styleMask" : 32783,
+  "views" : [
+    {
+      "childRadii" : [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "class" : "ChatHeaderBubblesView",
+      "frame" : "{{0, 0}, {800, 62}}"
+    },
+    {
+      "childRadii" : [
+        8,
+        8,
+        0,
+        20,
+        0
+      ],
+      "class" : "MainController_View",
+      "effectiveTopLeft" : 8,
+      "effectiveTopRight" : 8,
+      "frame" : "{{98, 8}, {292, 784}}"
+    },
+    {
+      "appliedRadius" : 8,
+      "childRadii" : [
+        0,
+        0,
+        0
+      ],
+      "class" : "LeftSidebarView",
+      "effectiveTopLeft" : 8,
+      "effectiveTopRight" : 8,
+      "frame" : "{{8, 8}, {82, 784}}"
+    }
+  ],
+  "windowHeight" : 800,
+  "windowWidth" : 1190
+}

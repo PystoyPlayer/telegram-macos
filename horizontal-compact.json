@@ -1,0 +1,25 @@
+{
+  "compactWidth" : true,
+  "contentFrame" : "{{0, 0}, {560, 668}}",
+  "contentLayoutRect" : "{{0, 0}, {560, 668}}",
+  "folderMode" : "horizontal",
+  "os" : "Version 27.0.1 (Build 26A434)",
+  "styleMask" : 15,
+  "views" : [
+    {
+      "childRadii" : [
+        0,
+        0,
+        0,
+        20,
+        0
+      ],
+      "class" : "MainController_View",
+      "effectiveTopLeft" : 0,
+      "effectiveTopRight" : 0,
+      "frame" : "{{0, 0}, {560, 668}}"
+    }
+  ],
+  "windowHeight" : 700,
+  "windowWidth" : 560
+}

@@ -1,0 +1,13 @@
+requested=(560.0, 700.0) frame=(560.0, 732.0) content=(560.0, 700.0)
+requested=(1100.0, 800.0) frame=(1100.0, 768.0) content=(1100.0, 768.0)
+requested=(560.0, 700.0) frame=(560.0, 732.0) content=(560.0, 700.0)
+requested=(1100.0, 800.0) frame=(1100.0, 768.0) content=(1100.0, 768.0)
+/Users/pystoyplayer/dev/telegram-message-validation/pr111-completion/chrome-before.swift:25:25: warning: 'showsBaselineSeparator' was deprecated in macOS 15.0: No longer supported [#DeprecatedDeclaration]
+23 |                 toolbar.allowsUserCustomization = false
+24 |                 toolbar.allowsDisplayModeCustomization = false
+25 |                 toolbar.showsBaselineSeparator = false
+   |                         `- warning: 'showsBaselineSeparator' was deprecated in macOS 15.0: No longer supported [#DeprecatedDeclaration]
+26 |                 self.toolbar = toolbar
+27 |                 toolbar.isVisible = !self.isFullScreen
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
