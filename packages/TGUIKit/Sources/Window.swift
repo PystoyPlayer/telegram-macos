@@ -336,6 +336,7 @@ open class Window: NSWindow {
 
 
     public func applyChrome(_ mode: ChromeMode) {
+        let windowFrame = frame
         switch mode {
         case .compact:
             self.toolbar = nil
@@ -360,6 +361,7 @@ open class Window: NSWindow {
                 self.setTrafficLightsInset(self is AppWindow ? NSPoint(x: 15, y: 8) : NSPoint(x: 10, y: 6))
             }
         }
+        setFrame(windowFrame, display: false)
     }
 
 

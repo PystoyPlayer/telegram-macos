@@ -321,6 +321,7 @@ final class AuthorizedApplicationContext: NSObject, SplitViewDelegate {
     private var pendingApplyWindowChrome: Bool = false
 
     private var appliedChromeMode: Window.ChromeMode?
+    private var windowChromeUpdatePending = false
     private let _ready:Promise<Bool> = Promise()
     var ready: Signal<Bool, NoError> {
         return _ready.get() |> filter { $0 } |> take (1)
@@ -1016,7 +1017,7 @@ final class AuthorizedApplicationContext: NSObject, SplitViewDelegate {
         self.folders = folders
         self.previousLayout = layout
         if sidebarChanged {
-            applyWindowChrome(forState: self.view.splitView.state)
+            scheduleWindowChromeUpdate()
         }
     }
     
@@ -1200,7 +1201,7 @@ final class AuthorizedApplicationContext: NSObject, SplitViewDelegate {
 
         updateMinMaxWindowSize(animated: false)
         context.layout = state
-        applyWindowChrome(forState: state)
+        scheduleWindowChromeUpdate()
     }
     
 
@@ -1409,11 +1410,21 @@ final class AuthorizedApplicationContext: NSObject, SplitViewDelegate {
         isInFullScreenTransition = false
         if pendingApplyWindowChrome {
             pendingApplyWindowChrome = false
-            applyWindowChrome(forState: self.view.splitView.state)
+            scheduleWindowChromeUpdate()
         }
     }
 
-    private func applyWindowChrome(forState state: SplitViewState) {
+    private func scheduleWindowChromeUpdate() {
+        guard !windowChromeUpdatePending else { return }
+        windowChromeUpdatePending = true
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.windowChromeUpdatePending = false
+            self.updateWindowChrome(forState: self.view.splitView.state)
+        }
+    }
+
+    private func updateWindowChrome(forState state: SplitViewState) {
         if isInFullScreenTransition {
             pendingApplyWindowChrome = true
             return
