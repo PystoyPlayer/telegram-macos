@@ -13,6 +13,11 @@ private final class CodexEventLogContext {
     func loadMoreEntries() {}
 }
 
+private final class CodexHeaderResizeButton: NSButton {
+    var resize: (() -> Void)?
+    @objc func performResize() { resize?() }
+}
+
 private final class CodexHeaderScene<Context: AccountContextProtocol> {
     let window: Window
     let navigation: NavigationViewController
@@ -28,6 +33,20 @@ private final class CodexHeaderScene<Context: AccountContextProtocol> {
         window.contentView = navigation.view
         navigation.viewDidAppear(false)
         navigation.push(controller, false)
+        for (index, width) in [CGFloat(920), CGFloat(400)].enumerated() {
+            let button = CodexHeaderResizeButton(frame: NSMakeRect(24 + CGFloat(index) * 130, 180, 120, 28))
+            button.title = width == 920 ? "Wide fixture" : "Compact fixture"
+            button.bezelStyle = .rounded
+            button.target = button
+            button.action = #selector(CodexHeaderResizeButton.performResize)
+            button.resize = { [weak window] in
+                guard let window else { return }
+                var frame = window.frame
+                frame.size.width = width
+                window.setFrame(frame, display: true)
+            }
+            navigation.view.addSubview(button)
+        }
         window.center()
         window.makeKeyAndOrderFront(nil)
     }
